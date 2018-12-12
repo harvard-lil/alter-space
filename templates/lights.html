@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+{% block content %}
+<form method='post'>
+  <table width="80%" align="center">
+    <tbody>
+    <tr>
+      <th colspan="4">
+        What's your color?
+        <input class="color" id="color" name="color" value="{{ color_string }}">
+      </th>
+    </tr>
+
+    <th colspan="4">
+      <button type="submit">Submit</button>
+    </th>
+
+    </tbody>
+  </table>
+</form>
+<style>
+  body {
+    background-color: {{ color }};
+  }
+
+  form {
+    margin-top: 20%;
+  }
+</style>
+{% endblock %}
