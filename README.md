@@ -9,6 +9,7 @@ $ pyenv activate alterspace
 ```
 
 ```
+$ cp config/config.example.py config/config.py
 $ pip install -r requirements.txt
 ```
 
