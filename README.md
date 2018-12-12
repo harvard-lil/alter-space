@@ -15,5 +15,10 @@ $ pip install -r requirements.txt
 ### Run
 
 ```
-$ FLASK_APP=app.py flask run
+$ fab run
 ```
+or, to run on a different port:
+```
+$ fab run:8000
+```
+

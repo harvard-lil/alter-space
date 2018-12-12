@@ -2,3 +2,8 @@ pip-tools
 
 
 flask
+
+Fabric3  # project automation
+
+# colors
+-e git+git://github.com/anastasia/namecolor.git@ca31a23#egg=namecolor
