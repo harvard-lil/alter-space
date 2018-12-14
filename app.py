@@ -27,3 +27,8 @@ def lights():
 
         hex_color = get_color(color_string)['hex']
         return render_template("lights.html", color_string=color_string, color=hex_color)
+
+@app.route("/sounds", methods=['GET'])
+def sounds():
+		if request.method == 'GET':
+			return render_template("sounds.html")
