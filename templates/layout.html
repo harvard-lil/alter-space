@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Flask Template Example</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="http://netdna.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" rel="stylesheet" media="screen">
+  <script src={{ url_for('static', filename='js/jquery-3.3.1.min.js') }}></script>
+  <script src={{ url_for('static', filename='js/chartist.js') }}></script>
+  <script src={{ url_for('static', filename='js/custom.js') }}></script>
+  <link href={{ url_for('static', filename='css/chartist.css') }} rel="stylesheet"/>
+  <link href={{ url_for('static', filename='css/styles.css') }} rel="stylesheet"/>
+</head>
+<body>
+<div class="container">
+  {% block content %}{% endblock %}
+</div>
+</body>
+</html>
