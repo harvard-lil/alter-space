@@ -23,3 +23,12 @@ or, to run on a different port:
 $ fab run:8000
 ```
 
+### Vue/static assets
+serve files:
+```
+$ fab npm
+```
+Build files:
+```
+$ fab build
+```

@@ -18,6 +18,7 @@ cycler==0.10.0            # via matplotlib
 dask[array]==1.0.0        # via scikit-image
 decorator==4.3.0          # via networkx
 fabric3==1.14.post1
+flask-cors==3.0.7
 flask==1.0.2
 idna==2.8                 # via cryptography, requests
 itsdangerous==1.1.0       # via flask
@@ -40,7 +41,7 @@ pywavelets==1.0.1         # via scikit-image
 requests==2.21.0          # via python-colourlovers
 scikit-image==0.14.1
 scipy==1.1.0              # via scikit-image
-six==1.12.0               # via bcrypt, cryptography, cycler, fabric3, pip-tools, pynacl, python-dateutil, scikit-image
+six==1.12.0               # via bcrypt, cryptography, cycler, fabric3, flask-cors, pip-tools, pynacl, python-dateutil, scikit-image
 toolz==0.9.0              # via dask
 torch==1.0.0
 urllib3==1.24.1           # via requests

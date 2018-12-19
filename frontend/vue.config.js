@@ -1,6 +1,7 @@
-var path = require('path')
+var path = require('path');
 
 module.exports = {
   assetsDir: 'static',
-  outputDir: path.resolve(__dirname, '../dist')
-}
+  outputDir: path.resolve(__dirname, '../dist'),
+  runtimeCompiler: true
+};

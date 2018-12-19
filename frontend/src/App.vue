@@ -1,27 +1,29 @@
 <template>
   <div id="app">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <nav>
+      <ul>
+        <li>
+          <router-link to="/">Home</router-link>
+        </li>
+        <li>
+          <router-link to="/ping">Ping!</router-link>
+        </li>
+        <li>
+          <router-link to="/lights">Lights</router-link>
+        </li>
+        <li>
+          <router-link to="/sounds">sounds</router-link>
+        </li>
+      </ul>
+    </nav>
+    <router-view></router-view>
   </div>
 </template>
 
+
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
-export default {
-  name: 'app',
-  components: {
-    HelloWorld
+  export default {
+    name: 'app',
+    components: {}
   }
-}
 </script>
-
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>

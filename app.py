@@ -1,5 +1,5 @@
 import os
-from flask import Flask
+from flask import Flask, jsonify
 
 from config import config
 from flask import request, render_template
@@ -13,13 +13,17 @@ app = Flask(__name__,
             static_folder="./dist/static",
             template_folder="./dist")
 app.config.from_pyfile(os.path.join(config.DIR, 'config/config.py'))
-print("APP IS HAPPENING?! ", app)
-CORS(app)  # for webpack server
+CORS(app)
 
 
 @app.route('/', methods=['GET'])
 def index():
     return render_template("index.html")
+
+
+@app.route('/ping', methods=['GET'])
+def ping_pong():
+    return jsonify('hello from backend pong!')
 
 
 @app.route("/lights", methods=['GET', 'POST'])
