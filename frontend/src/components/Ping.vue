@@ -18,10 +18,7 @@
         const path = 'http://localhost:5000/ping';
         axios.get(path)
             .then((res) => {
-              this.msg = res.data;
-            })
-            .catch((error) => {
-              console.error(error)
+              this.msg = res.data
             })
       }
     },

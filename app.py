@@ -26,21 +26,20 @@ def ping_pong():
     return jsonify('hello from backend pong!')
 
 
-@app.route("/lights", methods=['GET', 'POST'])
+@app.route("/lights")
 def lights():
-    if request.method == 'GET':
-        return render_template("lights.html")
-    elif request.method == 'POST':
-        color_string = request.form.get('color', None)
 
-        if not color_string:
-            return render_template("lights.html")
-
-        hex_color = get_color(color_string)['hex']
-        return render_template("lights.html", color_string=color_string, color=hex_color)
+    color_string = request.args.get('color_string', None)
+    hex_color = get_color(color_string)['hex']
+    print(color_string, hex_color, request.args)
+    result = {
+        "color_string": color_string,
+        "color": hex_color
+    }
+    return jsonify(result)
 
 
 @app.route("/sounds", methods=['GET'])
 def sounds():
-    if request.method == 'GET':
-        return render_template("sounds.html")
+    sound_files = os.listdir(app.template_folder + "/sounds")
+    return jsonify(sound_files)
