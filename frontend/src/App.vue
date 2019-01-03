@@ -9,7 +9,7 @@
           <router-link to="/lights">Lights</router-link>
         </li>
         <li>
-          <router-link to="/sounds">sounds</router-link>
+          <router-link to="/sounds">Sounds</router-link>
         </li>
       </ul>
     </nav>
