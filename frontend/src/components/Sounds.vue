@@ -24,16 +24,11 @@
         audioFiles: []
       }
     },
-    mounted() {
-      console.log(this.audioFiles)
-    },
-
     methods: {
       getFiles() {
         axios.get(audioBaseUrl)
             .then((res) => {
               this.audioFiles = res.data
-              console.log(this.audioFiles)
             })
       }
     },
