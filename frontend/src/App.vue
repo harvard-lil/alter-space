@@ -6,9 +6,6 @@
           <router-link to="/">Home</router-link>
         </li>
         <li>
-          <router-link to="/ping">Ping!</router-link>
-        </li>
-        <li>
           <router-link to="/lights">Lights</router-link>
         </li>
         <li>
