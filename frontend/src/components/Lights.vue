@@ -21,11 +21,13 @@
 
 <script>
   import axios from 'axios';
+  const lightsBaseUrl = process.env.VUE_APP_BACKEND_URL + "lights";
 
   export default {
     name: "Lights",
     data() {
       return {
+        lightsBaseUrl: lightsBaseUrl,
         color: "#fffff",
         colorString: "white",
         colorModel: {}
@@ -33,12 +35,10 @@
     },
     methods: {
       getColor() {
-        const path = 'http://localhost:5000/lights';
-
         if (this.colorString.length === 0) {
           return
         }
-        axios.get(path, {
+        axios.get(lightsBaseUrl, {
           params: {
             color: this.color,
             color_string: this.colorString
