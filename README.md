@@ -15,8 +15,7 @@ $ pip install -r requirements.txt
 
 Install frontend
 ```
-$ cd frontend
-$ npm install
+$ fab npm_install 
 ```
 
 ### Run

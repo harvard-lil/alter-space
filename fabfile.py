@@ -6,6 +6,11 @@ from fabric.decorators import task
 def run_flask(port="5000"):
     local("FLASK_APP=app.py FLASK_DEBUG=1 python -m flask run -p %s" % port)
 
+
+@task
+def npm_install():
+    local("cd frontend && npm install")
+
 @task
 def npm():
     local("cd frontend && npm run serve")
