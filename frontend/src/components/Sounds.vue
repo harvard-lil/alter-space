@@ -27,11 +27,10 @@
 
   export default {
     name: "Sounds",
-    audioBaseUrl: audioBaseUrl,
-
     data() {
       return {
         baseUrl: process.env.BASE_URL,
+        audioBaseUrl: audioBaseUrl,
         audioFiles: []
       }
     },
