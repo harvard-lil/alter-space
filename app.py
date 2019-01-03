@@ -2,7 +2,7 @@ import os
 from flask import Flask, jsonify
 
 from config import config
-from flask import request, render_template
+from flask import request, render_template, send_from_directory
 
 from color.trained import get_color
 
@@ -43,3 +43,8 @@ def lights():
 def sounds():
     sound_files = os.listdir(app.template_folder + "/sounds")
     return jsonify(sound_files)
+
+@app.route("/sounds/<sound_id>", methods=['GET'])
+def sound(sound_id):
+    sound_dir = os.path.join(app.template_folder, "sounds")
+    return send_from_directory(sound_dir, sound_id)
