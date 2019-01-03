@@ -5,8 +5,8 @@
       <th colspan="4">
         What's your color?
         <input v-model="colorString"
-                class="color"
-                @input="getColor">
+               class="color"
+               @input="getColor">
         <p>hex is: {{ color }} color string is {{ colorString }}</p>
       </th>
     </tr>
@@ -43,14 +43,13 @@
             color: this.color,
             color_string: this.colorString
           }
-        })
-            .then((res) => {
-              this.color = res.data.color;
-              this.colorString = res.data.color_string;
+        }).then((res) => {
+          this.color = res.data.color;
+          this.colorString = res.data.color_string;
 
-              let body = document.getElementsByTagName('body')[0]
-              body.style.backgroundColor = this.color;
-            })
+          let body = document.getElementsByTagName('body')[0]
+          body.style.backgroundColor = this.color;
+        })
       },
 
     }
