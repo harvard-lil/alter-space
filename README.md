@@ -41,6 +41,8 @@ Remember to build files before adding them to the source code:
 ```
 $ fab build
 ```
-Some static assets live in the /public folder. On build, these get copied over to the /dist folder
+Now you should be able to visit http://127.0.0.1:5000/ and see everything working as intended.
+
+Note: some static assets live in the /public folder. On build, these get copied over to the /dist folder
 instead of compiled using the webpack configuration.
 
