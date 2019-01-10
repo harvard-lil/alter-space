@@ -20,6 +20,7 @@ decorator==4.3.0          # via networkx
 fabric3==1.14.post1
 flask-cors==3.0.7
 flask==1.0.2
+gunicorn==19.9.0
 idna==2.8                 # via cryptography, requests
 itsdangerous==1.1.0       # via flask
 jinja2==2.10              # via flask
