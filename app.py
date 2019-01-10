@@ -1,34 +1,50 @@
 import os
-from flask import Flask
+from flask import Flask, jsonify
 
 from config import config
-from flask import request, render_template
+from flask import request, render_template, send_from_directory
 
 from color.trained import get_color
 
-app = Flask(__name__, static_url_path='/static')
+from flask_cors import CORS
+
+app = Flask(__name__,
+            static_url_path='/static',
+            static_folder="./dist/static",
+            template_folder="./dist")
 app.config.from_pyfile(os.path.join(config.DIR, 'config/config.py'))
+CORS(app)
 
 
-@app.route("/")
-def hello():
-    return render_template("main.html")
+@app.route('/', methods=['GET'])
+def index():
+    return render_template("index.html")
 
 
-@app.route("/lights", methods=['GET', 'POST'])
+@app.route('/ping', methods=['GET'])
+def ping_pong():
+    return jsonify('hello from backend pong!')
+
+
+@app.route("/lights")
 def lights():
-    if request.method == 'GET':
-        return render_template("lights.html")
-    elif request.method == 'POST':
-        color_string = request.form.get('color', None)
 
-        if not color_string:
-            return render_template("lights.html")
+    color_string = request.args.get('color_string', None)
+    hex_color = get_color(color_string)['hex']
+    print(color_string, hex_color, request.args)
+    result = {
+        "color_string": color_string,
+        "color": hex_color
+    }
+    return jsonify(result)
 
-        hex_color = get_color(color_string)['hex']
-        return render_template("lights.html", color_string=color_string, color=hex_color)
 
 @app.route("/sounds", methods=['GET'])
 def sounds():
-		if request.method == 'GET':
-			return render_template("sounds.html")
+    sound_files = os.listdir(app.template_folder + "/sounds")
+    return jsonify(sound_files)
+
+@app.route("/sounds/<sound_id>", methods=['GET'])
+def sound(sound_id):
+    sound_dir = os.path.join(app.template_folder, "sounds")
+    return send_from_directory(sound_dir, sound_id)

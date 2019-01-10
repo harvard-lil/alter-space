@@ -1,0 +1,13 @@
+language: python
+python:
+- "3.5"
+
+before_install:
+- cp config/config.example.py config/config.py
+- nvm install stable
+
+install:
+- pip install -r requirements.txt
+- cd frontend && npm install
+
+script: echo "hello"
