@@ -21,11 +21,6 @@ def index():
     return render_template("index.html")
 
 
-@app.route('/ping', methods=['GET'])
-def ping_pong():
-    return jsonify('hello from backend pong!')
-
-
 @app.route("/lights")
 def lights():
 
