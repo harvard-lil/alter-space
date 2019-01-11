@@ -11,11 +11,8 @@ $ pyenv activate alterspace
 ```
 $ cp config/config.example.py config/config.py
 $ pip install -r requirements.txt
-```
+$ cd frontend && npm install
 
-Install frontend
-```
-$ fab npm_install 
 ```
 
 ### Run
@@ -46,3 +43,6 @@ Now you should be able to visit http://127.0.0.1:5000/ and see everything workin
 Note: some static assets live in the /public folder. On build, these get copied over to the /dist folder
 instead of compiled using the webpack configuration.
 
+### Styles
+Most styles live in SCSS format in alter-space/frontend/src/assets/css
+Some small overrides can live in a <style scoped> fashion in the .vue files

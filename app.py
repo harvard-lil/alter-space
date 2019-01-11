@@ -7,7 +7,7 @@ from flask_cors import CORS
 from config import config
 from color.trained import get_color
 
-from utils import get_sound_paths
+from helpers import get_sound_paths
 
 app = Flask(__name__,
             static_url_path='/static',
@@ -62,13 +62,13 @@ def breathe():
     return jsonify(resp.status_code)
 
 
-@app.route("/sounds", methods=['GET'])
+@app.route("/sounds")
 def sounds():
     sound_paths = get_sound_paths()
     return jsonify(sound_paths)
 
 
-@app.route("/sounds/<sound_id>", methods=['GET'])
+@app.route("/sounds/<sound_id>")
 def sound(sound_id):
     sound_dir = os.path.join(app.template_folder, "sounds")
     return send_from_directory(sound_dir, sound_id)
@@ -77,3 +77,13 @@ def sound(sound_id):
 @app.route("/activities")
 def activities():
     return jsonify(config.ACTIVITIES)
+
+
+@app.route("/activity/<activity>")
+def get_activity_presets(activity):
+    presets = {
+        "sound": config.SOUND_PRESETS[activity],
+        "light": config.LIGHT_PRESETS[activity],
+    }
+    return jsonify(presets)
+

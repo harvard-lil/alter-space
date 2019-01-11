@@ -1,11 +1,16 @@
 <template>
-  <ul>
-    <li v-for="activity in activities" :key="activity">
-      <router-link :id="activity" :to="{ path: 'Activity', query: { name: activity }}">
-        <button class="activity-button">{{activity}}</button>
-      </router-link>
-    </li>
-  </ul>
+  <div class="row">
+    <div class="col-12">
+      <ul>
+        <li v-for="activity in activities" :key="activity">
+          <router-link :id="activity"
+                       :to="{ path: 'Activity', query: { name: activity }}">
+            <button class="btn btn-primary btn-activity">{{activity}}</button>
+          </router-link>
+        </li>
+      </ul>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -38,9 +43,3 @@
   }
 </script>
 
-<style lang="scss">
-
-  ul {
-    list-style: none;
-  }
-</style>

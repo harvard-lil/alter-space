@@ -1,7 +1,9 @@
 <template>
   <ul>
-    <li v-for="audio in audioFiles" :key="audio">
-      <soundfile :audio="audio"></soundfile>
+    <li v-for="audio in audioPaths"
+
+        :key="audio">
+      <soundfile :audio="audio" :showToggles="showToggles"></soundfile>
     </li>
   </ul>
 </template>
@@ -17,18 +19,30 @@
     components: {
       soundfile
     },
+    props: ['showToggles', 'soundPresets'],
     data() {
       return {
         baseUrl: process.env.BASE_URL,
-        audioFiles: []
+        audioPaths: []
       }
+    },
+    mounted() {
     },
     methods: {
       getFiles() {
         axios.get(audioBaseUrl)
             .then((res) => {
-              this.audioFiles = res.data
+              this.filterChosenSounds(res.data);
             })
+      },
+      filterChosenSounds(allSounds) {
+        if (this.soundPresets.length > 0) {
+          for (let i = 0; i < this.soundPresets.length; i++) {
+            this.audioPaths.push(allSounds[this.soundPresets[i]]);
+          }
+        } else {
+          this.audioPaths = allSounds;
+        }
       }
     },
     created() {

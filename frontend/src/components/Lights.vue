@@ -51,7 +51,6 @@
           body.style.backgroundColor = this.color;
         })
       },
-
     }
   }
 </script>

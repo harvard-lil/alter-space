@@ -9,43 +9,44 @@
         <p>Playing now...</p>
       </div>
     </div>
-    <br/><br/><br/><br/>
-    <div class="row">
-      <div class="col-6">
-        <h4>Lights</h4>
-        <Lights></Lights>
-      </div>
-      <div class="col-6">
-        <h4>Sounds</h4>
-        <Sounds></Sounds>
-      </div>
-    </div>
+    <Toggles :soundPresets="soundPresets" :lightPresets="lightPresets"></Toggles>
+    <hr/>
+    <Library></Library>
   </div>
 </template>
 
 <script>
-  import Sounds from './Sounds'
-  import Lights from './Lights'
+  import axios from 'axios';
+  import Toggles from './Toggles'
+  import Library from './Library'
 
+  const activityUrl = process.env.VUE_APP_BACKEND_URL + "activity/";
+  
   export default {
     name: "Activity",
-    props: ["name"],
-    components: {Lights, Sounds},
+    components: {Library, Toggles},
     mounted() {
-      window.route = this.$route
+
     },
     data() {
       return {
-        activity: this.$route.query.name
+        activity: this.$route.query.name,
+        soundPresets: [],
+        lightPresets: [],
       }
     },
+    methods: {
+      getPresets() {
+        axios.get(activityUrl + this.activity)
+            .then((res) => {
+              this.soundPresets = res.data.sound;
+              console.log(this.soundPresets)
+            })
+      },
+    },
+    created() {
+       this.getPresets()
+    }
   }
 
 </script>
-
-<style scoped>
-  h1 {
-    text-transform: uppercase;
-  }
-
-</style>

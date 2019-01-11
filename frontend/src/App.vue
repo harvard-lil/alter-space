@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <!-- Top level navigation -->
-    <nav>
+    <nav class="nav">
       <a href="/">Home</a>
     </nav>
 
@@ -27,13 +27,3 @@
     components: {Activities}
   }
 </script>
-<style scoped>
-  li {
-    float: left;
-    margin-right: 20px;
-  }
-
-  nav {
-    display: inline-block;
-  }
-</style>
