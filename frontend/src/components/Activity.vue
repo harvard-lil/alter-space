@@ -40,7 +40,7 @@
         axios.get(activityUrl + this.activity)
             .then((res) => {
               this.soundPresets = res.data.sound;
-              console.log(this.soundPresets)
+              this.lightPresets = res.data.light;
             })
       },
     },

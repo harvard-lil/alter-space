@@ -1,9 +1,7 @@
 <template>
   <ul>
-    <li v-for="audio in audioPaths"
-
-        :key="audio">
-      <soundfile :audio="audio" :showToggles="showToggles"></soundfile>
+    <li v-for="audio in audioPaths" :key="audio">
+      <soundfile :audio="audio" :play="play" :showToggles="showToggles"></soundfile>
     </li>
   </ul>
 </template>
@@ -23,7 +21,8 @@
     data() {
       return {
         baseUrl: process.env.BASE_URL,
-        audioPaths: []
+        audioPaths: [],
+        play: false
       }
     },
     mounted() {
@@ -36,10 +35,12 @@
             })
       },
       filterChosenSounds(allSounds) {
-        if (this.soundPresets.length > 0) {
+        if (this.soundPresets && this.soundPresets.length) {
           for (let i = 0; i < this.soundPresets.length; i++) {
             this.audioPaths.push(allSounds[this.soundPresets[i]]);
           }
+          // And then, play all the chosen sounds
+          this.play = true;
         } else {
           this.audioPaths = allSounds;
         }

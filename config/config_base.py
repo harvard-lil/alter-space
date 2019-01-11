@@ -10,9 +10,9 @@ ACTIVITIES = ["relax", "study", "meditate", "collaborate", "create"]
 
 SOUND_PRESETS = {
     "relax": [0, 3],
-    "study": [2, 3, 4],
+    "study": [1, 9, 5],
     "meditate": [8],
-    "collaborate": [0, 3],
+    "collaborate": [6, 3],
     "create": [2, 3, 4]
 }
 

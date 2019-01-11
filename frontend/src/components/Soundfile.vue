@@ -5,7 +5,7 @@
     </button>
     <!-- audio files are hidden from DOM / view -->
     <audio loop controls>
-      <source :id="audio" :src="`${audio}`" type="audio/mpeg">
+      <source :id="audio" :play="play" :src="`${audio}`" type="audio/mpeg">
     </audio>
   </div>
 </template>
@@ -17,7 +17,7 @@
     return parts[parts.length - 1]
   }
   export default {
-    props: ['audio'],
+    props: ['audio', 'play'],
     name: "soundfile",
     data() {
       return {
@@ -29,6 +29,9 @@
 
     mounted() {
       this.audioFile = this.$el.querySelectorAll('audio')[0];
+      if (this.play) {
+        this.toggleButton();
+      }
     },
 
     methods: {
