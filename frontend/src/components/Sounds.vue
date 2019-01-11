@@ -10,7 +10,7 @@
   import axios from 'axios';
   import soundfile from './Soundfile'
 
-  const audioBaseUrl = process.env.BASE_URL + "sounds";
+  const audioBaseUrl = process.env.VUE_APP_BACKEND_URL + "sounds";
 
   export default {
     name: "Sounds",
@@ -20,7 +20,6 @@
     data() {
       return {
         baseUrl: process.env.BASE_URL,
-        audioBaseUrl: audioBaseUrl,
         audioFiles: []
       }
     },

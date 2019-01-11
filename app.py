@@ -41,8 +41,9 @@ def lights():
 
 @app.route("/sounds", methods=['GET'])
 def sounds():
-    sound_files = os.listdir(app.template_folder + "/sounds")
-    return jsonify(sound_files)
+    sound_paths = get_sound_paths()
+    return jsonify(sound_paths)
+
 
 @app.route("/sounds/<sound_id>", methods=['GET'])
 def sound(sound_id):
