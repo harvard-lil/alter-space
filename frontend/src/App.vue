@@ -5,7 +5,7 @@
       <a href="/">Home</a>
     </nav>
 
-    <router-view></router-view>
+    <router-view :key="$route.fullPath"></router-view>
     <div class="container">
       <div class="row">
         <div class="col-4">
