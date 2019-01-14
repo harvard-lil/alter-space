@@ -1,30 +1,37 @@
 <template>
   <div>
     <button @click="toggleButton" class="toggle" v-bind:class="{ on: toggle }">
-      {{ audio }}
+      {{ audioName }}
     </button>
     <!-- audio files are hidden from DOM / view -->
     <audio loop controls>
-      <source :id="audio" :src="`${audioBaseUrl}/${audio}`" type="audio/mpeg">
+      <source :id="audio" :play="play" :src="`${audio}`" type="audio/mpeg">
     </audio>
   </div>
 </template>
 
 <script>
-  const audioBaseUrl = process.env.BASE_URL + "sounds";
-
+  const audioBaseUrl = process.env.VUE_APP_BACKEND_URL + "sounds";
+  function getAudioName(audioPath) {
+    let parts = audioPath.split('/');
+    return parts[parts.length - 1]
+  }
   export default {
-    props: ['audio'],
+    props: ['audio', 'play'],
     name: "soundfile",
     data() {
       return {
         audioBaseUrl: audioBaseUrl,
-        toggle: false
+        toggle: false,
+        audioName: getAudioName(this.audio)
       }
     },
 
     mounted() {
       this.audioFile = this.$el.querySelectorAll('audio')[0];
+      if (this.play) {
+        this.toggleButton();
+      }
     },
 
     methods: {
@@ -49,6 +56,8 @@
     width: 150px;
     cursor: pointer;
     font-weight: 300;
+    border: 0;
+    border-radius: 5px;
   }
 
   .toggle.on {

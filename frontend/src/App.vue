@@ -1,26 +1,29 @@
 <template>
   <div id="app">
-    <nav>
-      <ul>
-        <li>
-          <router-link to="/">Home</router-link>
-        </li>
-        <li>
-          <router-link to="/lights">Lights</router-link>
-        </li>
-        <li>
-          <router-link to="/sounds">Sounds</router-link>
-        </li>
-      </ul>
+    <!-- Top level navigation -->
+    <nav class="nav">
+      <a href="/">Home</a>
     </nav>
-    <router-view></router-view>
+
+    <router-view :key="$route.fullPath"></router-view>
+    <div class="container">
+      <div class="row">
+        <div class="col-4">
+          <h2>Choose an activity</h2>
+          <Activities></Activities>
+        </div>
+      </div>
+    </div>
+
   </div>
 </template>
 
 
 <script>
+  import Activities from './components/Activities'
+
   export default {
     name: 'app',
-    components: {}
+    components: {Activities}
   }
 </script>

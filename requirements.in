@@ -7,5 +7,7 @@ pip-tools
 # heroku
 gunicorn
 
+beautifulsoup4
+
 # words into colors
 -e git+git://github.com/anastasia/namecolor.git@ca31a23#egg=namecolor # colors

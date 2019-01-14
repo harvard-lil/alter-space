@@ -1,0 +1,31 @@
+// TODO: do we need to load all of bootstrap?
+@import 'bootstrap/scss/bootstrap.scss';
+@import 'variables';
+
+/* General settings */
+nav {
+  border-bottom: 1px solid $color-black;
+}
+
+ul {
+  list-style: none;
+}
+
+li {
+  float: left;
+  margin-right: 20px;
+}
+
+
+/* Headers */
+h1 {
+  text-transform: uppercase;
+}
+
+
+/* Activity settings */
+.btn-activity {
+  padding: 20px;
+  text-transform: uppercase;
+  margin: 10px;
+}

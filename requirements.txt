@@ -7,6 +7,7 @@
 -e git+git://github.com/anastasia/namecolor.git@ca31a23#egg=namecolor
 asn1crypto==0.24.0        # via cryptography
 bcrypt==3.1.5             # via paramiko
+beautifulsoup4==4.7.1
 certifi==2018.11.29       # via requests
 cffi==1.11.5              # via bcrypt, cryptography, pynacl
 chardet==3.0.4            # via requests
@@ -43,6 +44,7 @@ requests==2.21.0          # via python-colourlovers
 scikit-image==0.14.1
 scipy==1.1.0              # via scikit-image
 six==1.12.0               # via bcrypt, cryptography, cycler, fabric3, flask-cors, pip-tools, pynacl, python-dateutil, scikit-image
+soupsieve==1.7            # via beautifulsoup4
 toolz==0.9.0              # via dask
 torch==1.0.0
 urllib3==1.24.1           # via requests
