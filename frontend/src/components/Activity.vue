@@ -9,25 +9,41 @@
         <p>Playing now...</p>
       </div>
     </div>
-    <Toggles :soundPresets="soundPresets" :lightPresets="lightPresets"></Toggles>
-    <hr/>
-    <Library></Library>
+    <sound-with-toggles :soundPresets="soundPresets">
+
+    </sound-with-toggles>
+
+    <br/><hr/><br/>
+      <div class="row">
+    <div class="col-12">
+      <h1>All options</h1>
+    </div>
+    <div class="col-6">
+      <h4>Lights</h4>
+      <Lights></Lights>
+    </div>
+    <div class="col-6">
+      <h4>Sounds</h4>
+      <Sounds></Sounds>
+    </div>
+      </div>
   </div>
 </template>
 
 <script>
   import axios from 'axios';
-  import Toggles from './Toggles'
-  import Library from './Library'
+  import SoundWithToggles from "./SoundWithToggles";
+  import Sounds from './Sounds';
+  import Lights from './Lights';
 
   const activityUrl = process.env.VUE_APP_BACKEND_URL + "activity/";
-  
+
   export default {
     name: "Activity",
-    components: {Library, Toggles},
-    mounted() {
-
-    },
+    components: {
+      Sounds,
+      Lights,
+      SoundWithToggles},
     data() {
       return {
         activity: this.$route.query.name,

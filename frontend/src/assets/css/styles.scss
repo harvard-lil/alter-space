@@ -29,3 +29,30 @@ h1 {
   text-transform: uppercase;
   margin: 10px;
 }
+
+.sound-container {
+  display: none;
+  &.show {
+    display: inline-block;
+  }
+}
+
+audio {
+  display: none;
+}
+
+.toggle {
+  background-color: blue;
+  color: white;
+  padding: 10px;
+  margin: 0 0 20px 0;
+  width: 150px;
+  cursor: pointer;
+  font-weight: 300;
+  border: 0;
+  border-radius: 5px;
+}
+
+.toggle.on {
+  background-color: navy;
+}
