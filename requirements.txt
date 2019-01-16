@@ -4,7 +4,7 @@
 #
 #    pip-compile --output-file requirements.txt requirements.in
 #
--e git+git://github.com/anastasia/namecolor.git@ca31a23#egg=namecolor
+-e git+git://github.com/anastasia/namecolor.git@aa2a8d72#egg=namecolor
 asn1crypto==0.24.0        # via cryptography
 bcrypt==3.1.5             # via paramiko
 beautifulsoup4==4.7.1

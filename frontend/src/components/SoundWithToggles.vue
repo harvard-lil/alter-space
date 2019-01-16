@@ -1,20 +1,25 @@
 <template>
   <div class="row">
     <Sounds :showToggles="showToggles"
-            :soundPresets="soundPresets"></Sounds>
+            :soundPresets="soundPresets">
+    </Sounds>
   </div>
+
 </template>
 
 <script>
+
   import Sounds from './Sounds'
+
   export default {
-    name: "Toggles",
+    name: "sound-with-toggles",
     components: {Sounds},
-    props: ['soundPresets', 'lightPresets'],
+    props: ['soundPresets'],
     data() {
       return {
         showToggles: true,
       }
     },
   }
+
 </script>

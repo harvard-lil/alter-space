@@ -1,7 +1,9 @@
 <template>
   <ul>
-    <li v-for="audio in audioPaths" :key="audio">
-      <soundfile :audio="audio" :play="play" :showToggles="showToggles"></soundfile>
+    <li v-for="(audio, index) in audioPaths" :key="audio">
+      <soundfile :audio="audio"
+                 :index="index"
+                 :showToggles="showToggles"></soundfile>
     </li>
   </ul>
 </template>
@@ -17,12 +19,11 @@
     components: {
       soundfile
     },
-    props: ['showToggles', 'soundPresets'],
+    props: ['showToggles'],
     data() {
       return {
         baseUrl: process.env.BASE_URL,
         audioPaths: [],
-        play: false
       }
     },
     mounted() {
@@ -31,29 +32,15 @@
       getFiles() {
         axios.get(audioBaseUrl)
             .then((res) => {
-              this.filterChosenSounds(res.data);
+              this.audioPaths = res.data;
+              // if soundPresets exist, filter list
+              // otherwise, show everything
             })
       },
-      filterChosenSounds(allSounds) {
-        if (this.soundPresets && this.soundPresets.length) {
-          for (let i = 0; i < this.soundPresets.length; i++) {
-            this.audioPaths.push(allSounds[this.soundPresets[i]]);
-          }
-          // And then, play all the chosen sounds
-          this.play = true;
-        } else {
-          this.audioPaths = allSounds;
-        }
-      }
     },
+
     created() {
-      this.getFiles()
+      this.getFiles();
     }
   }
 </script>
-
-<style>
-  ul {
-    list-style: none;
-  }
-</style>
