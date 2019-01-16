@@ -1,28 +1,22 @@
 import os
 import requests
-from flask import Flask, jsonify
+from flask import jsonify
 from flask import request, render_template, send_from_directory
-from flask_cors import CORS
-
+from flask import Blueprint
 from config import config
 from color.trained import get_color
 
 from helpers import get_sound_paths
 
-app = Flask(__name__,
-            static_url_path='/static',
-            static_folder="./dist/static",
-            template_folder="./dist")
-app.config.from_pyfile(os.path.join(config.DIR, 'config/config.py'))
-CORS(app)
 
+backend_app = Blueprint('backend', __name__)
 
-@app.route('/', methods=['GET'])
+@backend_app.route('/', methods=['GET'])
 def index():
     return render_template("index.html")
 
 
-@app.route("/lights")
+@backend_app.route("/lights")
 def lights():
     color_string = request.args.get('color_string', None)
     hex_color = get_color(color_string)['hex']
@@ -44,7 +38,7 @@ def lights():
     return jsonify(result)
 
 
-@app.route("/breathe")
+@backend_app.route("/breathe")
 def breathe():
     headers = {"Authorization": "Bearer %s" % config.LIGHTS_TOKEN}
     data = {
@@ -62,28 +56,27 @@ def breathe():
     return jsonify(resp.status_code)
 
 
-@app.route("/sounds")
+@backend_app.route("/sounds")
 def sounds():
     sound_paths = get_sound_paths()
     return jsonify(sound_paths)
 
 
-@app.route("/sounds/<sound_id>")
+@backend_app.route("/sounds/<sound_id>")
 def sound(sound_id):
     sound_dir = os.path.join(app.template_folder, "sounds")
     return send_from_directory(sound_dir, sound_id)
 
 
-@app.route("/activities")
+@backend_app.route("/activities")
 def activities():
     return jsonify(config.ACTIVITIES)
 
 
-@app.route("/activity/<activity>")
+@backend_app.route("/activity/<activity>")
 def get_activity_presets(activity):
     presets = {
         "sound": config.SOUND_PRESETS[activity],
         "light": config.LIGHT_PRESETS[activity],
     }
     return jsonify(presets)
-

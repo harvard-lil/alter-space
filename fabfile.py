@@ -4,7 +4,7 @@ from fabric.decorators import task
 
 @task(alias='run')
 def run_flask(port="5000"):
-    local("FLASK_APP=app.py FLASK_DEBUG=1 python -m flask run -p %s" % port)
+    local("FLASK_APP=run.py FLASK_DEBUG=1 python -m flask run -p %s" % port)
 
 
 @task
@@ -18,3 +18,8 @@ def npm():
 @task
 def build():
     local("cd frontend && npm run build")
+
+
+@task
+def test():
+    local("pytest --ignore=./frontend")
