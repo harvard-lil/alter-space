@@ -10,4 +10,5 @@ install:
 - pip install -r requirements.txt
 - cd frontend && npm install
 
-script: echo "hello"
+script:
+- fab test
