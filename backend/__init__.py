@@ -1,9 +1,9 @@
 import os
-from flask import Flask, jsonify
+from flask import Flask
 from flask_cors import CORS
 from backend.views import backend_app
 from config import config
-# from backend.views import *
+
 
 def create_app():
     app = Flask(__name__,
@@ -14,4 +14,3 @@ def create_app():
     app.config.from_pyfile(os.path.join(config.DIR, 'config/config.py'))
     CORS(app)
     return app
-
