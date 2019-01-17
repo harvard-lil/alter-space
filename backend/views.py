@@ -4,12 +4,11 @@ from flask import jsonify
 from flask import request, render_template, send_from_directory
 from flask import Blueprint
 from config import config
-from color.trained import get_color
 
 from helpers import get_sound_paths
 
-
 backend_app = Blueprint('backend', __name__)
+
 
 @backend_app.route('/', methods=['GET'])
 def index():
@@ -19,7 +18,7 @@ def index():
 @backend_app.route("/lights")
 def lights():
     color_string = request.args.get('color_string', None)
-    hex_color = get_color(color_string)['hex']
+    hex_color = "#ff0000"
     result = {
         "color_string": color_string,
         "color": hex_color
@@ -29,8 +28,6 @@ def lights():
     headers = {"Authorization": "Bearer %s" % config.LIGHTS_TOKEN}
     data = {
         "power": "off",
-        # "color": hex_color,
-        # "brightness": ,
         "fast": "true"
     }
     # url = "https://api.lifx.com/v1/lights/%s/state" % config.LIGHTS_ID

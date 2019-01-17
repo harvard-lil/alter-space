@@ -6,10 +6,11 @@ from config import config
 
 
 def create_app():
+    template_folder = os.path.join(config.DIR, "dist")
     app = Flask(__name__,
                 static_url_path='/static',
-                static_folder="../dist/static",
-                template_folder="../dist")
+                static_folder=os.path.join(template_folder, "static"),
+                template_folder=template_folder)
     app.register_blueprint(backend_app)
     app.config.from_pyfile(os.path.join(config.DIR, 'config/config.py'))
     CORS(app)

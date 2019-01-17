@@ -22,4 +22,4 @@ def build():
 
 @task
 def test():
-    local("pytest --ignore=./frontend")
+    local("pytest --ignore=frontend/node_modules")
