@@ -14,8 +14,11 @@ before_install:
 install:
 - pip install -r requirements.txt
 - cd frontend && npm install
+- npm run build
+- cd ..
 
-script: echo "hello"
+script:
+- fab test
 
 after_success:
   - >

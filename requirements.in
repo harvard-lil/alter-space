@@ -8,6 +8,10 @@ pip-tools
 gunicorn
 
 beautifulsoup4
+requests
 
 # words into colors
--e git+git://github.com/anastasia/namecolor.git@aa2a8d72#egg=namecolor # colors
+# -e git+git://github.com/anastasia/namecolor.git@aa2a8d72#egg=namecolor # colors
+
+# testing
+pytest-flask
