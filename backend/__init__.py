@@ -15,3 +15,6 @@ def create_app():
     app.config.from_pyfile(os.path.join(config.DIR, 'config/config.py'))
     CORS(app)
     return app
+
+# for deployment via uWSGI
+app = create_app()
