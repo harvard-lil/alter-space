@@ -11,11 +11,7 @@ beautifulsoup4
 requests
 
 # words into colors
-<<<<<<< HEAD
-# -e git+git://github.com/anastasia/namecolor.git@aa2a8d72#egg=namecolor # colors
-=======
 # -e git+git://github.com/anastasia/namecolor.git@aa2a8d72#egg=namecolor # colors
 
 # testing
 pytest-flask
->>>>>>> 9f01baf63de8a612dbfa83d00acbed8cf378b801

@@ -7,42 +7,34 @@
 asn1crypto==0.24.0        # via cryptography
 atomicwrites==1.2.1       # via pytest
 attrs==18.2.0             # via pytest
-bcrypt==3.1.5             # via paramiko
+bcrypt==3.1.6             # via paramiko
 beautifulsoup4==4.7.1
+certifi==2018.11.29       # via requests
 cffi==1.11.5              # via bcrypt, cryptography, pynacl
+chardet==3.0.4            # via requests
 click==7.0                # via flask, pip-tools
 cryptography==2.4.2       # via paramiko
 fabric3==1.14.post1
 flask-cors==3.0.7
 flask==1.0.2
 gunicorn==19.9.0
-idna==2.8                 # via cryptography
+idna==2.8                 # via cryptography, requests
 itsdangerous==1.1.0       # via flask
 jinja2==2.10              # via flask
 markupsafe==1.1.0         # via jinja2
-<<<<<<< HEAD
-paramiko==2.4.2           # via fabric3
-=======
 more-itertools==5.0.0     # via pytest
 paramiko==2.4.2           # via fabric3
 pathlib2==2.3.3           # via pytest
->>>>>>> 9f01baf63de8a612dbfa83d00acbed8cf378b801
-pip-tools==3.1.0
+pip-tools==3.2.0
 pluggy==0.8.1             # via pytest
 py==1.7.0                 # via pytest
-pyasn1==0.4.4             # via paramiko
+pyasn1==0.4.5             # via paramiko
 pycparser==2.19           # via cffi
 pynacl==1.3.0             # via paramiko
-<<<<<<< HEAD
-six==1.12.0               # via bcrypt, cryptography, fabric3, flask-cors, pip-tools, pynacl
-soupsieve==1.7            # via beautifulsoup4
-werkzeug==0.14.1          # via flask
-=======
 pytest-flask==0.14.0
 pytest==4.1.1             # via pytest-flask
 requests==2.21.0
 six==1.12.0               # via bcrypt, cryptography, fabric3, flask-cors, more-itertools, pathlib2, pip-tools, pynacl, pytest
-soupsieve==1.7            # via beautifulsoup4
+soupsieve==1.7.2          # via beautifulsoup4
 urllib3==1.24.1           # via requests
 werkzeug==0.14.1          # via flask, pytest-flask
->>>>>>> 9f01baf63de8a612dbfa83d00acbed8cf378b801
