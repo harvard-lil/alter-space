@@ -51,6 +51,12 @@
         }
       });
 
+      EventBus.$on('update-volume', (volume) => {
+        if (this.showToggles && this.currentlyPlaying) {
+          this.audioFile.volume = volume / 100;
+        }
+      });
+
       this.initializePresetSound()
     },
     methods: {
