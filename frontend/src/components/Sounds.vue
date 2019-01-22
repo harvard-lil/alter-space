@@ -3,13 +3,10 @@
     <li v-for="(audio, index) in audioPaths" :key="audio">
       <soundfile :audio="audio"
                  :index="index"
-<<<<<<< HEAD
                  :globalPause="globalPause"
                  :showToggles="showToggles">
       </soundfile>
-=======
-                 :showToggles="showToggles"></soundfile>
->>>>>>> 9f01baf63de8a612dbfa83d00acbed8cf378b801
+
     </li>
   </ul>
 </template>

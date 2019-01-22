@@ -40,13 +40,12 @@
       // catch global event, check if this is the sound we're trying to add
       EventBus.$on('add-new-sound', (sound_index) => {
         if (this.index === sound_index && this.showToggles) {
-
           this.play = true;
           this.toggleButton()
         }
       });
 
-      EventBus.$on('pause-music', (pause) => {
+      EventBus.$on('pause-music', () => {
         if (this.showToggles && this.currentlyPlaying) {
           this.toggleButton()
         }
@@ -74,7 +73,6 @@
       initializePresetSound() {
         // Plays sound if it's in the presets
         if (this.showToggles) this.showChosenSound();
-
       }
     },
     beforeDestroy() {

@@ -1,10 +1,16 @@
 <template>
-  <div class="row">
 
+  <div class="row">
     <play-button></play-button>
+    <h3>Now playing:</h3>
+    <ul>
+      <li></li>
+    </ul>
     <Sounds :showToggles="showToggles"
-            :soundPresets="soundPresets">
+            :soundPresets="naturePresets"
+            :type="nature">
     </Sounds>
+
   </div>
 
 </template>
@@ -18,9 +24,11 @@
     name: "sound-with-toggles",
     components: {Sounds, PlayButton},
     props: ['soundPresets'],
+
     data() {
       return {
         showToggles: true,
+        pause: false,
       }
     },
   }

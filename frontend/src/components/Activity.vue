@@ -23,16 +23,12 @@
   import axios from 'axios';
   import SoundWithToggles from "./SoundWithToggles";
   import LightWithToggles from "./LightWithToggles";
-  import Sounds from './Sounds';
-  import Lights from './Lights';
 
   const activityUrl = process.env.VUE_APP_BACKEND_URL + "activity/";
 
   export default {
     name: "Activity",
     components: {
-      Sounds,
-      Lights,
       SoundWithToggles,
       LightWithToggles
     },

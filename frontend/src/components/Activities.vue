@@ -1,7 +1,7 @@
 <template>
     <table align="center">
       <tr v-for="(level, l_idx) in activities" v-bind:key="l_idx">
-        <td v-for="(activity, idx) in activities[l_idx]" :key="activity">
+        <td v-for="activity in activities[l_idx]" :key="activity">
           <router-link :id="activity"
                        :to="{ path: 'Activity', query: { name: activity }}">
             <button class="btn btn-primary btn-activity">
