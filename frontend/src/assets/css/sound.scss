@@ -1,0 +1,8 @@
+.btn-sound-list {
+  background: $color-black;
+  color: $color-white;
+  border: 0;
+  &.active {
+    background: $color-gray;
+  }
+}

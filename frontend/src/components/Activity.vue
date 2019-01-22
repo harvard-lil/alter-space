@@ -25,7 +25,7 @@
   import LightWithToggles from "./LightWithToggles";
 
   const activityUrl = process.env.VUE_APP_BACKEND_URL + "activity/";
-
+  console.log("activity")
   export default {
     name: "Activity",
     components: {
@@ -39,18 +39,17 @@
         lightPresets: [],
       }
     },
-    methods: {
-      getPresets() {
-        axios.get(activityUrl + this.activity)
-            .then((res) => {
-              this.soundPresets = res.data.sound;
-              this.lightPresets = res.data.light;
-            })
-      },
+    beforeCreate() {
+      let url = activityUrl + this.$route.query.name;
+      console.log("getting url", url)
+      axios.get(url)
+          .then((res) => {
+            this.soundPresets = res.data.sound;
+            this.lightPresets = res.data.light;
+          })
     },
-    created() {
-       this.getPresets()
-    }
+
+
   }
 
 </script>

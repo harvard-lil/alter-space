@@ -1,53 +1,39 @@
 <template>
-  <ul>
-    <li v-for="(audio, index) in audioPaths" :key="audio">
-      <soundfile :audio="audio"
-                 :index="index"
-                 :globalPause="globalPause"
-                 :showToggles="showToggles">
-      </soundfile>
+  <div class="sound-preset-container">
+    <button @click="showList = !showList"
+            :class="{active: showList}"
+            class="btn-sound-list">
+      {{soundType}}
+    </button>
 
-    </li>
-  </ul>
+    <ul class="sound-list" :class="{show: showList}">
+      <li v-for="(audio, index) in soundPresets"
+          :key="audio">
+        <soundfile :audio="audio"
+                   :index="index"
+                   :showToggles="showToggles">
+        </soundfile>
+
+      </li>
+    </ul>
+  </div>
 </template>
 
 <script>
-  import axios from 'axios';
   import soundfile from './Soundfile'
-
-  const audioBaseUrl = process.env.VUE_APP_BACKEND_URL + "sounds";
 
   export default {
     name: "Sounds",
     components: {
       soundfile
     },
-    props: ['showToggles'],
+    props: ['showToggles', 'soundType', 'soundPresets'],
     data() {
       return {
         baseUrl: process.env.BASE_URL,
-        audioPaths: [],
-        globalPause: false
+        showList: false,
+        soundNames: []
       }
     },
-    mounted() {
-    },
-    methods: {
-      getFiles() {
-        axios.get(audioBaseUrl)
-            .then((res) => {
-              this.audioPaths = res.data;
-              // if soundPresets exist, filter list
-              // otherwise, show everything
-            })
-      },
-    },
-
-    created() {
-      this.getFiles();
-      // EventBus.$on("pause-music", function (pause) {
-      //   this.globalPause = pause;
-      // })
-    }
   }
 </script>

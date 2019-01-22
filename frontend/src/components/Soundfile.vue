@@ -1,7 +1,5 @@
 <template>
-  <div class="sound-container"
-       :showToggles="showToggles"
-       :currentlyPlaying="currentlyPlaying"
+  <div :currentlyPlaying="currentlyPlaying"
        :index="index">
     <button @click="toggleButton" class="toggle" v-bind:class="{ on: toggle }">
       {{ audioName }}

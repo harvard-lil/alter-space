@@ -1,6 +1,5 @@
 <template>
   <div class="col-12">
-
     <button @click="toggleMute()"
             class="btn-volume"
             :class="{muted: mute}">
@@ -10,8 +9,10 @@
            min="0"
            max="100"
            value="100"
+           autocomplete="off"
            v-model.lazy.number="volume"/>
   </div>
+
 </template>
 
 <script>
