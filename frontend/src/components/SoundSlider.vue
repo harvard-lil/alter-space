@@ -1,6 +1,11 @@
 <template>
   <div>
+    <button @click="toggleMute()"
+            class="btn-volume"
+            :class="{muted: mute}">
+    </button>
     <input type="range"
+           class="volume-range"
            min="0"
            max="100"
            v-model.lazy.number="volume"/>
@@ -14,24 +19,22 @@
     name: "sound-slider",
     components: {},
     methods: {
+      toggleMute() {
+        this.mute = !this.mute;
+        EventBus.$emit('mute-volume', this.mute);
+      }
     },
     watch: {
       volume() {
-        console.log("getting value", this.volume);
         EventBus.$emit('update-volume', this.volume);
       }
-
-
     },
     data() {
       return {
         audio: undefined,
-        volume: 100
+        volume: 10,
+        mute: false
       }
     }
   }
 </script>
-
-<style scoped>{{}}
-
-</style>

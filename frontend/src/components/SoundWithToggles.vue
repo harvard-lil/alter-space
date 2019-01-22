@@ -4,8 +4,8 @@
     <play-button></play-button>
     <sound-slider></sound-slider>
     <h3>Now playing:</h3>
-    <ul>
-      <li></li>
+    <ul v-for="sound in sounds">
+      <li>{{sound}}</li>
     </ul>
     <Sounds :showToggles="showToggles"
             :soundPresets="naturePresets"
@@ -26,13 +26,15 @@
     name: "sound-with-toggles",
     components: {
       SoundSlider,
-      Sounds, PlayButton},
+      Sounds,
+      PlayButton},
     props: ['soundPresets'],
 
     data() {
       return {
         showToggles: true,
         pause: false,
+        sounds: this.$parent.soundPresets
       }
     },
   }

@@ -33,6 +33,7 @@
         audioName: getAudioName(this.audio),
         play: false,
         currentlyPlaying: false,
+        previousVolume: 10
       }
     },
     mounted() {
@@ -54,9 +55,15 @@
       EventBus.$on('update-volume', (volume) => {
         if (this.showToggles && this.currentlyPlaying) {
           this.audioFile.volume = volume / 100;
+          this.previousVolume = volume;
         }
       });
 
+      EventBus.$on('mute-volume', (mute) => {
+        if (this.showToggles && this.currentlyPlaying) {
+          this.audioFile.volume = mute ? 0 : this.previousVolume / 100
+        }
+      });
       this.initializePresetSound()
     },
     methods: {

@@ -58,6 +58,19 @@ h1 {
   }
 }
 
+.btn-volume {
+  background: transparent url("../img/volume.svg") no-repeat;
+  height: 30px;
+  width: 30px;
+  border: 0;
+  cursor: pointer;
+}
+
+.volume-range {
+  width: 70%;
+  margin-left: 10px;
+}
+
 .sound-container {
   display: none;
   &.show {
