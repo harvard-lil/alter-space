@@ -1,7 +1,11 @@
 <template>
   <ul>
-    <li v-for="audio in audioPaths" :key="audio">
-      <soundfile :audio="audio" :play="play" :showToggles="showToggles"></soundfile>
+    <li v-for="(audio, index) in audioPaths" :key="audio">
+      <soundfile :audio="audio"
+                 :index="index"
+                 :globalPause="globalPause"
+                 :showToggles="showToggles">
+      </soundfile>
     </li>
   </ul>
 </template>
@@ -22,7 +26,7 @@
       return {
         baseUrl: process.env.BASE_URL,
         audioPaths: [],
-        play: false
+        globalPause: false
       }
     },
     mounted() {
@@ -47,7 +51,10 @@
       }
     },
     created() {
-      this.getFiles()
+      this.getFiles();
+      // EventBus.$on("pause-music", function (pause) {
+      //   this.globalPause = pause;
+      // })
     }
   }
 </script>

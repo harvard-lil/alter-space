@@ -1,5 +1,8 @@
 <template>
-  <div>
+  <div class="sound-container"
+       :showToggles="showToggles"
+       :currentlyPlaying="currentlyPlaying"
+       :index="index">
     <button @click="toggleButton" class="toggle" v-bind:class="{ on: toggle }">
       {{ audioName }}
     </button>
@@ -23,22 +26,56 @@
       return {
         audioBaseUrl: audioBaseUrl,
         toggle: false,
-        audioName: getAudioName(this.audio)
+        audioName: getAudioName(this.audio),
+        play: false,
+        currentlyPlaying: false,
       }
     },
 
     mounted() {
       this.audioFile = this.$el.querySelectorAll('audio')[0];
-      if (this.play) {
-        this.toggleButton();
-      }
+      // catch global event, check if this is the sound we're trying to add
+      EventBus.$on('add-new-sound', (sound_index) => {
+        if (this.index === sound_index && this.showToggles) {
+          this.play = true;
+          this.toggleButton()
+        }
+      });
+
+      EventBus.$on('pause-music', (pause) => {
+        if (this.showToggles && this.currentlyPlaying) {
+          this.toggleButton()
+        }
+      });
+
+      this.initializePresetSound()
     },
 
     methods: {
       toggleButton() {
-        this.toggle = !this.toggle;
-        this.toggle ? this.audioFile.play() : this.audioFile.pause();
+        if (this.showToggles) {
+          this.toggle = !this.toggle;
+          this.toggle ? this.audioFile.play() : this.audioFile.pause();
+          this.play = this.toggle;
+        } else {
+          // send an event out to other sounds so that
+          // they may add themselves into the currently playing arena
+          EventBus.$emit("add-new-sound", this.index);
+        }
+      },
+      showChosenSound() {
+        if (this.$parent.$parent.soundPresets.indexOf(this.index) > -1) {
+          this.toggleButton();
+          this.currentlyPlaying = true;
+        }
+      },
+      initializePresetSound() {
+        // Plays sound if it's in the presets
+        if (this.showToggles) this.showChosenSound();
       }
+    },
+    beforeDestroy() {
+      this.currentlyPlaying = false;
     }
   }
 </script>

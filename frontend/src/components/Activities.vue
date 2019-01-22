@@ -1,16 +1,17 @@
 <template>
-  <div class="row">
-    <div class="col-12">
-      <ul>
-        <li v-for="activity in activities" :key="activity">
+    <table align="center">
+      <tr v-for="(level, l_idx) in activities" v-bind:key="l_idx">
+        <td v-for="(activity, idx) in activities[l_idx]" :key="activity">
           <router-link :id="activity"
                        :to="{ path: 'Activity', query: { name: activity }}">
-            <button class="btn btn-primary btn-activity">{{activity}}</button>
+            <button class="btn btn-primary btn-activity">
+              {{activity}}
+            </button>
           </router-link>
-        </li>
-      </ul>
-    </div>
-  </div>
+        </td>
+      </tr>
+
+    </table>
 </template>
 
 <script>
@@ -29,8 +30,16 @@
       getActivities() {
         axios.get(activitiesUrl)
             .then((res) => {
-              this.activities = res.data;
-              window.activities = this.activities;
+              let activities = res.data;
+              let activtiesPerRow = 3;
+              let loops = (activities.length / activtiesPerRow);
+              let loop = 0;
+              let activitiesForRendering = [];
+              while (loop < loops) {
+                activitiesForRendering.push(activities.slice(loop * 3, loop * 3 + 3));
+                loop += 1;
+              }
+              this.activities = activitiesForRendering;
             })
             .catch(function () {
               window.errors = arguments
