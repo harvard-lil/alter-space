@@ -3,9 +3,13 @@
     <li v-for="(audio, index) in audioPaths" :key="audio">
       <soundfile :audio="audio"
                  :index="index"
+<<<<<<< HEAD
                  :globalPause="globalPause"
                  :showToggles="showToggles">
       </soundfile>
+=======
+                 :showToggles="showToggles"></soundfile>
+>>>>>>> 9f01baf63de8a612dbfa83d00acbed8cf378b801
     </li>
   </ul>
 </template>
@@ -21,7 +25,7 @@
     components: {
       soundfile
     },
-    props: ['showToggles', 'soundPresets'],
+    props: ['showToggles'],
     data() {
       return {
         baseUrl: process.env.BASE_URL,
@@ -35,21 +39,13 @@
       getFiles() {
         axios.get(audioBaseUrl)
             .then((res) => {
-              this.filterChosenSounds(res.data);
+              this.audioPaths = res.data;
+              // if soundPresets exist, filter list
+              // otherwise, show everything
             })
       },
-      filterChosenSounds(allSounds) {
-        if (this.soundPresets && this.soundPresets.length) {
-          for (let i = 0; i < this.soundPresets.length; i++) {
-            this.audioPaths.push(allSounds[this.soundPresets[i]]);
-          }
-          // And then, play all the chosen sounds
-          this.play = true;
-        } else {
-          this.audioPaths = allSounds;
-        }
-      }
     },
+
     created() {
       this.getFiles();
       // EventBus.$on("pause-music", function (pause) {
@@ -58,9 +54,3 @@
     }
   }
 </script>
-
-<style>
-  ul {
-    list-style: none;
-  }
-</style>

@@ -27,14 +27,15 @@
   import Lights from './Lights';
 
   const activityUrl = process.env.VUE_APP_BACKEND_URL + "activity/";
-  
+
   export default {
     name: "Activity",
     components: {
       Sounds,
       Lights,
       SoundWithToggles,
-      LightWithToggles},
+      LightWithToggles
+    },
     data() {
       return {
         activity: this.$route.query.name,

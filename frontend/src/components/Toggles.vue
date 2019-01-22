@@ -1,6 +1,7 @@
 <template>
   <div class="row">
-    <Sounds :showToggles="showToggles" :soundPresets="soundPresets"></Sounds>
+    <Sounds :showToggles="showToggles"
+            :soundPresets="soundPresets"></Sounds>
   </div>
 </template>
 

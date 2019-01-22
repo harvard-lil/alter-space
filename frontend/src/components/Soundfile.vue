@@ -8,19 +8,23 @@
     </button>
     <!-- audio files are hidden from DOM / view -->
     <audio loop controls>
-      <source :id="audio" :play="play" :src="`${audio}`" type="audio/mpeg">
+      <source :id="audio" :src="`${audio}`" type="audio/mpeg">
     </audio>
   </div>
 </template>
 
 <script>
+  import EventBus from '../event-bus';
+
   const audioBaseUrl = process.env.VUE_APP_BACKEND_URL + "sounds";
+
   function getAudioName(audioPath) {
     let parts = audioPath.split('/');
     return parts[parts.length - 1]
   }
+
   export default {
-    props: ['audio', 'play'],
+    props: ['audio', 'showToggles', 'index'],
     name: "soundfile",
     data() {
       return {
@@ -31,12 +35,12 @@
         currentlyPlaying: false,
       }
     },
-
     mounted() {
       this.audioFile = this.$el.querySelectorAll('audio')[0];
       // catch global event, check if this is the sound we're trying to add
       EventBus.$on('add-new-sound', (sound_index) => {
         if (this.index === sound_index && this.showToggles) {
+
           this.play = true;
           this.toggleButton()
         }
@@ -50,13 +54,11 @@
 
       this.initializePresetSound()
     },
-
     methods: {
       toggleButton() {
         if (this.showToggles) {
           this.toggle = !this.toggle;
           this.toggle ? this.audioFile.play() : this.audioFile.pause();
-          this.play = this.toggle;
         } else {
           // send an event out to other sounds so that
           // they may add themselves into the currently playing arena
@@ -72,6 +74,7 @@
       initializePresetSound() {
         // Plays sound if it's in the presets
         if (this.showToggles) this.showChosenSound();
+
       }
     },
     beforeDestroy() {
@@ -80,24 +83,3 @@
   }
 </script>
 
-<style scoped>
-  audio {
-    display: none;
-  }
-
-  .toggle {
-    background-color: blue;
-    color: white;
-    padding: 10px;
-    margin: 0 0 20px 0;
-    width: 150px;
-    cursor: pointer;
-    font-weight: 300;
-    border: 0;
-    border-radius: 5px;
-  }
-
-  .toggle.on {
-    background-color: navy;
-  }
-</style>

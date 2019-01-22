@@ -1,3 +1,8 @@
+env:
+  global:
+    - secure: "mguYztVQf20/tGGmC7QE316FVlwniJMT1i8dAub/pffFBQU02S3P5O2qhkkMXiOiZXfbRKyyhVYmIXSsDsnDtULNiQB7z5F3lh+pXGoSlU2+XYjbA3DhwKeH94c7BU7+fNr7E9+TMIZcoqZ4ttxQBsFe+IdAenA0l+eMLOnYCiR2TDJrkAcJiiv4W+IvF/qUemcT+OMOCZc+XD/q6GAWJKvkFYeM7UJyrFk9EVGx1F/u0f8E5mqcpRlx8+q42nagkdhEUOPuXPhvlI8FDFxBO3EHM0eb1VkT+aV5PDOdhjHzOFTZN8jg8W56LLN/18j5X/BCplbtjhDuhuQ0f/Eeff59fh51fhcf0sXvbHsWPkO5p7gHXQ3gd+8ParvPB2w8N6kxedQPDN50+PAOwZdmLiUWw79Rcy+40TG0xL9V7x17xsFSIAdOxjaCleRzA/Y/5C/1KlQh8gYop5muom8dYuOPLPxEiAy3Uz959DoWGUEy38g05Cf9dbxDj8+Uzn7OwU4PZiYRTLYkREwQp5zp5HBXjOoCb4nMM93Uz7YEo5czCqEQzl/oLUJdKaegzed2Fscid5o1KWA9tlMASy7hvG4O4vEbehbji31EIZPh4QW73Gw90G/JC58hYmnAA38eX7jBqFIMdjrv3+KHurYzfcdvDZr27M1uDtjtckU1OwY="
+    - secure: "YZ8X78+GVMunmGxsOoCeegf19/IgcZdRkXqDG8fGnv/K0cL0La+mBgMmVS/KNB/F0omgceRJQH1+s1l1eDiDXFr9npji2DAcjrAHAKs0i659k12o8LF/DvQ7ooU0GFxuscITBDCj/GHKr826nKaHd6NWMi9HJ02T2U2yzH7q8caz0+jzH+ssmTzWI6h2ObQ/9aa1FMqX2rsP24N3S9Fmw1o6ekoOytoQd0py/xYO15lAspLllHUcr9NaUxkx0gyunFgR8KiVVCYb+V5kbcNnqtJRfwX1shJcPRNpTYtQg4n5rP/LnVT22lJApw+EkbuklYI8uUuVeoGoRbIylQHgHWj8UJEVZZ4SlOLk1CNRwLx9WRLphrXa9khrZtrb7aryw8gnQICaV9iE5UeDkZoJr+d1V4Gs7A0N3CPQ+9pfIU1D2Hn1YCvCbqCe5lRtQ9qsIiRXoH8SIRfcMSGMxlLTKuOpDERKvSYOXuIm0EhTOGHjdh5FSWrWC3iptDwE4crfZxfzNw78IddlIIMPBPBMxl0YsD9jsZMN2OsWoO1Hw+LA19aF8gVw7j8FSdbndS8anTLFYMejoN3+67IFJbdZ81d/TZInlb0Ujr8NlV/eEVG3OdaVJY+R6aWvKcCswf8qrhMYuQAX9PyvVoM8aIskeXA/Bh0fAY6rv/8AOBJ0Fas="
+
 language: python
 python:
 - "3.5"
@@ -9,5 +14,17 @@ before_install:
 install:
 - pip install -r requirements.txt
 - cd frontend && npm install
+- npm run build
+- cd ..
 
-script: echo "hello"
+script:
+- fab test
+
+after_success:
+  - >
+    if [ "$TRAVIS_PULL_REQUEST" == "false" -a "$TRAVIS_BRANCH" == "master" ] ;
+    then
+    export DEPLOY_CONTENT='{"TRAVIS_BUILD_NUMBER":"'$TRAVIS_BUILD_NUMBER'","TRAVIS_COMMIT":"'$TRAVIS_COMMIT'","TRAVIS_BRANCH":"'$TRAVIS_BRANCH'","TRAVIS_REPO_SLUG":"'$TRAVIS_REPO_SLUG'"}' ;
+    export DEPLOY_SIG="sha1=`echo -n "$DEPLOY_CONTENT" | openssl sha1 -hmac $DEPLOY_KEY | sed 's/^.* //'`" ;
+    curl -X POST "$DEPLOY_URL" --data "$DEPLOY_CONTENT" -H "Content-Type: application/json" -H "X-Travis-Signature: $DEPLOY_SIG" ;
+    fi

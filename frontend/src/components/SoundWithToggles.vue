@@ -1,5 +1,6 @@
 <template>
   <div class="row">
+
     <play-button></play-button>
     <Sounds :showToggles="showToggles"
             :soundPresets="soundPresets">
