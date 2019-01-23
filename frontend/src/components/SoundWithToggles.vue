@@ -8,20 +8,26 @@
         v-bind:key="sound">
       <li>{{sound}}</li>
     </ul>
-    <Sounds :showToggles="showToggles"
-            :soundPresets="presetsNature"
-            :soundType="'nature'">
-    </Sounds>
-
-    <Sounds :showToggles="showToggles"
-            :soundPresets="presetsUrban"
-            :soundType="'urban'">
-    </Sounds>
-
-    <Sounds :showToggles="showToggles"
-            :soundPresets="presetsAbstract"
-            :soundType="'abstract'">
-    </Sounds>
+    <ul>
+      <li>
+        <Sounds :showToggles="showToggles"
+                :soundPresets="presetsNature"
+                :soundType="'nature'">
+        </Sounds>
+      </li>
+      <li>
+        <Sounds :showToggles="showToggles"
+                :soundPresets="presetsUrban"
+                :soundType="'urban'">
+        </Sounds>
+      </li>
+      <li>
+        <Sounds :showToggles="showToggles"
+                :soundPresets="presetsAbstract"
+                :soundType="'abstract'">
+        </Sounds>
+      </li>
+    </ul>
 
   </div>
 

@@ -1,4 +1,12 @@
-@import 'bootstrap/scss/bootstrap.scss';
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/mixins";
+
+@import "~bootstrap/scss/reboot";
+@import "~bootstrap/scss/type";
+@import "~bootstrap/scss/code";
+@import "~bootstrap/scss/grid";
+
 @import 'variables';
 
 body {
@@ -34,6 +42,12 @@ h1 {
     text-transform: uppercase;
   }
 }
+
+/* buttons */
+button, input.btn, input.btn-default {
+  cursor: pointer;
+}
+
 
 /* Activity settings */
 

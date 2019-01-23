@@ -8,10 +8,12 @@
     </div>
     <div class="row">
       <div class="col-4">
+        <h3>Sounds</h3>
         <sound-with-toggles :soundPresets="soundPresets">
         </sound-with-toggles>
       </div>
       <div class="col-4">
+        <h3>Lights</h3>
         <light-with-toggles>
         </light-with-toggles>
       </div>
@@ -25,7 +27,7 @@
   import LightWithToggles from "./LightWithToggles";
 
   const activityUrl = process.env.VUE_APP_BACKEND_URL + "activity/";
-  console.log("activity")
+
   export default {
     name: "Activity",
     components: {
@@ -41,7 +43,6 @@
     },
     beforeCreate() {
       let url = activityUrl + this.$route.query.name;
-      console.log("getting url", url)
       axios.get(url)
           .then((res) => {
             this.soundPresets = res.data.sound;
