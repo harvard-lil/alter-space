@@ -1,0 +1,27 @@
+/* colorpicker styles */
+.colorpicker {
+  width: 300px;
+  height: 300px;
+  position: fixed;
+  z-index: 999;
+}
+
+.canvas-image {
+  width: 300px;
+  height: 300px;
+}
+
+#picker {
+  cursor: pointer;
+  float: left;
+  margin: 10px;
+  border: 0;
+}
+
+.preview {
+  border-radius: 50%;
+  cursor: pointer;
+  height: 30px;
+  width: 30px;
+  border: 1px solid $color-black;
+}

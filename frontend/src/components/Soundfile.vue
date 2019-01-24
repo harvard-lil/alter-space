@@ -1,7 +1,5 @@
 <template>
-  <div class="sound-container"
-       v-bind:class="{ show: showSound }"
-       :showToggles="showToggles"
+  <div :currentlyPlaying="currentlyPlaying"
        :index="index">
     <button @click="toggleButton" class="toggle" v-bind:class="{ on: toggle }">
       {{ audioName }}
@@ -31,8 +29,9 @@
         audioBaseUrl: audioBaseUrl,
         toggle: false,
         audioName: getAudioName(this.audio),
-        showSound: false,
         play: false,
+        currentlyPlaying: false,
+        previousVolume: 10
       }
     },
     mounted() {
@@ -40,11 +39,29 @@
       // catch global event, check if this is the sound we're trying to add
       EventBus.$on('add-new-sound', (sound_index) => {
         if (this.index === sound_index && this.showToggles) {
-          this.showSound = true;
+          this.play = true;
           this.toggleButton()
         }
       });
 
+      EventBus.$on('pause-music', () => {
+        if (this.showToggles && this.currentlyPlaying) {
+          this.toggleButton()
+        }
+      });
+
+      EventBus.$on('update-volume', (volume) => {
+        if (this.showToggles && this.currentlyPlaying) {
+          this.audioFile.volume = volume / 100;
+          this.previousVolume = volume;
+        }
+      });
+
+      EventBus.$on('mute-volume', (mute) => {
+        if (this.showToggles && this.currentlyPlaying) {
+          this.audioFile.volume = mute ? 0 : this.previousVolume / 100
+        }
+      });
       this.initializePresetSound()
     },
     methods: {
@@ -52,7 +69,6 @@
         if (this.showToggles) {
           this.toggle = !this.toggle;
           this.toggle ? this.audioFile.play() : this.audioFile.pause();
-
         } else {
           // send an event out to other sounds so that
           // they may add themselves into the currently playing arena
@@ -61,18 +77,18 @@
       },
       showChosenSound() {
         if (this.$parent.$parent.soundPresets.indexOf(this.index) > -1) {
-          this.showSound = true;
-          this.toggleButton()
+          this.toggleButton();
+          this.currentlyPlaying = true;
         }
       },
       initializePresetSound() {
         // Plays sound if it's in the presets
         if (this.showToggles) this.showChosenSound();
-        else {
-          this.showSound = true;
-        }
       }
     },
+    beforeDestroy() {
+      this.currentlyPlaying = false;
+    }
   }
 </script>
 

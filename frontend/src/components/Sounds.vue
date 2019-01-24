@@ -1,46 +1,58 @@
 <template>
-  <ul>
-    <li v-for="(audio, index) in audioPaths" :key="audio">
-      <soundfile :audio="audio"
-                 :index="index"
-                 :showToggles="showToggles"></soundfile>
-    </li>
-  </ul>
+  <div class="sound-preset-container">
+    <button @click="showList()"
+            :class="{active: showList}"
+            class="btn btn-default btn-sound-list">
+      {{soundType}}
+    </button>
+
+    <ul class="sound-list" :class="{show: showingList}">
+      <li v-for="(audio, index) in soundPresets"
+          :key="audio">
+        <soundfile :audio="audio"
+                   :index="index"
+                   :showToggles="showToggles">
+        </soundfile>
+
+      </li>
+    </ul>
+  </div>
 </template>
 
 <script>
-  import axios from 'axios';
   import soundfile from './Soundfile'
-
-  const audioBaseUrl = process.env.VUE_APP_BACKEND_URL + "sounds";
 
   export default {
     name: "Sounds",
     components: {
       soundfile
     },
-    props: ['showToggles'],
+    props: ['showToggles', 'soundType', 'soundPresets'],
     data() {
       return {
         baseUrl: process.env.BASE_URL,
-        audioPaths: [],
+        showingList: false,
+        soundNames: []
       }
     },
     mounted() {
+      let self = this;
+      /* collapse all other lists */
+      this.$parent.$on("sounds-collapse-list", function(soundType) {
+        if (soundType !== self.soundType) {
+          self.showingList = false;
+        }
+      })
     },
     methods: {
-      getFiles() {
-        axios.get(audioBaseUrl)
-            .then((res) => {
-              this.audioPaths = res.data;
-              // if soundPresets exist, filter list
-              // otherwise, show everything
-            })
-      },
-    },
-
-    created() {
-      this.getFiles();
+      showList() {
+        if (this.showingList) {
+          this.showingList = false;
+        } else {
+          this.showingList = true;
+          this.$parent.$emit("sounds-collapse-list", this.soundType);
+        }
+      }
     }
   }
 </script>
