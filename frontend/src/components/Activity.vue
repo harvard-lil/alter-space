@@ -14,8 +14,8 @@
       </div>
       <div class="col-4">
         <h3>Lights</h3>
-        <light-with-toggles>
-        </light-with-toggles>
+        <light-levers>
+        </light-levers>
       </div>
     </div>
   </div>
@@ -23,8 +23,8 @@
 
 <script>
   import axios from 'axios';
-  import SoundWithToggles from "./SoundWithToggles";
-  import LightWithToggles from "./LightWithToggles";
+  import SoundWithToggles from "./SoundLevers";
+  import LightLevers from "./LightLevers";
 
   const activityUrl = process.env.VUE_APP_BACKEND_URL + "activity/";
 
@@ -32,7 +32,7 @@
     name: "Activity",
     components: {
       SoundWithToggles,
-      LightWithToggles
+      LightLevers
     },
     data() {
       return {
