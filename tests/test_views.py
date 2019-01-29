@@ -8,5 +8,6 @@ def test_sounds(client):
     assert response.status_code == 200
     assert response.is_json
     results = response.get_json()
-    for song in results:
+    assert 'nature' in results
+    for song in results['nature']:
         assert ".mp3" in song or ".wav" in song
