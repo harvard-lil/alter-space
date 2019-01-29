@@ -1,13 +1,26 @@
 <template>
-  <div class="container">
-    <light-levers></light-levers>
-    <br/>
-    <sound-with-toggles :soundPresets="soundPresets"></sound-with-toggles>
+  <div class="row">
+    <div class="col-12 gray-bar">
+      <ul class="list-inline">
+        <li class="list-inline-item">
+          <h3 class="settings-title">Settings</h3>
+        </li>
+        <li class="list-inline-item">
+          <button class="float-right">Reset</button>
+        </li>
+      </ul>
 
-    <div class="row">
-      <!-- TODO: visual? -->
+
     </div>
+    <div class="lever-container col-centered">
+      <light-levers class="color-levers"></light-levers>
+      <br/>
+      <sound-with-toggles :soundPresets="soundPresets"></sound-with-toggles>
 
+      <div class="row">
+        <!-- TODO: visual? -->
+      </div>
+    </div>
   </div>
 </template>
 

@@ -27,7 +27,7 @@ input[type="range"]::-moz-range-progress {
 }
 
 input[type="range"]::-moz-range-track {
-  background-color: $color-gray-light;
+  background-color: $color-gray-lighter;
 }
 
 /* IE*/
@@ -36,9 +36,5 @@ input[type="range"]::-ms-fill-lower {
 }
 
 input[type="range"]::-ms-fill-upper {
-  background-color: $color-gray-light;
-}
-
-input[type="range"] {
-   border-radius: 50%;
+  background-color: $color-gray-lighter;
 }

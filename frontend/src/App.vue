@@ -1,21 +1,33 @@
 <template>
-  <div id="app">
+  <div id="app" :class="'activity-'+$route.query.name">
     <!-- Top level navigation -->
-    <nav class="nav">
+
+    <nav class="nav"
+         :class="'activity-'+$route.query.name">
       <div class="row">
         <div class="col-1">
-          <a href="/">Home</a>
+          <div class="btn-group">
+            <a class="btn-link btn-home"
+               href="/"></a>
+            <a href="/">Home</a>
+          </div>
         </div>
         <div class="col-10">
-          <h1 class="page-header" v-if="$route.query.name">
+          <h1 class="page-header"
+              v-if="$route.query.name"
+              :class="'activity-'+$route.query.name">
             {{ $route.query.name }}
           </h1>
         </div>
         <div class="col-1">
-          <a href="/about">About</a>
+          <div class="btn-group">
+            <a class="btn-link btn-info" href="/about"></a>
+            <a href="/about">About</a>
+          </div>
         </div>
       </div>
     </nav>
+
     <router-view :key="$route.fullPath"></router-view>
 
     <div class="container"

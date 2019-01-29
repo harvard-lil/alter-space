@@ -1,4 +1,5 @@
 import os
+import json
 import requests
 from flask import jsonify
 from flask import request, render_template, send_from_directory
@@ -33,6 +34,11 @@ def lights():
     # url = "https://api.lifx.com/v1/lights/%s/state" % config.LIGHTS_ID
     # requests.put(url, data=data, headers=headers)
     return jsonify(result)
+
+
+#
+# @backend_app.route("/colorpresets")
+# def getcolorpresets():
 
 
 @backend_app.route("/breathe")
@@ -77,3 +83,38 @@ def get_activity_presets(activity):
         "light": config.LIGHT_PRESETS[activity],
     }
     return jsonify(presets)
+
+
+# LIFX LIGHTS
+
+@backend_app.route("/lifx/scenes")
+def list_scenes():
+    headers = {"Authorization": "Bearer %s" % config.LIGHTS_TOKEN}
+    results = requests.get("https://api.lifx.com/v1/scenes", headers=headers)
+    return jsonify(results.json())
+
+@backend_app.route("/lifx/relax")
+def create_lights():
+    headers = {"Authorization": "Bearer %s" % config.LIGHTS_TOKEN}
+    data = {
+        "power": "on",
+        "states": [
+            {
+                "selector": "id:d073d52cd4cb|0-7",
+                "brightness": 0.65,
+                "hue": 35,
+                "saturation": 0.37,
+                "kelvin": 3500,
+                # "duration": 600
+            },
+            {
+                "selector": "id:d073d52cd4cb|8-15",
+                "brightness": 0.9,
+                "hue": 300,
+                "kelvin": 3500,
+            }
+        ],
+    }
+
+    results = requests.put("https://api.lifx.com/v1/lights/states", data=json.dumps(data), headers=headers)
+    return jsonify(results.json())

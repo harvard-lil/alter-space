@@ -1,0 +1,92 @@
+nav {
+  @include make-col(12);
+  display: inline-block;
+  min-width: 100%;
+  h1, .h1 {
+    text-align: center;
+    font-size: 6.5rem;
+    font-weight: $font-weight-bold;
+    &.page-header {
+      text-transform: capitalize;
+    }
+
+  }
+  a {
+    text-decoration: none;
+  }
+  .btn-group {
+    text-align: center;
+    position: absolute;
+    .btn-link {
+      margin: 0 auto;
+    }
+
+  }
+}
+
+nav {
+  .btn-home, .btn-info {
+    @extend .btn;
+    border: 0;
+    display: block;
+  }
+  .btn-home {
+    background: transparent url("../img/sprites/home.svg") no-repeat;
+    height: 37px;
+    width: 44px;
+  }
+
+  .btn-info {
+    background: transparent url("../img/sprites/info.svg") no-repeat;
+    height: 37px;
+    width: 37px;
+  }
+
+}
+
+nav {
+  &.activity-read {
+    background-color: $color-read;
+  }
+  &.activity-relax {
+    background-color: $color-relax;
+  }
+  &.activity-meditate {
+    background-color: $color-meditate;
+  }
+  &.activity-create {
+    background-color: $color-create;
+  }
+  &.activity-focus {
+    background-color: $color-focus;
+  }
+  &.activity-wyrd {
+    background-color: $color-wyrd;
+  }
+  &.activity-read, &.activity-relax,
+  &.activity-meditate, &.activity-create {
+    color: $color-navy;
+    h1 {
+      color: $color-navy;
+    }
+    a {
+      color: $color-navy;
+    }
+  }
+  &.activity-wyrd, &.activity-focus {
+    color: $color-white;
+    h1 {
+      color: $color-white;
+    }
+    a {
+      color: $color-white;
+    }
+
+  }
+}
+
+nav {
+  .activity-focus {
+    background-color: $color-focus;
+  }
+}
