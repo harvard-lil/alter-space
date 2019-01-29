@@ -15,7 +15,7 @@
     <div class="lever-container col-centered">
       <light-levers class="color-levers"></light-levers>
       <br/>
-      <sound-with-toggles :soundPresets="soundPresets"></sound-with-toggles>
+      <sound-levers :soundPresets="soundPresets"></sound-levers>
 
       <div class="row">
         <!-- TODO: visual? -->
@@ -26,7 +26,7 @@
 
 <script>
   import axios from 'axios';
-  import SoundWithToggles from "./SoundLevers";
+  import SoundLevers from "./SoundLevers";
   import LightLevers from "./LightLevers";
 
   const activityUrl = process.env.VUE_APP_BACKEND_URL + "activity/";
@@ -34,7 +34,7 @@
   export default {
     name: "Activity",
     components: {
-      SoundWithToggles,
+      SoundLevers,
       LightLevers
     },
     data() {

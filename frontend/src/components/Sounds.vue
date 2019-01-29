@@ -1,16 +1,17 @@
 <template>
   <div class="sound-preset-container">
+
     <button @click="showList()"
             :class="{active: showList}"
-            class="btn btn-default btn-sound-list">
+            class="btn btn-default btn-sound-list btn-round">
       {{soundType}}
     </button>
 
     <ul class="sound-list" :class="{show: showingList}">
-      <li v-for="(audio, index) in soundPresets"
+      <li v-for="audio in soundPresets"
           :key="audio">
         <soundfile :audio="audio"
-                   :index="index"
+                   :soundType="soundType"
                    :showToggles="showToggles">
         </soundfile>
 
@@ -37,6 +38,7 @@
     },
     mounted() {
       let self = this;
+
       /* collapse all other lists */
       this.$parent.$on("sounds-collapse-list", function(soundType) {
         if (soundType !== self.soundType) {

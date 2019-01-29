@@ -4,7 +4,7 @@ import requests
 from flask import jsonify
 from flask import request, render_template, send_from_directory
 from flask import Blueprint
-from config import config
+from config import config, light_presets, sound_presets
 
 from helpers import get_sound_paths
 
@@ -61,14 +61,14 @@ def breathe():
 
 @backend_app.route("/sounds")
 def sounds():
-    sound_paths = get_sound_paths()
-    return jsonify(sound_paths)
-
-
-@backend_app.route("/sounds/<sound_id>")
-def sound(sound_id):
-    sound_dir = os.path.join(app.template_folder, "sounds")
-    return send_from_directory(sound_dir, sound_id)
+    nature_paths = get_sound_paths('nature')
+    urban_paths = get_sound_paths('urban')
+    abstract_paths = get_sound_paths('abstract')
+    return jsonify({
+        "nature": nature_paths,
+        "urban": urban_paths,
+        "abstract": abstract_paths
+    })
 
 
 @backend_app.route("/activities")
@@ -79,42 +79,25 @@ def activities():
 @backend_app.route("/activity/<activity>")
 def get_activity_presets(activity):
     presets = {
-        "sound": config.SOUND_PRESETS[activity],
-        "light": config.LIGHT_PRESETS[activity],
+        "sound": sound_presets.presets[activity],
+        "light": light_presets.presets[activity],
     }
     return jsonify(presets)
 
 
-# LIFX LIGHTS
-
-@backend_app.route("/lifx/scenes")
+# LIGHT CONTROLS
+@backend_app.route("/lights/scenes")
 def list_scenes():
     headers = {"Authorization": "Bearer %s" % config.LIGHTS_TOKEN}
     results = requests.get("https://api.lifx.com/v1/scenes", headers=headers)
     return jsonify(results.json())
 
-@backend_app.route("/lifx/relax")
+
+@backend_app.route("/lights/states")
 def create_lights():
     headers = {"Authorization": "Bearer %s" % config.LIGHTS_TOKEN}
-    data = {
-        "power": "on",
-        "states": [
-            {
-                "selector": "id:d073d52cd4cb|0-7",
-                "brightness": 0.65,
-                "hue": 35,
-                "saturation": 0.37,
-                "kelvin": 3500,
-                # "duration": 600
-            },
-            {
-                "selector": "id:d073d52cd4cb|8-15",
-                "brightness": 0.9,
-                "hue": 300,
-                "kelvin": 3500,
-            }
-        ],
-    }
-
+    activity = request.args.get('activity', "focus")
+    data = light_presets.presets[activity]
+    # TODO: control each light through different url!!!
     results = requests.put("https://api.lifx.com/v1/lights/states", data=json.dumps(data), headers=headers)
     return jsonify(results.json())

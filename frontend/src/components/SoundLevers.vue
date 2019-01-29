@@ -47,10 +47,13 @@
           </td>
           <td colspan="15">
             <h3>Now playing:</h3>
-            <ul v-for="sound in sounds"
-                v-bind:key="sound">
-              <li>{{sound}}</li>
-            </ul>
+            <div v-for="val in sounds" :key="val">
+              <ul v-for="sound in val" :key="sound">
+                <li>
+                  {{getAudioName(sound)}}
+                </li>
+              </ul>
+            </div>
           </td>
         </tr>
       </table>
@@ -67,14 +70,7 @@
   import PlayButton from './PlayButton'
   import SoundSlider from './SoundSlider'
   import Sounds from './Sounds'
-
   const audioBaseUrl = process.env.VUE_APP_BACKEND_URL + "sounds";
-
-  function getAudioName(audioPath) {
-    let parts = audioPath.split('/');
-    return parts[parts.length - 1]
-  }
-
 
   export default {
     name: "sound-with-toggles",
@@ -88,7 +84,7 @@
       return {
         showToggles: true,
         pause: false,
-        sounds: [],
+        sounds: {},
         presetsNature: [],
         presetsUrban: [],
         presetsAbstract: [],
@@ -98,35 +94,40 @@
     },
     mounted() {
       let self = this;
-      EventBus.$on('mute-volume', function(mute){
+      EventBus.$on('mute-volume', function (mute) {
         self.mute = mute ? "Unmute" : "Mute";
       });
     },
+    methods: {
+      getAudioName(audioPath) {
+        let name = audioPath.split(".mp3")[0];
+        let parts = name.split('_');
+        return parts.join(" ");
+      },
+
+    },
+
     beforeCreate() {
-      /* TODO: name sounds like nature_sound-name and urban_sound-name.
-        * Sort here. For now, sort randomly */
+      let self = this;
       axios.get(audioBaseUrl)
           .then((res) => {
-            this.allSoundPresets = res.data;
-            this.presetsNature = this.allSoundPresets.slice(5, 9);
-            this.presetsUrban = this.allSoundPresets.slice(0, 5);
-            this.presetsAbstract = this.allSoundPresets.slice(6, 8);
-            let chosenSounds = this.$parent.soundPresets;
-            for (let i = 0; i < chosenSounds.length; i++) {
-              let name = getAudioName(this.allSoundPresets[chosenSounds[i]]);
-              this.sounds.push(name)
-            }
+            self.allSoundPresets = res.data;
+            self.presetsNature = self.allSoundPresets.nature;
+            self.presetsUrban = self.allSoundPresets.urban;
+            self.presetsAbstract = self.allSoundPresets.abstract;
+            self.sounds = self.$parent.soundPresets;
           })
-
     }
   }
 
 </script>
+
 <style scoped>
+  /* Extra styles because of tables stacked */
   .table-1 {
-    -moz-box-shadow: 1px 0 5px rgba(0, 0, 0, 0.2);
-    -webkit-box-shadow: 1px 0 5px rgba(0, 0, 0, 0.2);
-    box-shadow: 1px 0 5px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 1px 0 5px rgba(230, 230, 230, 0.8);
+    -webkit-box-shadow: 1px 0 5px rgba(230, 230, 230, 0.8);
+    box-shadow: 1px 0 5px rgba(230, 230, 230, 0.8);
     height: 125px;
   }
 
@@ -135,9 +136,8 @@
   }
 
   .table-1 label.volume-label {
-   margin-left: 30%;
+    margin-left: 30%;
   }
-
 
   .table-2 {
     border-top: 0;
