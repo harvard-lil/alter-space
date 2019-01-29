@@ -80,9 +80,9 @@ input[type="range"] {
   border: 2px solid $color-gray-lighter;
   width: 100%;
 
-  -moz-box-shadow: 1px 1px 5px rgba(230, 230, 230, 0.8);
-  -webkit-box-shadow: 1px 1px 5px rgba(230, 230, 230, 0.8);
-  box-shadow: 1px 1px 5px rgba(230, 230, 230, 0.8);
+  -moz-box-shadow: 1px 1px 5px $color-dropshadow;
+  -webkit-box-shadow: 1px 1px 5px $color-dropshadow;
+  box-shadow: 1px 1px 5px $color-dropshadow;
   td {
     padding: 10px;
     border-right: 2px solid $color-gray-lighter;
