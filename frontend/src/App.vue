@@ -14,10 +14,16 @@
         </div>
         <div class="col-10">
           <h1 class="page-header"
-              v-if="$route.query.name"
+              v-if="$route.query.name && $route.query.name !== 'wyrd'"
               :class="'activity-'+$route.query.name">
             {{ $route.query.name }}
           </h1>
+          <h1 class="page-header"
+              v-else-if="$route.query.name === 'wyrd'"
+              :class="'activity-'+$route.query.name">
+            w3!rd
+          </h1>
+
         </div>
         <div class="col-1">
           <div class="btn-group">
