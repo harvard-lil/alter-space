@@ -24,20 +24,20 @@
       <table class="table cell-table table-2">
         <tr>
           <td>
-            <ul>
-              <li>
+            <ul class="list-inline">
+              <li class="list-inline-item">
                 <Sounds :showToggles="showToggles"
                         :soundPresets="presetsNature"
                         :soundType="'nature'">
                 </Sounds>
               </li>
-              <li>
+              <li class="list-inline-item">
                 <Sounds :showToggles="showToggles"
                         :soundPresets="presetsUrban"
                         :soundType="'urban'">
                 </Sounds>
               </li>
-              <li>
+              <li class="list-inline-item">
                 <Sounds :showToggles="showToggles"
                         :soundPresets="presetsAbstract"
                         :soundType="'abstract'">
@@ -45,17 +45,24 @@
               </li>
             </ul>
           </td>
-          <td colspan="15">
-            <h3>Now playing:</h3>
-            <div v-for="val in sounds" :key="val">
-              <ul v-for="sound in val" :key="sound">
-                <li>
+          <!--Now playing container -->
+          <td colspan="15" class="now-playing-container">
+            <span>Now playing:</span>
+            <div class="soundtype-container"
+                 v-for="val in soundPresets"
+                 :key="val">
+              <ul class="list-inline"
+                  v-for="sound in val"
+                  :key="sound">
+                <li class="list-inline-item">
                   {{getAudioName(sound)}}
                 </li>
               </ul>
             </div>
           </td>
         </tr>
+      </table>
+      <table class="table cell-table table-2">
       </table>
     </div>
   </div>
@@ -64,16 +71,14 @@
 
 <script>
 
-  import axios from 'axios';
   import EventBus from '../event-bus'
 
   import PlayButton from './PlayButton'
   import SoundSlider from './SoundSlider'
   import Sounds from './Sounds'
-  const audioBaseUrl = process.env.VUE_APP_BACKEND_URL + "sounds";
 
   export default {
-    name: "sound-with-toggles",
+    name: "sound-levers",
     components: {
       SoundSlider,
       Sounds,
@@ -84,12 +89,10 @@
       return {
         showToggles: true,
         pause: false,
-        sounds: {},
+        mute: "Mute",
         presetsNature: [],
         presetsUrban: [],
-        presetsAbstract: [],
-        allSoundPresets: [],
-        mute: "Mute",
+        presetsAbstract: []
       }
     },
     mounted() {
@@ -97,6 +100,9 @@
       EventBus.$on('mute-volume', function (mute) {
         self.mute = mute ? "Unmute" : "Mute";
       });
+      this.presetsNature = this.soundPresets["nature"];
+      this.presetsUrban =  this.soundPresets["urban"];
+      this.presetsAbstract = this.soundPresets["abstract"];
     },
     methods: {
       getAudioName(audioPath) {
@@ -106,18 +112,6 @@
       },
 
     },
-
-    beforeCreate() {
-      let self = this;
-      axios.get(audioBaseUrl)
-          .then((res) => {
-            self.allSoundPresets = res.data;
-            self.presetsNature = self.allSoundPresets.nature;
-            self.presetsUrban = self.allSoundPresets.urban;
-            self.presetsAbstract = self.allSoundPresets.abstract;
-            self.sounds = self.$parent.soundPresets;
-          })
-    }
   }
 
 </script>

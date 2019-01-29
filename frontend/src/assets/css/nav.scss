@@ -1,7 +1,5 @@
-nav {
-  @include make-col(12);
-  display: inline-block;
-  min-width: 100%;
+.nav {
+
   h1, .h1 {
     text-align: center;
     font-size: 6.5rem;
@@ -24,18 +22,18 @@ nav {
   }
 }
 
-nav {
+.nav {
   .btn-home, .btn-info {
     @extend .btn;
     border: 0;
     display: block;
+    margin-top: 50%;
   }
   .btn-home {
     background: transparent url("../img/sprites/home.svg") no-repeat;
     height: 37px;
     width: 44px;
   }
-
   .btn-info {
     background: transparent url("../img/sprites/info.svg") no-repeat;
     height: 37px;
@@ -44,7 +42,7 @@ nav {
 
 }
 
-nav {
+.nav {
   &.activity-read {
     background-color: $color-read;
   }
@@ -85,7 +83,7 @@ nav {
   }
 }
 
-nav {
+.nav {
   .activity-focus {
     background-color: $color-focus;
   }

@@ -36,7 +36,7 @@
       EventBus.$on('add-new-sound', (sound_name) => {
         if (this.audio === sound_name && this.showToggles) {
           this.play = true;
-          this.toggleButton()
+          this.$parent.$parent.soundPresets[this.soundType].push(this.audio);
         }
       });
 
@@ -72,7 +72,7 @@
         }
       },
       showChosenSound() {
-        if (this.$parent.soundPresets.indexOf(this.audio) > -1) {
+        if (this.$parent.$parent.soundPresets[this.soundType].indexOf(this.audio) > -1) {
           this.toggleButton();
           this.currentlyPlaying = true;
         }

@@ -1,12 +1,12 @@
 <template>
   <div class="row">
-    <div class="col-12 gray-bar">
+    <div class="gray-bar">
       <ul class="list-inline">
         <li class="list-inline-item">
           <h3 class="settings-title">Settings</h3>
         </li>
         <li class="list-inline-item">
-          <button class="float-right">Reset</button>
+          <button @click="resetActivity()" class="btn btn-reset">Reset</button>
         </li>
       </ul>
 
@@ -42,6 +42,11 @@
         activity: this.$route.query.name,
         soundPresets: [],
         lightPresets: [],
+      }
+    },
+    methods: {
+      resetActivity() {
+        window.location.reload();
       }
     },
     beforeCreate() {

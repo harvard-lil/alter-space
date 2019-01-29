@@ -54,6 +54,14 @@
   }
 }
 
+.now-playing-container {
+  display: inline;
+  text-align: left;
+  .soundtype-container {
+    display: inline;
+  }
+}
+
 audio {
   display: none;
 }

@@ -70,6 +70,11 @@ def sounds():
         "abstract": abstract_paths
     })
 
+@backend_app.route("/sounds/<sound_type>")
+def sounds_of_type(sound_type):
+    paths = get_sound_paths(sound_type)
+    return jsonify(paths)
+
 
 @backend_app.route("/activities")
 def activities():

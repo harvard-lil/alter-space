@@ -8,8 +8,7 @@
     </button>
 
     <ul class="sound-list" :class="{show: showingList}">
-      <li v-for="audio in soundPresets"
-          :key="audio">
+      <li v-for="audio in allSoundsOfType" :key="audio">
         <soundfile :audio="audio"
                    :soundType="soundType"
                    :showToggles="showToggles">
@@ -21,7 +20,9 @@
 </template>
 
 <script>
-  import soundfile from './Soundfile'
+  import axios from 'axios';
+  import soundfile from './Soundfile';
+  const audioBaseUrl = process.env.VUE_APP_BACKEND_URL + "sounds";
 
   export default {
     name: "Sounds",
@@ -33,14 +34,22 @@
       return {
         baseUrl: process.env.BASE_URL,
         showingList: false,
-        soundNames: []
+        soundNames: [],
+        allSoundsOfType: [],
       }
+    },
+    beforeMount() {
+      let self = this;
+      let url = audioBaseUrl + "/" + this.soundType;
+      axios.get(url)
+          .then((res) => {
+            self.allSoundsOfType = res.data;
+          })
     },
     mounted() {
       let self = this;
-
       /* collapse all other lists */
-      this.$parent.$on("sounds-collapse-list", function(soundType) {
+      this.$parent.$on("sounds-collapse-list", function (soundType) {
         if (soundType !== self.soundType) {
           self.showingList = false;
         }
