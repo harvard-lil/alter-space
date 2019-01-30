@@ -25,23 +25,15 @@
         <tr>
           <td>
             <ul class="list-inline">
-              <li class="list-inline-item">
-                <Sounds :showToggles="showToggles"
-                        :soundPresets="presetsNature"
-                        :soundType="'nature'">
-                </Sounds>
-              </li>
-              <li class="list-inline-item">
-                <Sounds :showToggles="showToggles"
-                        :soundPresets="presetsUrban"
-                        :soundType="'urban'">
-                </Sounds>
-              </li>
-              <li class="list-inline-item">
-                <Sounds :showToggles="showToggles"
-                        :soundPresets="presetsAbstract"
-                        :soundType="'abstract'">
-                </Sounds>
+              <li class="list-inline-item"
+                  v-for="type in soundTypes"
+                  :key="type">
+                <button @click="showList(type)"
+                        :class="{active: type === soundType}"
+                        class="btn btn-default btn-sound-list btn-round">
+                  {{type}}
+                </button>
+
               </li>
             </ul>
           </td>
@@ -49,10 +41,10 @@
           <td colspan="15" class="now-playing-container">
             <span>Now playing:</span>
             <div class="soundtype-container"
-                 v-for="val in soundPresets"
-                 :key="val">
+                 v-for="soundType in soundTypes"
+                 :key="soundType">
               <ul class="list-inline"
-                  v-for="sound in val"
+                  v-for="sound in soundPresets[soundType]"
                   :key="sound">
                 <li class="list-inline-item">
                   {{getAudioName(sound)}}
@@ -62,10 +54,27 @@
           </td>
         </tr>
       </table>
-      <table class="table cell-table table-2">
+      <table class="table cell-table table-2"
+             v-show="showingList">
+        <tr>
+          <th>
+            Select or deselect {{soundType}} tracks
+          </th>
+        </tr>
+        <tr>
+          <div v-for="type in soundTypes"
+               v-bind:key="type"
+               v-show="type === soundType">
+            <Sounds :soundPresets="soundPresets[type]"
+                    :soundType="type">
+            </Sounds>
+
+          </div>
+        </tr>
       </table>
     </div>
   </div>
+
 
 </template>
 
@@ -90,9 +99,9 @@
         showToggles: true,
         pause: false,
         mute: "Mute",
-        presetsNature: [],
-        presetsUrban: [],
-        presetsAbstract: []
+        soundTypes: ['nature', 'urban', 'abstract'],
+        soundType: "",
+        showingList: false,
       }
     },
     mounted() {
@@ -100,9 +109,14 @@
       EventBus.$on('mute-volume', function (mute) {
         self.mute = mute ? "Unmute" : "Mute";
       });
-      this.presetsNature = this.soundPresets["nature"];
-      this.presetsUrban =  this.soundPresets["urban"];
-      this.presetsAbstract = this.soundPresets["abstract"];
+
+      /* collapse all other lists */
+      this.$on("sounds-collapse-list", function (soundType) {
+        if (soundType !== self.soundType) {
+          self.showingList = false;
+        }
+      })
+
     },
     methods: {
       getAudioName(audioPath) {
@@ -110,7 +124,16 @@
         let parts = name.split('_');
         return parts.join(" ");
       },
-
+      showList(soundType) {
+        if (this.showingList && soundType === this.soundType) {
+          this.showingList = false;
+          this.soundType = "";
+        } else {
+          this.soundType = soundType;
+          this.showingList = true;
+          this.$emit("sounds-collapse-list", this.soundType);
+        }
+      }
     },
   }
 

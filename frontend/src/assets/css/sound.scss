@@ -1,9 +1,9 @@
 .btn-sound-list {
-  background: $color-black;
   color: $color-white;
   border: 0;
+  background-color: $color-gray;
   &.active {
-    background: $color-gray;
+    background-color: $color-black;
   }
 }
 
@@ -43,8 +43,6 @@
 }
 
 .sound-list {
-  display: none;
-  position: fixed;
   background-color: $color-white;
   padding: 20px;
   z-index: 999;

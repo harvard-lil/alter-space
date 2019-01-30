@@ -16,7 +16,6 @@
       <light-levers class="color-levers"></light-levers>
       <br/>
       <sound-levers :soundPresets="soundPresets"></sound-levers>
-
       <div class="row">
         <!-- TODO: visual? -->
       </div>

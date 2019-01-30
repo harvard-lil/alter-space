@@ -1,7 +1,9 @@
 <template>
-  <div :currentlyPlaying="currentlyPlaying"
+  <div :selectedSound="selectedSound"
        :audio="audio">
-    <button @click="toggleButton" class="toggle" v-bind:class="{ on: toggle }">
+    <button @click="toggleButton"
+            class="toggle"
+            v-bind:class="{ on: toggle }">
       {{ audioName }}
     </button>
     <!-- audio files are hidden from DOM / view -->
@@ -17,7 +19,7 @@
   const audioBaseUrl = process.env.VUE_APP_SOUND_URL;
 
   export default {
-    props: ['audio', 'showToggles', 'soundType'],
+    props: ['audio', 'soundType'],
     name: "soundfile",
     data() {
       return {
@@ -26,35 +28,39 @@
         audioName: this.$parent.$parent.getAudioName(this.audio),
         audioPath: audioBaseUrl + this.soundType + "/" + this.audio,
         play: false,
-        currentlyPlaying: false,
-        previousVolume: 10
+        previousVolume: 10,
+        selectedSound: false
       }
     },
     mounted() {
       this.audioFile = this.$el.querySelectorAll('audio')[0];
+      this.selectedSound = this.$parent.allSoundsOfType.indexOf(this.audio) > -1;
+
+
       // catch global event, check if this is the sound we're trying to add
       EventBus.$on('add-new-sound', (sound_name) => {
-        if (this.audio === sound_name && this.showToggles) {
+        if (this.audio === sound_name && this.selectedSound) {
           this.play = true;
-          this.$parent.$parent.soundPresets[this.soundType].push(this.audio);
+          this.selectedSound = true;
+          this.$parent.allSoundsOfType[this.soundType].push(this.audio);
         }
       });
 
       EventBus.$on('pause-music', () => {
-        if (this.showToggles && this.currentlyPlaying) {
+        if (this.selectedSound) {
           this.toggleButton()
         }
       });
 
       EventBus.$on('update-volume', (volume) => {
-        if (this.showToggles && this.currentlyPlaying) {
+        if (this.selectedSound) {
           this.audioFile.volume = volume / 100;
           this.previousVolume = volume;
         }
       });
 
       EventBus.$on('mute-volume', (mute) => {
-        if (this.showToggles && this.currentlyPlaying) {
+        if (this.selectedSound) {
           this.audioFile.volume = mute ? 0 : this.previousVolume / 100
         }
       });
@@ -62,7 +68,7 @@
     },
     methods: {
       toggleButton() {
-        if (this.showToggles) {
+        if (this.selectedSound) {
           this.toggle = !this.toggle;
           this.toggle ? this.audioFile.play() : this.audioFile.pause();
         } else {
@@ -72,18 +78,16 @@
         }
       },
       showChosenSound() {
-        if (this.$parent.$parent.soundPresets[this.soundType].indexOf(this.audio) > -1) {
-          this.toggleButton();
-          this.currentlyPlaying = true;
-        }
+
+        this.toggleButton();
       },
       initializePresetSound() {
         // Plays sound if it's in the presets
-        if (this.showToggles) this.showChosenSound();
+        if (this.selectedSound) this.showChosenSound();
       }
     },
     beforeDestroy() {
-      this.currentlyPlaying = false;
+      this.selectedSound = false;
     }
   }
 </script>
