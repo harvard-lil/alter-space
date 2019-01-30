@@ -1,9 +1,11 @@
 <template>
+
   <div class="col-12">
     <button @click="toggleMute()"
             class="btn-volume"
             :class="{muted: mute}">
     </button>
+
     <input type="range"
            class="volume-range"
            min="0"
@@ -35,7 +37,7 @@
     data() {
       return {
         audio: undefined,
-        volume: 10,
+        volume: 100,
         mute: false
       }
     }

@@ -1,17 +1,9 @@
 <template>
   <div class="sound-preset-container">
-    <button @click="showList()"
-            :class="{active: showList}"
-            class="btn btn-default btn-sound-list">
-      {{soundType}}
-    </button>
-
-    <ul class="sound-list" :class="{show: showingList}">
-      <li v-for="(audio, index) in soundPresets"
-          :key="audio">
+    <ul class="sound-list list-inline">
+      <li class="list-inline-item" v-for="audio in allSoundsOfType" :key="audio">
         <soundfile :audio="audio"
-                   :index="index"
-                   :showToggles="showToggles">
+                   :soundType="soundType">
         </soundfile>
 
       </li>
@@ -20,39 +12,32 @@
 </template>
 
 <script>
-  import soundfile from './Soundfile'
+  import axios from 'axios';
+
+  import soundfile from './Soundfile';
+
+  const audioBaseUrl = process.env.VUE_APP_BACKEND_URL + "sounds";
 
   export default {
     name: "Sounds",
     components: {
       soundfile
     },
-    props: ['showToggles', 'soundType', 'soundPresets'],
+    props: ['soundType', 'soundPresets'],
     data() {
       return {
         baseUrl: process.env.BASE_URL,
-        showingList: false,
-        soundNames: []
+        soundNames: [],
+        allSoundsOfType: [],
       }
     },
-    mounted() {
+    beforeMount() {
       let self = this;
-      /* collapse all other lists */
-      this.$parent.$on("sounds-collapse-list", function(soundType) {
-        if (soundType !== self.soundType) {
-          self.showingList = false;
-        }
-      })
+      let url = audioBaseUrl + "/" + this.soundType;
+      axios.get(url)
+          .then((res) => {
+            self.allSoundsOfType = res.data;
+          })
     },
-    methods: {
-      showList() {
-        if (this.showingList) {
-          this.showingList = false;
-        } else {
-          this.showingList = true;
-          this.$parent.$emit("sounds-collapse-list", this.soundType);
-        }
-      }
-    }
   }
 </script>

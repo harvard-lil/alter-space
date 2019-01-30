@@ -1,21 +1,23 @@
 <template>
-  <div class="container">
+  <div class="row">
+    <div class="gray-bar">
+      <ul class="list-inline">
+        <li class="list-inline-item">
+          <h3 class="settings-title">Settings</h3>
+        </li>
+        <li class="list-inline-item">
+          <button @click="resetActivity()" class="btn btn-reset">Reset</button>
+        </li>
+      </ul>
 
-    <div class="row">
-      <div class="col-12">
-        <h1>{{activity}}</h1>
-      </div>
+
     </div>
-    <div class="row">
-      <div class="col-4">
-        <h3>Sounds</h3>
-        <sound-with-toggles :soundPresets="soundPresets">
-        </sound-with-toggles>
-      </div>
-      <div class="col-4">
-        <h3>Lights</h3>
-        <light-levers>
-        </light-levers>
+    <div class="lever-container col-centered">
+      <light-levers class="color-levers"></light-levers>
+      <br/>
+      <sound-levers :soundPresets="soundPresets"></sound-levers>
+      <div class="row">
+        <!-- TODO: visual? -->
       </div>
     </div>
   </div>
@@ -23,7 +25,7 @@
 
 <script>
   import axios from 'axios';
-  import SoundWithToggles from "./SoundLevers";
+  import SoundLevers from "./SoundLevers";
   import LightLevers from "./LightLevers";
 
   const activityUrl = process.env.VUE_APP_BACKEND_URL + "activity/";
@@ -31,7 +33,7 @@
   export default {
     name: "Activity",
     components: {
-      SoundWithToggles,
+      SoundLevers,
       LightLevers
     },
     data() {
@@ -39,6 +41,11 @@
         activity: this.$route.query.name,
         soundPresets: [],
         lightPresets: [],
+      }
+    },
+    methods: {
+      resetActivity() {
+        window.location.reload();
       }
     },
     beforeCreate() {

@@ -1,0 +1,15 @@
+@import "~bootstrap/scss/functions";
+@import '~bootstrap/scss/variables';
+@import '~bootstrap/scss/mixins';
+
+// h6 starts at $base-font-size
+// headings grow from h6 to h1 by $heading-scale
+@include media-breakpoint-down(xl) {
+  $base-font-size: 12px;
+  $heading-scale: 10; // amount of px headings grow from h6 to h1
+  @for $i from 1 through 6 {
+    h#{$i}, .h#{$i} {
+      font-size: $base-font-size + $heading-scale * (6 - $i);
+    }
+  }
+}

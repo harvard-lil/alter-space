@@ -4,9 +4,15 @@
         <td v-for="activity in activities[l_idx]" :key="activity">
           <router-link :id="activity"
                        :to="{ path: 'Activity', query: { name: activity }}">
-            <button class="btn btn-primary btn-activity">
+            <button class="btn btn-primary btn-activity"
+                    v-if="activity === 'wyrd'">
+              w3!rd
+            </button>
+            <button class="btn btn-primary btn-activity"
+                    v-else>
               {{activity}}
             </button>
+
           </router-link>
         </td>
       </tr>

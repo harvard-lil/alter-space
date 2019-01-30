@@ -1,56 +1,93 @@
 <template>
+  <div class="row sound-levers">
+    <div class="col-12">
+      <h3>Sounds</h3>
+    </div>
+    <div class="col-12">
+      <table class="table cell-table table-1">
+        <tr>
+          <td>
+            <play-button></play-button>
+            <label>Play</label>
+            <!--TODO: play or pause-->
+          </td>
+          <td>
+            <!--TODO: mute button-->
+            <sound-slider></sound-slider>
+            <label>{{ mute }}</label>
+            <label class="volume-label">
+              Volume
+            </label>
+          </td>
+        <tr/>
+      </table>
+      <table class="table cell-table table-2">
+        <tr>
+          <td>
+            <ul class="list-inline">
+              <li class="list-inline-item"
+                  v-for="type in soundTypes"
+                  :key="type">
+                <button @click="showList(type)"
+                        :class="{active: type === soundType}"
+                        class="btn btn-default btn-sound-list btn-round">
+                  {{type}}
+                </button>
 
-  <div class="row">
-    <play-button></play-button>
-    <sound-slider></sound-slider>
-    <h3>Now playing:</h3>
-    <ul v-for="sound in sounds"
-        v-bind:key="sound">
-      <li>{{sound}}</li>
-    </ul>
-    <ul>
-      <li>
-        <Sounds :showToggles="showToggles"
-                :soundPresets="presetsNature"
-                :soundType="'nature'">
-        </Sounds>
-      </li>
-      <li>
-        <Sounds :showToggles="showToggles"
-                :soundPresets="presetsUrban"
-                :soundType="'urban'">
-        </Sounds>
-      </li>
-      <li>
-        <Sounds :showToggles="showToggles"
-                :soundPresets="presetsAbstract"
-                :soundType="'abstract'">
-        </Sounds>
-      </li>
-    </ul>
+              </li>
+            </ul>
+          </td>
+          <!--Now playing container -->
+          <td colspan="15" class="now-playing-container">
+            <span>Now playing:</span>
+            <div class="soundtype-container"
+                 v-for="soundType in soundTypes"
+                 :key="soundType">
+              <ul class="list-inline"
+                  v-for="sound in soundPresets[soundType]"
+                  :key="sound">
+                <li class="list-inline-item">
+                  {{getAudioName(sound)}}
+                </li>
+              </ul>
+            </div>
+          </td>
+        </tr>
+      </table>
+      <table class="table cell-table table-2"
+             v-show="showingList">
+        <tr>
+          <th>
+            Select or deselect {{soundType}} tracks
+          </th>
+        </tr>
+        <tr>
+          <div v-for="type in soundTypes"
+               v-bind:key="type"
+               v-show="type === soundType">
+            <Sounds :soundPresets="soundPresets[type]"
+                    :soundType="type">
+            </Sounds>
 
+          </div>
+        </tr>
+      </table>
+    </div>
   </div>
+
 
 </template>
 
 <script>
 
-  import axios from 'axios';
+  import EventBus from '../event-bus'
 
   import PlayButton from './PlayButton'
   import SoundSlider from './SoundSlider'
   import Sounds from './Sounds'
 
-  const audioBaseUrl = process.env.VUE_APP_BACKEND_URL + "sounds";
-
-  function getAudioName(audioPath) {
-    let parts = audioPath.split('/');
-    return parts[parts.length - 1]
-  }
-
-
   export default {
-    name: "sound-with-toggles",
+    name: "sound-levers",
     components: {
       SoundSlider,
       Sounds,
@@ -61,30 +98,66 @@
       return {
         showToggles: true,
         pause: false,
-        sounds: [],
-        presetsNature: [],
-        presetsUrban: [],
-        presetsAbstract: [],
-        allSoundPresets: []
+        mute: "Mute",
+        soundTypes: ['nature', 'urban', 'abstract'],
+        soundType: "",
+        showingList: false,
       }
     },
-    beforeCreate() {
-      /* TODO: name sounds like nature_sound-name and urban_sound-name.
-        * Sort here. For now, sort randomly */
-      axios.get(audioBaseUrl)
-          .then((res) => {
-            this.allSoundPresets = res.data;
-            this.presetsNature = this.allSoundPresets.slice(5, 9);
-            this.presetsUrban = this.allSoundPresets.slice(0, 5);
-            this.presetsAbstract = this.allSoundPresets.slice(6, 8);
-            let chosenSounds = this.$parent.soundPresets;
-            for (let i = 0; i < chosenSounds.length; i++) {
-              let name = getAudioName(this.allSoundPresets[chosenSounds[i]]);
-              this.sounds.push(name)
-            }
-          })
+    mounted() {
+      let self = this;
+      EventBus.$on('mute-volume', function (mute) {
+        self.mute = mute ? "Unmute" : "Mute";
+      });
 
-    }
+      /* collapse all other lists */
+      this.$on("sounds-collapse-list", function (soundType) {
+        if (soundType !== self.soundType) {
+          self.showingList = false;
+        }
+      })
+
+    },
+    methods: {
+      getAudioName(audioPath) {
+        let name = audioPath.split(".mp3")[0];
+        let parts = name.split('_');
+        return parts.join(" ");
+      },
+      showList(soundType) {
+        if (this.showingList && soundType === this.soundType) {
+          this.showingList = false;
+          this.soundType = "";
+        } else {
+          this.soundType = soundType;
+          this.showingList = true;
+          this.$emit("sounds-collapse-list", this.soundType);
+        }
+      }
+    },
   }
 
 </script>
+
+<style scoped>
+  /* Extra styles because of tables stacked */
+  .table-1 {
+    -moz-box-shadow: 1px 0 5px rgba(230, 230, 230, 0.8);
+    -webkit-box-shadow: 1px 0 5px rgba(230, 230, 230, 0.8);
+    box-shadow: 1px 0 5px rgba(230, 230, 230, 0.8);
+    height: 125px;
+  }
+
+  .table-1 label {
+    bottom: auto;
+  }
+
+  .table-1 label.volume-label {
+    margin-left: 30%;
+  }
+
+  .table-2 {
+    border-top: 0;
+  }
+
+</style>

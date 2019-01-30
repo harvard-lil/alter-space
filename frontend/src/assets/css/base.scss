@@ -1,45 +1,98 @@
 @import "~bootstrap/scss/functions";
 @import "~bootstrap/scss/variables";
 @import "~bootstrap/scss/mixins";
-
+@import "~bootstrap/scss/utilities/flex";
 @import "~bootstrap/scss/reboot";
 @import "~bootstrap/scss/type";
-@import "~bootstrap/scss/code";
 @import "~bootstrap/scss/grid";
-
+@import "~bootstrap/scss/nav";
 @import 'variables';
 
 body {
   font-family: $font-family;
 }
-/* General settings */
-nav {
-  border-bottom: 1px solid $color-black;
-}
 
+/* General settings */
 ul {
   list-style: none;
+  margin: 0;
 }
 
-li {
-  float: left;
-  margin-right: 20px;
+.container-full {
+  margin: 0 auto;
+  width: 100%;
 }
 
-.col-centered{
-    float: none;
-    margin: 0 auto;
+.gray-bar {
+  background-color: $color-gray-light;
+  color: $color-gray;
+  width: 100%;
+  margin-top: -10px;
+  padding: 7px;
+  .settings-title {
+    color: $color-gray;
+  }
+}
+
+.modal-background {
+  background-color: $color-black;
+  opacity: 0.5;
+  z-index: 1;
+  position: fixed;
+  top: 0;
+}
+
+.col-centered {
+  float: none;
+  margin: 0 auto;
+}
+
+.lever-container {
+  padding-top: 50px;
+  @include media-breakpoint-up(lg) {
+    @include make-col(7);
+  }
+  @include media-breakpoint-down(md) {
+    @include make-col(10);
+  }
 }
 
 /* Headers */
 h1, h2, h3, h4, h5 {
-  color: #1B1464;
+  color: $color-gray;
 }
 
-h1 {
-  font-weight: $font-weight-bold;
-  &.page-header {
-    text-transform: uppercase;
+input[type="range"] {
+  cursor: pointer;
+}
+
+.cell-table {
+  border: 2px solid $color-gray-lighter;
+  width: 100%;
+
+  -moz-box-shadow: 1px 1px 5px $color-dropshadow;
+  -webkit-box-shadow: 1px 1px 5px $color-dropshadow;
+  box-shadow: 1px 1px 5px $color-dropshadow;
+  td {
+    padding: 10px;
+    border-right: 2px solid $color-gray-lighter;
+    text-align: center;
+  }
+  td:last-child {
+    border-right: 0;
+  }
+  tr {
+    border-bottom: 2px solid $color-gray-lighter;
+  }
+  tr:last-child {
+    border-bottom: 0;
+  }
+  label {
+    color: $color-navy;
+    position: absolute;
+    bottom: 0;
+    display: block;
+    text-align: center;
   }
 }
 
@@ -48,77 +101,39 @@ button, input.btn, input.btn-default {
   cursor: pointer;
 }
 
+.btn-round {
+  @extend .btn;
+  border-radius: 50%;
+  height: 50px;
+  width: 50px;
+  border: 0;
+  outline: 0;
+  text-align: center;
+  display: table-cell;
+}
+
+.btn-group-color {
+  text-align: justify;
+}
+
+.btn-group-color:after {
+  content: ' ';
+  display: inline-block;
+  width: 100%;
+  height: 0
+}
+
+.btn-reset {
+  position: absolute;
+  right: 10px;
+  margin-top: 10px;
+}
 
 /* Activity settings */
-
 .btn-activity {
   padding: 10px;
   text-transform: lowercase;
   letter-spacing: 0.08rem;
-  //margin: 10px;
   width: 120px;
   text-align: center;
-}
-
-.btn-music {
-  border: 0;
-  cursor: pointer;
-  width: 50px;
-  height: 50px;
-  background: transparent url("../img/pause.svg") no-repeat;
-  &.pause {
-    background: transparent url("../img/play.svg") no-repeat;
-  }
-}
-
-.btn-volume {
-  background: transparent url("../img/volume.svg") no-repeat;
-  height: 30px;
-  width: 30px;
-  border: 0;
-  cursor: pointer;
-}
-
-.volume-range {
-  width: 70%;
-  margin-left: 10px;
-}
-
-.sound-container {
-  display: none;
-  &.show {
-    display: inline-block;
-  }
-}
-
-.sound-list {
-  display: none;
-  position: fixed;
-  background-color: $color-white;
-  padding: 20px;
-  z-index: 999;
-  border: 1px solid $color-black;
-  &.show {
-    display: inline-block;
-  }
-}
-
-audio {
-  display: none;
-}
-
-.toggle {
-  background-color: $color-blue;
-  color: $color-white;
-  padding: 10px;
-  margin: 0 0 20px 0;
-  width: 150px;
-  cursor: pointer;
-  font-weight: 300;
-  border: 0;
-  border-radius: 5px;
-}
-
-.toggle.on {
-  background-color: $color-navy;
 }

@@ -1,8 +1,73 @@
 .btn-sound-list {
-  background: $color-black;
   color: $color-white;
   border: 0;
+  background-color: $color-gray;
   &.active {
-    background: $color-gray;
+    background-color: $color-black;
   }
+}
+
+.btn-music {
+  border: 0;
+  cursor: pointer;
+  width: 50px;
+  height: 50px;
+  background: transparent url("../img/pause.svg") no-repeat;
+  &.pause {
+    background: transparent url("../img/play.svg") no-repeat;
+  }
+}
+.btn-toggle {
+  border: 1px solid black;
+  background-color: $color-white;
+  &.on {
+    background-color: $color-gray;
+
+  }
+}
+
+.btn-volume {
+  background: transparent url("../img/volume.svg") no-repeat;
+  height: 30px;
+  width: 30px;
+  border: 0;
+  cursor: pointer;
+  &.muted {
+    background: transparent url("../img/volume-muted.svg") no-repeat;
+    height: 25px;
+  }
+}
+
+.volume-range {
+  width: 70%;
+  margin-left: 10px;
+}
+
+.sound-container {
+  display: none;
+  &.show {
+    display: inline-block;
+  }
+}
+
+.sound-list {
+  background-color: $color-white;
+  padding: 20px;
+  z-index: 999;
+  border: 1px solid $color-black;
+  &.show {
+    display: inline-block;
+  }
+}
+
+.now-playing-container {
+  display: inline;
+  text-align: left;
+  .soundtype-container {
+    display: inline;
+  }
+}
+
+audio {
+  display: none;
 }

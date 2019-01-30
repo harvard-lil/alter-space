@@ -1,9 +1,10 @@
 import os
+import json
 import requests
 from flask import jsonify
 from flask import request, render_template, send_from_directory
 from flask import Blueprint
-from config import config
+from config import config, light_presets, sound_presets
 
 from helpers import get_sound_paths
 
@@ -35,6 +36,11 @@ def lights():
     return jsonify(result)
 
 
+#
+# @backend_app.route("/colorpresets")
+# def getcolorpresets():
+
+
 @backend_app.route("/breathe")
 def breathe():
     headers = {"Authorization": "Bearer %s" % config.LIGHTS_TOKEN}
@@ -55,14 +61,19 @@ def breathe():
 
 @backend_app.route("/sounds")
 def sounds():
-    sound_paths = get_sound_paths()
-    return jsonify(sound_paths)
+    nature_paths = get_sound_paths('nature')
+    urban_paths = get_sound_paths('urban')
+    abstract_paths = get_sound_paths('abstract')
+    return jsonify({
+        "nature": nature_paths,
+        "urban": urban_paths,
+        "abstract": abstract_paths
+    })
 
-
-@backend_app.route("/sounds/<sound_id>")
-def sound(sound_id):
-    sound_dir = os.path.join(app.template_folder, "sounds")
-    return send_from_directory(sound_dir, sound_id)
+@backend_app.route("/sounds/<sound_type>")
+def sounds_of_type(sound_type):
+    paths = get_sound_paths(sound_type)
+    return jsonify(paths)
 
 
 @backend_app.route("/activities")
@@ -73,7 +84,25 @@ def activities():
 @backend_app.route("/activity/<activity>")
 def get_activity_presets(activity):
     presets = {
-        "sound": config.SOUND_PRESETS[activity],
-        "light": config.LIGHT_PRESETS[activity],
+        "sound": sound_presets.presets[activity],
+        "light": light_presets.presets[activity],
     }
     return jsonify(presets)
+
+
+# LIGHT CONTROLS
+@backend_app.route("/lights/scenes")
+def list_scenes():
+    headers = {"Authorization": "Bearer %s" % config.LIGHTS_TOKEN}
+    results = requests.get("https://api.lifx.com/v1/scenes", headers=headers)
+    return jsonify(results.json())
+
+
+@backend_app.route("/lights/states")
+def create_lights():
+    headers = {"Authorization": "Bearer %s" % config.LIGHTS_TOKEN}
+    activity = request.args.get('activity', "focus")
+    data = light_presets.presets[activity]
+    # TODO: control each light through different url!!!
+    results = requests.put("https://api.lifx.com/v1/lights/states", data=json.dumps(data), headers=headers)
+    return jsonify(results.json())

@@ -1,12 +1,14 @@
 <template>
-  <div :currentlyPlaying="currentlyPlaying"
-       :index="index">
-    <button @click="toggleButton" class="toggle" v-bind:class="{ on: toggle }">
+  <div :selectedSound="selectedSound"
+       :audio="audio">
+    <button @click="toggleButton()"
+            class="btn-toggle"
+            v-bind:class="{ on: selectedSound }">
       {{ audioName }}
     </button>
     <!-- audio files are hidden from DOM / view -->
     <audio loop controls>
-      <source :id="audio" :src="`${audio}`" type="audio/mpeg">
+      <source :id="audio" :src="`${audioPath}`" type="audio/mpeg">
     </audio>
   </div>
 </template>
@@ -14,80 +16,91 @@
 <script>
   import EventBus from '../event-bus';
 
-  const audioBaseUrl = process.env.VUE_APP_BACKEND_URL + "sounds";
-
-  function getAudioName(audioPath) {
-    let parts = audioPath.split('/');
-    return parts[parts.length - 1]
-  }
+  const audioBaseUrl = process.env.VUE_APP_SOUND_URL;
 
   export default {
-    props: ['audio', 'showToggles', 'index'],
+    props: ['audio', 'soundType'],
     name: "soundfile",
     data() {
       return {
         audioBaseUrl: audioBaseUrl,
-        toggle: false,
-        audioName: getAudioName(this.audio),
+        audioName: this.$parent.$parent.getAudioName(this.audio),
+        audioPath: audioBaseUrl + this.soundType + "/" + this.audio,
         play: false,
-        currentlyPlaying: false,
-        previousVolume: 10
+        previousVolume: 10,
+        selectedSound: false,
+        soundPresets: this.$parent.soundPresets,
       }
     },
     mounted() {
       this.audioFile = this.$el.querySelectorAll('audio')[0];
-      // catch global event, check if this is the sound we're trying to add
-      EventBus.$on('add-new-sound', (sound_index) => {
-        if (this.index === sound_index && this.showToggles) {
-          this.play = true;
-          this.toggleButton()
-        }
-      });
+      this.selectedSound = this.soundIsInChosenField();
 
-      EventBus.$on('pause-music', () => {
-        if (this.showToggles && this.currentlyPlaying) {
-          this.toggleButton()
+
+      EventBus.$on('pause-music', (tryingToPause) => {
+        if (this.soundIsInChosenField()) {
+          tryingToPause ? this.pauseSound() : this.playSound();
         }
       });
 
       EventBus.$on('update-volume', (volume) => {
-        if (this.showToggles && this.currentlyPlaying) {
+        if (this.selectedSound) {
           this.audioFile.volume = volume / 100;
           this.previousVolume = volume;
         }
       });
 
       EventBus.$on('mute-volume', (mute) => {
-        if (this.showToggles && this.currentlyPlaying) {
+        if (this.selectedSound) {
           this.audioFile.volume = mute ? 0 : this.previousVolume / 100
         }
       });
-      this.initializePresetSound()
+      this.initializePresetSound();
     },
     methods: {
-      toggleButton() {
-        if (this.showToggles) {
-          this.toggle = !this.toggle;
-          this.toggle ? this.audioFile.play() : this.audioFile.pause();
-        } else {
-          // send an event out to other sounds so that
-          // they may add themselves into the currently playing arena
-          EventBus.$emit("add-new-sound", this.index);
-        }
+      soundIsInChosenField() {
+        return this.soundPresets.indexOf(this.audio) > -1;
       },
-      showChosenSound() {
-        if (this.$parent.$parent.soundPresets.indexOf(this.index) > -1) {
-          this.toggleButton();
-          this.currentlyPlaying = true;
+      addSound() {
+        this.play = true;
+        this.selectedSound = true;
+        this.soundPresets.push(this.audio);
+        this.playSound()
+
+      },
+      removeSound() {
+        let index = this.soundPresets.indexOf(this.audio);
+        this.soundPresets.splice(index, 1);
+        this.pauseSound();
+      },
+      pauseSound() {
+        this.audioFile.pause();
+      },
+      playSound() {
+        this.audioFile.play()
+      },
+
+      toggleButton() {
+        if (this.selectedSound) {
+          this.selectedSound = !this.selectedSound;
+          this.removeSound();
+        } else {
+          this.addSound();
         }
       },
       initializePresetSound() {
         // Plays sound if it's in the presets
-        if (this.showToggles) this.showChosenSound();
+        if (this.soundIsInChosenField()) {
+          this.selectedSound = true;
+          this.play = true;
+          this.playSound();
+        }
+
       }
     },
     beforeDestroy() {
-      this.currentlyPlaying = false;
+      this.selectedSound = false;
+      this.pauseSound();
     }
   }
 </script>

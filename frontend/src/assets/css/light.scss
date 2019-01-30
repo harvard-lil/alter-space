@@ -19,9 +19,7 @@
 }
 
 .preview {
-  border-radius: 50%;
+  @extend .btn-round;
   cursor: pointer;
-  height: 30px;
-  width: 30px;
   border: 1px solid $color-black;
 }
