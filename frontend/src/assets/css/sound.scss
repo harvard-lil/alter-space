@@ -17,6 +17,14 @@
     background: transparent url("../img/play.svg") no-repeat;
   }
 }
+.btn-toggle {
+  border: 1px solid black;
+  background-color: $color-white;
+  &.on {
+    background-color: $color-gray;
+
+  }
+}
 
 .btn-volume {
   background: transparent url("../img/volume.svg") no-repeat;

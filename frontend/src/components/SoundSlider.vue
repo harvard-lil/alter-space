@@ -37,7 +37,7 @@
     data() {
       return {
         audio: undefined,
-        volume: 10,
+        volume: 100,
         mute: false
       }
     }

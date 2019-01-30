@@ -1,9 +1,9 @@
 <template>
   <div :selectedSound="selectedSound"
        :audio="audio">
-    <button @click="toggleButton"
-            class="toggle"
-            v-bind:class="{ on: toggle }">
+    <button @click="toggleButton()"
+            class="btn-toggle"
+            v-bind:class="{ on: selectedSound }">
       {{ audioName }}
     </button>
     <!-- audio files are hidden from DOM / view -->
@@ -24,27 +24,18 @@
     data() {
       return {
         audioBaseUrl: audioBaseUrl,
-        toggle: false,
         audioName: this.$parent.$parent.getAudioName(this.audio),
         audioPath: audioBaseUrl + this.soundType + "/" + this.audio,
         play: false,
         previousVolume: 10,
-        selectedSound: false
+        selectedSound: false,
+        soundPresets: this.$parent.soundPresets,
       }
     },
     mounted() {
       this.audioFile = this.$el.querySelectorAll('audio')[0];
-      this.selectedSound = this.$parent.allSoundsOfType.indexOf(this.audio) > -1;
+      this.selectedSound = this.soundPresets.indexOf(this.audio) > -1;
 
-
-      // catch global event, check if this is the sound we're trying to add
-      EventBus.$on('add-new-sound', (sound_name) => {
-        if (this.audio === sound_name && this.selectedSound) {
-          this.play = true;
-          this.selectedSound = true;
-          this.$parent.allSoundsOfType[this.soundType].push(this.audio);
-        }
-      });
 
       EventBus.$on('pause-music', () => {
         if (this.selectedSound) {
@@ -64,30 +55,54 @@
           this.audioFile.volume = mute ? 0 : this.previousVolume / 100
         }
       });
-      this.initializePresetSound()
+      this.initializePresetSound();
     },
     methods: {
+      addSound() {
+        this.play = true;
+        this.selectedSound = true;
+        this.soundPresets.push(this.audio);
+        this.playSound()
+
+      },
+      removeSound() {
+        let index = this.soundPresets.indexOf(this.audio);
+        this.soundPresets.splice(index, 1);
+        this.pauseSound();
+      },
+      pauseSound() {
+        this.audioFile.pause();
+      },
+      playSound() {
+        this.audioFile.play()
+      },
+
       toggleButton() {
         if (this.selectedSound) {
-          this.toggle = !this.toggle;
-          this.toggle ? this.audioFile.play() : this.audioFile.pause();
+          console.log("getting toggle button of already selected sound", this.audio)
+          this.selectedSound = !this.selectedSound;
+          this.removeSound();
         } else {
           // send an event out to other sounds so that
           // they may add themselves into the currently playing arena
-          EventBus.$emit("add-new-sound", this.audio);
+          // EventBus.$emit("add-new-sound", this.audio);
+          this.addSound();
         }
-      },
-      showChosenSound() {
-
-        this.toggleButton();
       },
       initializePresetSound() {
         // Plays sound if it's in the presets
-        if (this.selectedSound) this.showChosenSound();
+        if (this.soundPresets.indexOf(this.audio) > -1) {
+          console.log("playing sound", this.audio)
+          this.selectedSound = true;
+          this.play = true;
+          this.playSound();
+        }
+
       }
     },
     beforeDestroy() {
       this.selectedSound = false;
+      this.pauseSound();
     }
   }
 </script>

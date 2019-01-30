@@ -13,7 +13,10 @@
 
 <script>
   import axios from 'axios';
+
   import soundfile from './Soundfile';
+  import EventBus from '../event-bus';
+
   const audioBaseUrl = process.env.VUE_APP_BACKEND_URL + "sounds";
 
   export default {
@@ -37,7 +40,5 @@
             self.allSoundsOfType = res.data;
           })
     },
-    methods: {
-    }
   }
 </script>
