@@ -34,12 +34,12 @@
     },
     mounted() {
       this.audioFile = this.$el.querySelectorAll('audio')[0];
-      this.selectedSound = this.soundPresets.indexOf(this.audio) > -1;
+      this.selectedSound = this.soundIsInChosenField();
 
 
-      EventBus.$on('pause-music', () => {
-        if (this.selectedSound) {
-          this.toggleButton()
+      EventBus.$on('pause-music', (tryingToPause) => {
+        if (this.soundIsInChosenField()) {
+          tryingToPause ? this.pauseSound() : this.playSound();
         }
       });
 
@@ -58,6 +58,9 @@
       this.initializePresetSound();
     },
     methods: {
+      soundIsInChosenField() {
+        return this.soundPresets.indexOf(this.audio) > -1;
+      },
       addSound() {
         this.play = true;
         this.selectedSound = true;
@@ -79,20 +82,15 @@
 
       toggleButton() {
         if (this.selectedSound) {
-          console.log("getting toggle button of already selected sound", this.audio)
           this.selectedSound = !this.selectedSound;
           this.removeSound();
         } else {
-          // send an event out to other sounds so that
-          // they may add themselves into the currently playing arena
-          // EventBus.$emit("add-new-sound", this.audio);
           this.addSound();
         }
       },
       initializePresetSound() {
         // Plays sound if it's in the presets
-        if (this.soundPresets.indexOf(this.audio) > -1) {
-          console.log("playing sound", this.audio)
+        if (this.soundIsInChosenField()) {
           this.selectedSound = true;
           this.play = true;
           this.playSound();
