@@ -4,8 +4,19 @@
 
 // h6 starts at $base-font-size
 // headings grow from h6 to h1 by $heading-scale
-@include media-breakpoint-down(xl) {
+@include media-breakpoint-between(lg, xl) {
   $base-font-size: 12px;
+  $heading-scale: 10; // amount of px headings grow from h6 to h1
+  @for $i from 1 through 6 {
+    h#{$i}, .h#{$i} {
+      font-size: $base-font-size + $heading-scale * (6 - $i);
+    }
+  }
+}
+
+
+@include media-breakpoint-down(md) {
+  $base-font-size: 9px;
   $heading-scale: 10; // amount of px headings grow from h6 to h1
   @for $i from 1 through 6 {
     h#{$i}, .h#{$i} {

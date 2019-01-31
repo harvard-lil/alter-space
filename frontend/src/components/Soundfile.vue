@@ -27,7 +27,7 @@
         audioName: this.$parent.$parent.getAudioName(this.audio),
         audioPath: audioBaseUrl + this.soundType + "/" + this.audio,
         play: false,
-        previousVolume: 10,
+        previousVolume: 100,
         selectedSound: false,
         soundPresets: this.$parent.soundPresets,
       }

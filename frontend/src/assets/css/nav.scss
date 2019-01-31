@@ -2,6 +2,9 @@
   margin: 0 auto;
   float: none;
   width: 100%;
+  @include media-breakpoint-down(md) {
+    padding-bottom: 20px;
+  }
   > li {
     display: table-cell;
     float: none;
@@ -17,6 +20,12 @@
     font-weight: $font-weight-bold;
     &.page-header {
       text-transform: capitalize;
+      @include media-breakpoint-only(md) {
+        font-size: 5rem;
+      }
+      @include media-breakpoint-down(sm) {
+        font-size: 4rem;
+      }
     }
   }
   a {
@@ -27,6 +36,13 @@
     border: 0;
     display: block;
     margin-top: 40px;
+    opacity: 0.75;
+    @include media-breakpoint-only(md) {
+      margin-top: 30px;
+    }
+    @include media-breakpoint-down(sm) {
+      margin-top: 20px;
+    }
     a {
       font-size: 2em;
     }
@@ -35,13 +51,11 @@
     background: transparent url("../img/sprites/home.svg") no-repeat;
     height: 37px;
     width: 44px;
-    opacity: 0.75;
   }
   .btn-info {
     background: transparent url("../img/sprites/info.svg") no-repeat;
     height: 37px;
     width: 37px;
-    opacity: 0.75;
   }
 
 }

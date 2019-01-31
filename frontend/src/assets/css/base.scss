@@ -34,9 +34,10 @@ ul {
   color: $color-gray;
   width: 100%;
   margin-top: -10px;
-  padding: 7px;
+  padding: 15px 10px;
   .settings-title {
     color: $color-gray;
+    font-weight: 600;
   }
 }
 
@@ -132,6 +133,13 @@ input[type="range"] {
 button, a, .btn, .btn-default {
   cursor: pointer;
   border-radius: 0;
+}
+
+.btn {
+  -moz-box-shadow: 2px 1px 5px $color-dropshadow;
+  -webkit-box-shadow: 2px 1px 5px $color-dropshadow;
+  box-shadow: 2px 1px 5px $color-dropshadow;
+
 }
 
 .btn-round {

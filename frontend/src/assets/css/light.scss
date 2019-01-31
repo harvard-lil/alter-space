@@ -1,25 +1,14 @@
 /* colorpicker styles */
-.colorpicker {
-  width: 300px;
-  height: 300px;
-  position: fixed;
-  z-index: 999;
+.btn-group-color-options {
+  padding: 10px;
 }
 
-.canvas-image {
-  width: 300px;
-  height: 300px;
-}
+.btn-color {
+  margin: 2px;
+  &.active {
+    -moz-box-shadow: 2px 1px 5px $color-dropshadow;
+    -webkit-box-shadow: 2px 1px 5px $color-dropshadow;
+    box-shadow: 2px 1px 5px $color-dropshadow;
 
-#picker {
-  cursor: pointer;
-  float: left;
-  margin: 10px;
-  border: 0;
-}
-
-.preview {
-  @extend .btn-round;
-  cursor: pointer;
-  border: 1px solid $color-black;
+  }
 }
