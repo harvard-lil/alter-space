@@ -106,3 +106,9 @@ def create_lights():
     # TODO: control each light through different url!!!
     results = requests.put("https://api.lifx.com/v1/lights/states", data=json.dumps(data), headers=headers)
     return jsonify(results.json())
+
+
+@backend_app.route("/lights/colors")
+def get_color_presets():
+    colors = light_presets.colors
+    return jsonify(colors)

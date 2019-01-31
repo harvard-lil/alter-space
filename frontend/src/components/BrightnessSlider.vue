@@ -1,5 +1,4 @@
 <template>
-  <div class="row">
 
     <input type="range"
            class="bright-range"
@@ -8,7 +7,6 @@
            value="100"
            autocomplete="off"
            v-model.lazy.number="bright"/>
-  </div>
 </template>
 
 <script>
@@ -17,7 +15,7 @@
     name: "BrightnessSlider",
     data() {
       return {
-        bright: 50
+        bright: 100
       }
     },
     watch: {

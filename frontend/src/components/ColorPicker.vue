@@ -1,21 +1,5 @@
 <template>
-  <div class="btn-group btn-group-color"
-       role="group"
-       aria-label="color button group">
 
-    <button type="button"
-            class="btn-round btn-color"
-            :style="{'backgroundColor': color1}">
-    </button>
-    <button type="button"
-            class="btn-round btn-color"
-            :style="{'backgroundColor': color2}">
-    </button>
-    <button type="button"
-            class="btn-round btn-color"
-            :style="{'backgroundColor': color3}">
-    </button>
-  </div>
 
 </template>
 

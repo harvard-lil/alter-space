@@ -1,20 +1,22 @@
 <template>
   <div class="row">
     <div class="gray-bar">
-      <ul class="list-inline">
-        <li class="list-inline-item">
-          <h3 class="settings-title">Settings</h3>
-        </li>
-        <li class="list-inline-item">
-          <button @click="resetActivity()" class="btn btn-reset">Reset</button>
-        </li>
-      </ul>
-
+      <div class="col-12 col-centered">
+        <ul class="list-inline">
+          <li class="list-inline-item">
+            <h5 class="settings-title">Settings</h5>
+          </li>
+          <li class="list-inline-item">
+            <button @click="resetActivity()" class="btn btn-reset">Reset</button>
+          </li>
+        </ul>
+      </div>
 
     </div>
     <div class="lever-container col-centered">
+
       <light-levers class="color-levers"></light-levers>
-      <br/>
+      <br/><br/>
       <sound-levers :soundPresets="soundPresets"></sound-levers>
       <div class="row">
         <!-- TODO: visual? -->

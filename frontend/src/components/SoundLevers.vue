@@ -4,7 +4,7 @@
       <h3>Sounds</h3>
     </div>
     <div class="col-12">
-      <table class="table cell-table table-1">
+      <table class="table cell-table table-top">
         <tr>
           <td>
             <play-button></play-button>
@@ -21,7 +21,7 @@
           </td>
         <tr/>
       </table>
-      <table class="table cell-table table-2">
+      <table class="table cell-table table-bottom">
         <tr>
           <td>
             <ul class="list-inline">
@@ -54,11 +54,19 @@
           </td>
         </tr>
       </table>
-      <table class="table cell-table table-2"
+      <table class="table cell-table table-bottom"
              v-show="showingList">
         <tr>
-          <th>
-            Select or deselect {{soundType}} tracks
+          <th class="row">
+            <div class="col-6">
+              Select or deselect {{soundType}} tracks
+            </div>
+            <div class="col-6 text-right">
+              <a>
+                Back to main view
+                <span class="btn-x"></span>
+              </a>
+            </div>
           </th>
         </tr>
         <tr>
@@ -68,7 +76,6 @@
             <Sounds :soundPresets="soundPresets[type]"
                     :soundType="type">
             </Sounds>
-
           </div>
         </tr>
       </table>
@@ -138,26 +145,3 @@
   }
 
 </script>
-
-<style scoped>
-  /* Extra styles because of tables stacked */
-  .table-1 {
-    -moz-box-shadow: 1px 0 5px rgba(230, 230, 230, 0.8);
-    -webkit-box-shadow: 1px 0 5px rgba(230, 230, 230, 0.8);
-    box-shadow: 1px 0 5px rgba(230, 230, 230, 0.8);
-    height: 125px;
-  }
-
-  .table-1 label {
-    bottom: auto;
-  }
-
-  .table-1 label.volume-label {
-    margin-left: 30%;
-  }
-
-  .table-2 {
-    border-top: 0;
-  }
-
-</style>

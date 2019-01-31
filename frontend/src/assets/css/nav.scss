@@ -1,33 +1,51 @@
 .nav {
-
+  margin: 0 auto;
+  float: none;
+  width: 100%;
+  @include media-breakpoint-down(md) {
+    padding-bottom: 20px;
+  }
+  > li {
+    display: table-cell;
+    float: none;
+    text-align: center;
+    font-weight: 700;
+  }
+  .btn-link {
+    margin: 0 auto;
+  }
   h1, .h1 {
     text-align: center;
     font-size: 6.5rem;
     font-weight: $font-weight-bold;
     &.page-header {
       text-transform: capitalize;
+      @include media-breakpoint-only(md) {
+        font-size: 5rem;
+      }
+      @include media-breakpoint-down(sm) {
+        font-size: 4rem;
+      }
     }
-
   }
   a {
     text-decoration: none;
   }
-  .btn-group {
-    text-align: center;
-    position: absolute;
-    .btn-link {
-      margin: 0 auto;
-    }
-
-  }
-}
-
-.nav {
   .btn-home, .btn-info {
     @extend .btn;
     border: 0;
     display: block;
-    margin-top: 50%;
+    margin-top: 40px;
+    opacity: 0.75;
+    @include media-breakpoint-only(md) {
+      margin-top: 30px;
+    }
+    @include media-breakpoint-down(sm) {
+      margin-top: 20px;
+    }
+    a {
+      font-size: 2em;
+    }
   }
   .btn-home {
     background: transparent url("../img/sprites/home.svg") no-repeat;
@@ -70,6 +88,18 @@
     a {
       color: $color-navy;
     }
+    .btn-home {
+      background-position-x: -45px;
+      &:hover, &:active, &:focus {
+        background-position-x: 0;
+      }
+    }
+    .btn-info {
+      background-position-x: -37px;
+      &:hover, &:active, &:focus {
+        background-position-x: 0;
+      }
+    }
   }
   &.activity-wyrd, &.activity-focus {
     color: $color-white;
@@ -79,12 +109,16 @@
     a {
       color: $color-white;
     }
+    .btn-home {
+      &:hover, &:active, &:focus {
+        background-position-x: -135px;
+      }
+    }
+    .btn-info {
+      &:hover, &:active, &:focus {
+        background-position-x: -111px;
+      }
+    }
 
-  }
-}
-
-.nav {
-  .activity-focus {
-    background-color: $color-focus;
   }
 }

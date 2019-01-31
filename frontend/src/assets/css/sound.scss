@@ -32,14 +32,18 @@
   width: 30px;
   border: 0;
   cursor: pointer;
+  top: -7px;
+  position: relative;
   &.muted {
     background: transparent url("../img/volume-muted.svg") no-repeat;
     height: 25px;
+    top: -10px;
+    margin-bottom: 2px;
   }
 }
 
 .volume-range {
-  width: 70%;
+  width: 90%;
   margin-left: 10px;
 }
 
@@ -53,8 +57,6 @@
 .sound-list {
   background-color: $color-white;
   padding: 20px;
-  z-index: 999;
-  border: 1px solid $color-black;
   &.show {
     display: inline-block;
   }
