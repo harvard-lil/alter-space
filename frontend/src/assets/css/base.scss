@@ -1,15 +1,21 @@
 @import "~bootstrap/scss/functions";
 @import "~bootstrap/scss/variables";
 @import "~bootstrap/scss/mixins";
-@import "~bootstrap/scss/utilities/flex";
 @import "~bootstrap/scss/reboot";
+@import "~bootstrap/scss/utilities/flex";
+@import "~bootstrap/scss/utilities/text";
+@import "~bootstrap/scss/buttons";
 @import "~bootstrap/scss/type";
 @import "~bootstrap/scss/grid";
 @import "~bootstrap/scss/nav";
 @import 'variables';
 
 body {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
   font-family: $font-family;
+  @extend .flex-column;
+  min-height: 100vh;
 }
 
 /* General settings */
@@ -40,6 +46,8 @@ ul {
   z-index: 1;
   position: fixed;
   top: 0;
+  width: 100%;
+  height: 100%;
 }
 
 .col-centered {
@@ -66,6 +74,8 @@ input[type="range"] {
   cursor: pointer;
 }
 
+/* tables: light levers, sound levers */
+
 .cell-table {
   border: 2px solid $color-gray-lighter;
   width: 100%;
@@ -77,6 +87,9 @@ input[type="range"] {
     padding: 10px;
     border-right: 2px solid $color-gray-lighter;
     text-align: center;
+  }
+  th {
+    padding: 10px;
   }
   td:last-child {
     border-right: 0;
@@ -96,9 +109,29 @@ input[type="range"] {
   }
 }
 
+.table-top {
+  -moz-box-shadow: 1px 0 5px $color-dropshadow;
+  -webkit-box-shadow: 1px 0 5px $color-dropshadow;
+  box-shadow: 1px 0 5px $color-dropshadow;
+  height: 125px;
+}
+
+.table-top label {
+  bottom: auto;
+}
+
+.table-top label.volume-label {
+  margin-left: 30%;
+}
+
+.table-bottom {
+  border-top: 0;
+}
+
 /* buttons */
-button, input.btn, input.btn-default {
+button, a, .btn, .btn-default {
   cursor: pointer;
+  border-radius: 0;
 }
 
 .btn-round {
@@ -109,28 +142,36 @@ button, input.btn, input.btn-default {
   border: 0;
   outline: 0;
   text-align: center;
+  margin: 0 5px;
   display: table-cell;
 }
 
-.btn-group-color {
-  text-align: justify;
+.btn-round-small {
+  @extend .btn-round;
+  height: 30px;
+  width: 30px;
 }
 
-.btn-group-color:after {
-  content: ' ';
+.btn-x {
+  @extend .btn;
+  background: transparent url("../img/x.svg") no-repeat;
+  height: 13px;
+  width: 13px;
+  background-size: contain;
   display: inline-block;
-  width: 100%;
-  height: 0
 }
 
 .btn-reset {
+  @extend .btn;
   position: absolute;
-  right: 10px;
-  margin-top: 10px;
+  right: 20px;
+  margin-top: -25px;
+  background-color: $color-white;
 }
 
 /* Activity settings */
 .btn-activity {
+  @extend .btn;
   padding: 10px;
   text-transform: lowercase;
   letter-spacing: 0.08rem;

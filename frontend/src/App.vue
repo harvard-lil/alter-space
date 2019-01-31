@@ -3,14 +3,16 @@
        :class="'activity-'+$route.query.name">
     <!-- Top level navigation -->
 
-    <ul class="nav justify-content-center" :class="'activity-'+$route.query.name">
+    <ul class="nav" :class="'activity-'+$route.query.name">
 
 
       <!--<div class="btn-group">-->
       <li class="nav-item col-2">
-        <a class="btn-link btn-home"
-           href="/"></a>
-        <a href="/">Home</a>
+        <div class="button-label-container">
+          <a class="btn-link btn-home"
+             href="/"></a>
+          <a href="/">Home</a>
+        </div>
       </li>
       <li class="nav-item col-8">
         <h1 class="page-header"
@@ -25,8 +27,10 @@
         </h1>
       </li>
       <li class="nav-item col-2">
-        <a class="btn-link btn-info" href="/about"></a>
-        <a href="/about">About</a>
+        <div class="button-label-container">
+          <a class="btn-link btn-info" href="/about"></a>
+          <a href="/about">About</a>
+        </div>
       </li>
     </ul>
     <div class="container-fluid">
