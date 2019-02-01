@@ -6,7 +6,7 @@
     <div class="col-12">
       <table class="table cell-table table-top">
         <tr>
-          <td>
+          <td width="30%">
             <div class="btn-group-color"
                  role="group"
                  aria-label="color button group">
@@ -19,16 +19,16 @@
                       :class="{active: color === colorPresets[currentColorIdx]}"
                       :style="{'backgroundColor': color}">
               </button>
+            <label class="text-center">colors</label>
             </div>
 
-            <label>colors</label>
           </td>
-          <!--<td>-->
-            <!--&lt;!&ndash;TODO: breathe effect&ndash;&gt;-->
-            <!--<button class="btn-round"></button>-->
-            <!--<label>breathe</label>-->
-          <!--</td>-->
-          <td>
+          <td width="20%">
+            <!--TODO: breathe effect-->
+            <button class="btn-breathe"></button>
+            <label>breathe</label>
+          </td>
+          <td width="50%">
             <brightness-slider></brightness-slider>
             <label>brightness</label>
           </td>

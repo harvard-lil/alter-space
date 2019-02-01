@@ -13,30 +13,28 @@
           </td>
           <td>
             <!--TODO: mute button-->
+
             <sound-slider></sound-slider>
-            <label>{{ mute }}</label>
-            <label class="volume-label">
-              Volume
-            </label>
+
           </td>
         <tr/>
       </table>
       <table class="table cell-table table-bottom">
         <tr>
-          <td>
-            <ul class="list-inline">
-              <li class="list-inline-item"
+          <td width="30%">
+              <div class="list-inline-item btn-sound-item"
                   v-for="type in soundTypes"
                   :key="type">
                 <button @click="showList(type)"
-                        :class="{active: type === soundType}"
-                        class="btn btn-default btn-sound-list btn-round">
-                  {{type}}
+                        :class="{active: type === soundType,
+                        nature: type==='nature',
+                        urban: type===  'urban',
+                        abstract: type==='abstract'}"
+                        class="btn btn-default btn-sound btn-round">
                 </button>
-
-              </li>
-            </ul>
-          </td>
+                <label>{{type}}</label>
+              </div>
+            </td>
           <!--Now playing container -->
           <td colspan="15" class="now-playing-container">
             <span>Now playing:</span>

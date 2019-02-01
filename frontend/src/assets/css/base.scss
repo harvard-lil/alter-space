@@ -76,7 +76,6 @@ input[type="range"] {
 }
 
 /* tables: light levers, sound levers */
-
 .cell-table {
   border: 2px solid $color-gray-lighter;
   width: 100%;
@@ -103,10 +102,12 @@ input[type="range"] {
   }
   label {
     color: $color-navy;
-    position: absolute;
-    bottom: 0;
+    position: relative;
+    margin-bottom: -20px;
+    margin-top: 10px;
     display: block;
     text-align: center;
+    font-weight: 600;
   }
 }
 
@@ -135,23 +136,24 @@ button, a, .btn, .btn-default {
   border-radius: 0;
 }
 
-.btn {
-  -moz-box-shadow: 2px 1px 5px $color-dropshadow;
-  -webkit-box-shadow: 2px 1px 5px $color-dropshadow;
-  box-shadow: 2px 1px 5px $color-dropshadow;
-
-}
-
 .btn-round {
   @extend .btn;
   border-radius: 50%;
-  height: 50px;
-  width: 50px;
+  height: 60px;
+  width: 60px;
   border: 0;
   outline: 0;
   text-align: center;
   margin: 0 5px;
   display: table-cell;
+  @include media-breakpoint-only(md) {
+    height: 50px;
+    width: 50px;
+  }
+  @include media-breakpoint-down(sm) {
+    height: 40px;
+    width: 40px;
+  }
 }
 
 .btn-round-small {
