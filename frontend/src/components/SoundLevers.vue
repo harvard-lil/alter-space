@@ -6,12 +6,12 @@
     <div class="col-12">
       <table class="table cell-table table-top">
         <tr>
-          <td>
+          <td width="15%">
             <play-button></play-button>
-            <label>Play</label>
+
             <!--TODO: play or pause-->
           </td>
-          <td>
+          <td width="85%">
             <!--TODO: mute button-->
 
             <sound-slider></sound-slider>
@@ -22,19 +22,21 @@
       <table class="table cell-table table-bottom">
         <tr>
           <td width="30%">
-              <div class="list-inline-item btn-sound-item"
-                  v-for="type in soundTypes"
-                  :key="type">
-                <button @click="showList(type)"
-                        :class="{active: type === soundType,
-                        nature: type==='nature',
-                        urban: type===  'urban',
-                        abstract: type==='abstract'}"
-                        class="btn btn-default btn-sound btn-round">
-                </button>
-                <label>{{type}}</label>
-              </div>
-            </td>
+            <div class="list-inline-item btn-sound-item"
+                 v-for="type in soundTypes"
+                 :key="type">
+
+              <svgicon :icon="type"
+                       width="60"
+                       height="60"
+                       :original="true"
+                       class="btn-round"
+                       @click="showList(type)"
+                       stroke="0">
+              </svgicon>
+              <label>{{type}}</label>
+            </div>
+          </td>
           <!--Now playing container -->
           <td colspan="15" class="now-playing-container">
             <span>Now playing:</span>
@@ -86,6 +88,9 @@
 <script>
 
   import EventBus from '../event-bus'
+  import "./icons/nature";
+  import "./icons/urban";
+  import "./icons/abstract";
 
   import PlayButton from './PlayButton'
   import SoundSlider from './SoundSlider'

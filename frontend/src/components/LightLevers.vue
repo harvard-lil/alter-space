@@ -19,13 +19,19 @@
                       :class="{active: color === colorPresets[currentColorIdx]}"
                       :style="{'backgroundColor': color}">
               </button>
-            <label class="text-center">colors</label>
+              <label class="text-center">colors</label>
             </div>
 
           </td>
           <td width="20%">
             <!--TODO: breathe effect-->
-            <button class="btn-breathe"></button>
+            <svgicon icon="breathe"
+                     width="60"
+                     height="60"
+                     :original="true"
+                     class="btn-round"
+                     stroke="0"></svgicon>
+
             <label>breathe</label>
           </td>
           <td width="50%">
@@ -70,6 +76,7 @@
 
 <script>
   import axios from 'axios';
+  import './icons/breathe';
 
   import BrightnessSlider from './BrightnessSlider';
 

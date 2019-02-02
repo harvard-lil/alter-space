@@ -1,34 +1,7 @@
-.btn-sound {
-  color: $color-white;
-  border: 0;
-  background-color: $color-gray;
-  background-size: 60px !important;
-  &.active {
-    background-color: $color-black;
-  }
-  &.nature {
-    background: transparent url("../img/nature.png") no-repeat;
-  }
-  &.urban {
-    background: transparent url("../img/urban.png") no-repeat;
-  }
-  &.abstract {
-    background: transparent url("../img/abstract.png") no-repeat;
-  }
 
-  @include media-breakpoint-only(md) {
-    background-size: 50px !important;
-  }
-  @include media-breakpoint-down(sm) {
-    background-size: 40px !important;
-  }
-
-}
 
 .btn-breathe {
   @extend .btn-round;
-  @extend .btn-sound;
-  background: transparent url("../img/breathe.png") no-repeat;
   background-size: 60px;
 }
 

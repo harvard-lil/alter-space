@@ -1,6 +1,10 @@
 /* eslint-disable */
+require('./abstract')
+require('./breathe')
 require('./home')
 require('./mute')
+require('./nature')
 require('./pause')
 require('./play')
+require('./urban')
 require('./volume')
