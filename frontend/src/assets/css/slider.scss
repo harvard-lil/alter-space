@@ -133,18 +133,18 @@ input[type=range]::-ms-thumb {
 
 /** FF*/
 input[type="range"]::-moz-range-progress {
-  background-color: $color-navy;
+  background-color: $color-meditate;
 }
 
 input[type="range"]::-moz-range-track {
-  background-color: $color-gray-lighter;
+  background-color: $color-gray;
 }
 
 /* IE*/
 input[type="range"]::-ms-fill-lower {
-  background-color: $color-navy;
+  background-color: $color-meditate;
 }
 
 input[type="range"]::-ms-fill-upper {
-  background-color: $color-gray-lighter;
+  background-color: $color-gray;
 }
