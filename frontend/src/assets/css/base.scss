@@ -18,6 +18,39 @@ body {
   min-height: 100vh;
 }
 
+/* svgs */
+
+.svg-icon {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    color: inherit;
+    vertical-align: middle;
+    fill: none;
+}
+
+.svg-fill {
+    fill: currentColor;
+    stroke: none;
+}
+
+.svg-up {
+    /* default */
+    transform: rotate(0deg);
+}
+
+.svg-right {
+    transform: rotate(90deg);
+}
+
+.svg-down {
+    transform: rotate(180deg);
+}
+
+.svg-left {
+    transform: rotate(-90deg);
+}
+
 /* General settings */
 ul {
   list-style: none;
@@ -77,7 +110,7 @@ input[type="range"] {
 
 /* tables: light levers, sound levers */
 .cell-table {
-  border: 2px solid $color-gray-lighter;
+  border: 1px solid $color-black;
   width: 100%;
 
   -moz-box-shadow: 1px 1px 5px $color-dropshadow;
@@ -85,7 +118,7 @@ input[type="range"] {
   box-shadow: 1px 1px 5px $color-dropshadow;
   td {
     padding: 10px;
-    border-right: 2px solid $color-gray-lighter;
+    border-right: 1px solid $color-black;
     text-align: center;
   }
   th {
@@ -95,7 +128,7 @@ input[type="range"] {
     border-right: 0;
   }
   tr {
-    border-bottom: 2px solid $color-gray-lighter;
+    border-bottom: 1px solid $color-black;
   }
   tr:last-child {
     border-bottom: 0;
@@ -141,18 +174,18 @@ button, a, .btn, .btn-default {
   border-radius: 50%;
   height: 60px;
   width: 60px;
+  padding: 0;
   border: 0;
   outline: 0;
   text-align: center;
-  margin: 0 5px;
-  display: table-cell;
+  //display: table-cell;
   @include media-breakpoint-only(md) {
-    height: 50px;
-    width: 50px;
+    height: 50px !important;
+    width: 50px !important;
   }
   @include media-breakpoint-down(sm) {
-    height: 40px;
-    width: 40px;
+    height: 40px !important;
+    width: 40px !important;
   }
 }
 
@@ -188,3 +221,4 @@ button, a, .btn, .btn-default {
   width: 120px;
   text-align: center;
 }
+
