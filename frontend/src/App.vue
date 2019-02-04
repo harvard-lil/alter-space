@@ -2,6 +2,7 @@
   <div id="app"
        :class="'app-activity-'+$route.params.name">
 
+    <topnav :translation="translation"></topnav>
     <template v-if="$route.name === 'preset'">
       <preset :translation="translation"></preset>
     </template>
@@ -9,42 +10,6 @@
 
     <template v-else>
       <!-- Top level navigation -->
-
-      <ul class="nav" :class="'activity-'+$route.params.name">
-        <!--<div class="btn-group">-->
-        <li class="nav-item col-2">
-          <div class="button-label-container">
-            <a href="/">
-              <svgicon icon="home"
-                       width="60"
-                       height="60"
-                       :original="true"
-                       class="btn-round"
-                       stroke="0"></svgicon>
-              Home</a>
-          </div>
-        </li>
-        <li class="nav-item col-8">
-          <h1 class="page-header"
-              v-if="$route.params.name"
-              :class="'activity-'+$route.params.name">
-            {{translation[$route.params.name]}}
-          </h1>
-        </li>
-        <li class="nav-item col-2">
-          <div class="button-label-container">
-            <svgicon icon="info"
-                     width="60"
-                     height="60"
-                     :original="true"
-                     class="btn-round"
-                     stroke="0"></svgicon>
-
-            <a href="/about">About</a>
-          </div>
-        </li>
-      </ul>
-
       <div class="container-fluid">
         <router-view :key="$route.fullPath"></router-view>
 
@@ -72,6 +37,7 @@
 
 <script>
 
+  import topnav from './components/TopNav';
   import Activities from './components/Activities';
   import Preset from './components/Preset';
 
@@ -81,6 +47,7 @@
   export default {
     name: 'app',
     components: {
+      topnav,
       Preset,
       Activities
     },
@@ -93,7 +60,6 @@
           'create': 'cREATe',
           'meditate': 'mEdITAtE',
           'wyrd': 'W3!Rd',
-
         }
       }
     },
