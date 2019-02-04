@@ -2,6 +2,7 @@
 require('./abstract')
 require('./breathe')
 require('./home')
+require('./info')
 require('./mute')
 require('./nature')
 require('./pause')
