@@ -1,5 +1,7 @@
 <template>
   <div class="row">
+    <!--{{$route}}-->
+        <!--<router-link to="/preset">Go to Foo</router-link>-->
     <div class="gray-bar">
       <div class="col-12 col-centered">
         <ul class="list-inline">
@@ -7,7 +9,8 @@
             <h5 class="settings-title">Settings</h5>
           </li>
           <li class="list-inline-item">
-            <button @click="resetActivity()" class="btn btn-reset">Reset</button>
+            <button @click="resetActivity()"
+                    class="btn btn-reset">Reset</button>
           </li>
         </ul>
       </div>
@@ -40,7 +43,7 @@
     },
     data() {
       return {
-        activity: this.$route.query.name,
+        activity: this.$route.params.name,
         soundPresets: [],
         lightPresets: [],
       }
@@ -51,7 +54,7 @@
       }
     },
     beforeCreate() {
-      let url = activityUrl + this.$route.query.name;
+      let url = activityUrl + this.$route.params.name;
       axios.get(url)
           .then((res) => {
             this.soundPresets = res.data.sound;
