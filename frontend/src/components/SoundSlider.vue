@@ -9,7 +9,7 @@
            autocomplete="off"
            v-model.lazy.number="volume"/>
     <label class="volume-label">
-      Volume
+      volume
     </label>
 
 
@@ -23,7 +23,7 @@
 
   export default {
     name: "sound-slider",
-    componensts: {},
+    components: {},
     watch: {
       volume() {
         EventBus.$emit('update-volume', this.volume);

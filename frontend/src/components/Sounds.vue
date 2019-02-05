@@ -1,13 +1,14 @@
 <template>
   <div class="all-sounds-container">
-    <tr class="sound-list list-inline">
-      <td class="list-inline-item" v-for="audio in allSoundsOfType" :key="audio">
+    <div class="tr sound-list list-inline">
+      <div class="td list-inline-item"
+           v-for="audio in allSoundsOfType" :key="audio">
         <soundfile :audio="audio"
                    :soundType="soundType">
         </soundfile>
 
-      </td>
-    </tr>
+      </div>
+    </div>
   </div>
 </template>
 

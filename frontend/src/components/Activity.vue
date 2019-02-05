@@ -46,8 +46,6 @@
             this.lightPresets = res.data.light;
           })
     },
-
-
   }
 
 </script>

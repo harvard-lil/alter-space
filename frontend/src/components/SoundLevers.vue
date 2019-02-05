@@ -108,8 +108,6 @@
     data() {
       return {
         showToggles: true,
-        pause: false,
-        mute: "Mute",
         soundTypes: ['nature', 'urban', 'abstract'],
         soundType: "",
         showingList: false,
@@ -117,10 +115,6 @@
     },
     mounted() {
       let self = this;
-      EventBus.$on('mute-volume', function (mute) {
-        self.mute = mute ? "Unmute" : "Mute";
-      });
-
       /* collapse all other lists */
       this.$on("sounds-collapse-list", function (soundType) {
         if (soundType !== self.soundType) {
