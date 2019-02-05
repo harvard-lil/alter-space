@@ -1,25 +1,29 @@
 <template>
   <div class="row sound-levers">
     <div class="col-12">
-      <h3>Sounds</h3>
-    </div>
-    <div class="col-12">
-      <table class="table cell-table table-top">
+      <table class="table title-shape" :class="$route.params.name">
+        <svgicon icon="triangle-sound"
+                 width="100%"
+                 height="100%"
+                 title="Sound Levers"
+                 class="triangle"
+                 :class="$route.params.name"
+                 stroke="0">
+        </svgicon>
+
+      </table>
+      <table class="table cell-table table-top" :class="$route.params.name">
         <tr>
           <td width="15%">
             <play-button></play-button>
-
-            <!--TODO: play or pause-->
           </td>
           <td width="85%">
-            <!--TODO: mute button-->
-
             <sound-slider></sound-slider>
-
           </td>
         <tr/>
       </table>
-      <table class="table cell-table table-bottom">
+      <table class="table cell-table table-bottom"
+             :class="$route.params.name">
         <tr>
           <td width="30%">
             <div class="list-inline-item btn-sound-item"
@@ -55,6 +59,7 @@
         </tr>
       </table>
       <table class="table cell-table table-bottom"
+             :class="$route.params.name"
              v-show="showingList">
         <tr>
           <th class="row">
@@ -91,6 +96,7 @@
   import "./icons/nature";
   import "./icons/urban";
   import "./icons/abstract";
+  import './icons/triangle-sound';
 
   import PlayButton from './PlayButton'
   import SoundSlider from './SoundSlider'

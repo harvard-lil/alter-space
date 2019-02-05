@@ -1,10 +1,18 @@
 <template>
   <div class="row light-levers">
     <div class="col-12">
-      <h3>Lights</h3>
-    </div>
-    <div class="col-12">
-      <table class="table cell-table table-top">
+      <table class="table title-shape">
+        <svgicon icon="triangle-light"
+                 width="100%"
+                 height="100%"
+                 title="Light Levers"
+                 class="triangle"
+                 :class="$route.params.name"
+                 stroke="0">
+        </svgicon>
+
+      </table>
+      <table class="table cell-table table-top-single" :class="$route.params.name">
         <tr>
           <td width="30%">
             <div class="btn-group-color"
@@ -77,6 +85,7 @@
 <script>
   import axios from 'axios';
   import './icons/breathe';
+  import './icons/triangle-light';
 
   import BrightnessSlider from './BrightnessSlider';
 

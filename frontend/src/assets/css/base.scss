@@ -64,7 +64,13 @@ ul {
 }
 
 .container-preset {
+  @extend .container-full;
   height: 100vh;
+}
+
+.preset-content {
+  margin: 250px auto 0 auto;
+  display: table;
 }
 
 .gray-bar {
@@ -104,16 +110,29 @@ input[type="range"] {
 }
 
 /* tables: light levers, sound levers */
-.cell-table {
-  border: 1px solid $color-black;
-  width: 100%;
+.lever-title {
+  color: $color-white;
+  position: absolute;
+  left: 20px;
+}
 
-  -moz-box-shadow: 1px 1px 5px $color-dropshadow;
-  -webkit-box-shadow: 1px 1px 5px $color-dropshadow;
-  box-shadow: 1px 1px 5px $color-dropshadow;
+.sound-levers {
+  .lever-title {
+    text-align: right;
+    right: 20px;
+    z-index: 2;
+  }
+}
+
+.table.title-shape {
+  margin-bottom: -0.5px;
+}
+
+.cell-table {
+  width: 100%;
+  border: 15px solid $color-navy;
   td {
     padding: 10px;
-    border-right: 1px solid $color-black;
     text-align: center;
   }
   th {
@@ -121,12 +140,6 @@ input[type="range"] {
   }
   td:last-child {
     border-right: 0;
-  }
-  tr {
-    border-bottom: 1px solid $color-black;
-  }
-  tr:last-child {
-    border-bottom: 0;
   }
   label {
     color: $color-navy;
@@ -137,12 +150,61 @@ input[type="range"] {
     text-align: center;
     font-weight: 600;
   }
+  &.create {
+    border: 15px solid $color-create;
+  }
+  &.relax {
+    border: 15px solid $color-relax;
+  }
+  &.meditate {
+    border: 15px solid $color-meditate;
+  }
+  &.read {
+    border: 15px solid $color-read;
+  }
+  &.wyrd {
+    border: 15px solid $color-wyrd;
+  }
+  &.focus {
+    border: 15px solid $color-focus;
+  }
+
+  &.table-top {
+    border-bottom: 0;
+  }
+  &.table-bottom {
+    border-top: 0;
+  }
+
+}
+
+h5 {
+  padding: 15px;
+  color: $color-white;
+}
+
+.triangle {
+  &.create {
+    fill: $color-create;
+  }
+  &.focus {
+    fill: $color-focus;
+  }
+  &.relax {
+    fill: $color-relax;
+  }
+  &.read {
+    fill: $color-read;
+  }
+  &.meditate {
+    fill: $color-meditate;
+  }
+  &.wyrd {
+    fill: $color-wyrd;
+  }
 }
 
 .table-top {
-  -moz-box-shadow: 1px 0 5px $color-dropshadow;
-  -webkit-box-shadow: 1px 0 5px $color-dropshadow;
-  box-shadow: 1px 0 5px $color-dropshadow;
   height: 125px;
 }
 
@@ -152,10 +214,6 @@ input[type="range"] {
 
 .table-top label.volume-label {
   margin-left: 30%;
-}
-
-.table-bottom {
-  border-top: 0;
 }
 
 /* buttons */
@@ -173,7 +231,6 @@ button, a, .btn, .btn-default {
   border: 0;
   outline: 0;
   text-align: center;
-  //display: table-cell;
   @include media-breakpoint-only(md) {
     height: 50px !important;
     width: 50px !important;
@@ -229,16 +286,66 @@ button, a, .btn, .btn-default {
   background-color: $color-meditate;
 }
 
-.activity-create {
-  background-color: $color-create;
-}
-
 .activity-focus {
   background-color: $color-focus;
 }
 
+.activity-create {
+  background-color: $color-create;
+}
+
 .activity-wyrd {
   background-color: $color-wyrd;
+}
+
+.btn-customize {
+  background-color: $color-white;
+  font-size: 2em;
+  font-weight: $font-weight-medium;
+  padding: 10px 15px;
+  border: 0;
+  &:hover, &:focus, &:active {
+    border: 0;
+  }
+  &.relax {
+    background-color: $color-navy;
+    color: $color-relax;
+  }
+  &.focus {
+    background-color: $color-relax;
+    color: $color-focus;
+    &:hover, &:focus, &:active {
+      background-color: $color-white;
+    }
+  }
+  &.meditate, &.create, &.read, &.relax {
+    background-color: $color-navy;
+  }
+  &.meditate {
+    color: $color-meditate;
+    &:hover, &:focus, &:active {
+      background-color: $color-relax;
+    }
+  }
+  &.read {
+    color: $color-read;
+    &:hover, &:focus, &:active {
+      background-color: $color-meditate;
+    }
+  }
+  &.create {
+    color: $color-create;
+    &:hover, &:focus, &:active {
+      background-color: $color-relax;
+    }
+  }
+  &.wyrd {
+    color: $color-wyrd;
+    &:hover, &:focus, &:active {
+      background-color: $color-read;
+    }
+  }
+
 }
 
 .activity-read, .activity-relax,
@@ -250,18 +357,7 @@ button, a, .btn, .btn-default {
   a {
     color: $color-navy;
   }
-  .btn-home {
-    background-position-x: -45px;
-    &:hover, &:active, &:focus {
-      background-position-x: 0;
-    }
-  }
-  .btn-info {
-    background-position-x: -37px;
-    &:hover, &:active, &:focus {
-      background-position-x: 0;
-    }
-  }
+
 }
 
 .activity-wyrd, .activity-focus {
@@ -272,16 +368,12 @@ button, a, .btn, .btn-default {
   a {
     color: $color-white;
   }
-  .btn-home {
-    &:hover, &:active, &:focus {
-      background-position-x: -135px;
-    }
-  }
-  .btn-info {
-    &:hover, &:active, &:focus {
-      background-position-x: -111px;
-    }
-  }
-
 }
 
+.trapezium {
+  border-bottom: 100px solid #333;
+  border-left: 50px solid transparent;
+  border-right: 50px solid transparent;
+  height: 0;
+  width: 100px;
+}

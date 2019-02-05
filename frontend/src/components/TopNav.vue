@@ -1,16 +1,15 @@
 <template>
   <ul class="nav"
       :class="'activity-'+$route.params.name">
-    <!--<div class="btn-group">-->
     <li class="nav-item col-2">
       <div class="button-label-container">
-        <a href="/">
+        <a href="/" class="nav-button-group">
           <svgicon icon="home"
                    width="60"
                    height="60"
-                   :original="true"
-                   class="btn-round"
+                   class="icon btn-round"
                    stroke="0"></svgicon>
+          <br/>
           Home</a>
       </div>
     </li>
@@ -22,14 +21,15 @@
     </li>
     <li class="nav-item col-2">
       <div class="button-label-container">
-        <svgicon icon="info"
-                 width="60"
-                 height="60"
-                 :original="true"
-                 class="btn-round"
-                 stroke="0"></svgicon>
+        <a href="/about" class="nav-button-group">
+          <svgicon icon="info"
+                   width="60"
+                   height="60"
+                   class="icon btn-round"
+                   stroke="0"></svgicon>
 
-        <a href="/about">About</a>
+          <br/>
+          About</a>
       </div>
     </li>
   </ul>
@@ -41,7 +41,3 @@
     props: ['translation'],
   }
 </script>
-
-<style scoped>
-
-</style>
