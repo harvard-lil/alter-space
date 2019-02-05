@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="td col-2">
     <svgicon :icon="playLabel"
              width="60"
              height="60"

@@ -1,5 +1,5 @@
 <template>
-  <div class="row">
+  <div>
     <div class="row">
       <button @click="resetActivity()"
               class="btn btn-reset">Reset
