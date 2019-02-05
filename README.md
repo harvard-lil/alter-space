@@ -46,3 +46,24 @@ instead of compiled using the webpack configuration.
 ### Styles
 Most styles live in SCSS format in alter-space/frontend/src/assets/css
 Some small overrides can live in a <style scoped> fashion in the .vue files
+
+
+
+### Working with SVGs
+We use the lovely [vue-svgicon](https://github.com/MMF-FE/vue-svgicon#use-generated-icon) for dealing with svgs in Vue.
+To use, place all svg assets into frontend/svg-icons.
+Run the following command to compile (assets will be placed in frontend/components/icons):
+```
+$ npm run generate-icons
+```
+
+In your Vue component's script tag, import your icon
+
+```python
+  import './icons/your-icon';
+```
+
+In your vue component's template, place the svg
+```html
+<svgicon icon="your-icon" width="60" height="60" :original="true" class="btn-default" stroke="0"></svgicon>
+```

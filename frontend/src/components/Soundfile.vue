@@ -77,7 +77,7 @@
         this.audioFile.pause();
       },
       playSound() {
-        this.audioFile.play()
+        this.audioFile.play();
       },
 
       toggleButton() {

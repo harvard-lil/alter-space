@@ -2,9 +2,8 @@
   margin: 0 auto;
   float: none;
   width: 100%;
-  @include media-breakpoint-down(md) {
-    padding-bottom: 20px;
-  }
+  padding-top: 40px;
+  padding-bottom: 20px;
   > li {
     display: table-cell;
     float: none;
@@ -16,8 +15,7 @@
   }
   h1, .h1 {
     text-align: center;
-    font-size: 6.5rem;
-    font-weight: $font-weight-bold;
+    margin-top: -20px;
     &.page-header {
       text-transform: capitalize;
       @include media-breakpoint-only(md) {
@@ -31,94 +29,20 @@
   a {
     text-decoration: none;
   }
-  .btn-home, .btn-info {
-    @extend .btn;
-    border: 0;
-    display: block;
-    margin-top: 40px;
-    opacity: 0.75;
-    @include media-breakpoint-only(md) {
-      margin-top: 30px;
-    }
-    @include media-breakpoint-down(sm) {
-      margin-top: 20px;
-    }
-    a {
-      font-size: 2em;
-    }
-  }
-  .btn-home {
-    background: transparent url("../img/sprites/home.svg") no-repeat;
-    height: 37px;
-    width: 44px;
-  }
-  .btn-info {
-    background: transparent url("../img/sprites/info.svg") no-repeat;
-    height: 37px;
-    width: 37px;
-  }
-
 }
 
-.nav {
-  &.activity-read {
-    background-color: $color-read;
+.nav-button-group {
+  font-size: 1.2em;
+  font-weight: $font-weight-medium;
+  .icon {
+    opacity: 0.75;
   }
-  &.activity-relax {
-    background-color: $color-relax;
-  }
-  &.activity-meditate {
-    background-color: $color-meditate;
-  }
-  &.activity-create {
-    background-color: $color-create;
-  }
-  &.activity-focus {
-    background-color: $color-focus;
-  }
-  &.activity-wyrd {
-    background-color: $color-wyrd;
-  }
-  &.activity-read, &.activity-relax,
-  &.activity-meditate, &.activity-create {
+}
+.app-activity-read {
+  .nav-button-group {
     color: $color-navy;
-    h1 {
-      color: $color-navy;
+    .icon {
+      fill: $color-navy;
     }
-    a {
-      color: $color-navy;
-    }
-    .btn-home {
-      background-position-x: -45px;
-      &:hover, &:active, &:focus {
-        background-position-x: 0;
-      }
-    }
-    .btn-info {
-      background-position-x: -37px;
-      &:hover, &:active, &:focus {
-        background-position-x: 0;
-      }
-    }
-  }
-  &.activity-wyrd, &.activity-focus {
-    color: $color-white;
-    h1 {
-      color: $color-white;
-    }
-    a {
-      color: $color-white;
-    }
-    .btn-home {
-      &:hover, &:active, &:focus {
-        background-position-x: -135px;
-      }
-    }
-    .btn-info {
-      &:hover, &:active, &:focus {
-        background-position-x: -111px;
-      }
-    }
-
   }
 }

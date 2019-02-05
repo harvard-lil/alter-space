@@ -16,3 +16,5 @@ yarn-error.log*
 *.sln
 
 config.py
+
+frontend/svg-icons/

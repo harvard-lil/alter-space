@@ -9,6 +9,7 @@
 @import "~bootstrap/scss/grid";
 @import "~bootstrap/scss/nav";
 @import 'variables';
+@import 'fonts';
 
 body {
   -moz-osx-font-smoothing: grayscale;
@@ -16,6 +17,39 @@ body {
   font-family: $font-family;
   @extend .flex-column;
   min-height: 100vh;
+}
+
+/* svgs */
+
+.svg-icon {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  color: inherit;
+  vertical-align: middle;
+  fill: none;
+}
+
+.svg-fill {
+  fill: currentColor;
+  stroke: none;
+}
+
+.svg-up {
+  /* default */
+  transform: rotate(0deg);
+}
+
+.svg-right {
+  transform: rotate(90deg);
+}
+
+.svg-down {
+  transform: rotate(180deg);
+}
+
+.svg-left {
+  transform: rotate(-90deg);
 }
 
 /* General settings */
@@ -27,6 +61,16 @@ ul {
 .container-full {
   margin: 0 auto;
   width: 100%;
+}
+
+.container-preset {
+  @extend .container-full;
+  height: 100vh;
+}
+
+.preset-content {
+  margin: 250px auto 0 auto;
+  display: table;
 }
 
 .gray-bar {
@@ -41,16 +85,6 @@ ul {
   }
 }
 
-.modal-background {
-  background-color: $color-black;
-  opacity: 0.5;
-  z-index: 1;
-  position: fixed;
-  top: 0;
-  width: 100%;
-  height: 100%;
-}
-
 .col-centered {
   float: none;
   margin: 0 auto;
@@ -62,7 +96,10 @@ ul {
     @include make-col(7);
   }
   @include media-breakpoint-down(md) {
-    @include make-col(10);
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 95%;
+    flex: 0 0 95%;
+    max-width: 95%;
   }
 }
 
@@ -76,17 +113,47 @@ input[type="range"] {
 }
 
 /* tables: light levers, sound levers */
-.cell-table {
-  border: 2px solid $color-gray-lighter;
-  width: 100%;
+.lever-title {
+  color: $color-white;
+  position: absolute;
+  left: 20px;
+}
 
-  -moz-box-shadow: 1px 1px 5px $color-dropshadow;
-  -webkit-box-shadow: 1px 1px 5px $color-dropshadow;
-  box-shadow: 1px 1px 5px $color-dropshadow;
-  td {
-    padding: 10px;
-    border-right: 2px solid $color-gray-lighter;
+.sound-levers {
+  .lever-title {
+    text-align: right;
+    right: 20px;
+    z-index: 2;
+  }
+}
+
+.title-shape {
+  margin-bottom: -0.5px;
+  width: 100%;
+}
+
+.table {
+  display: table;
+  .tr {
+    display: table-row;
+
+  }
+  .td, .th {
     text-align: center;
+    display: inline-block;
+    margin: 20px 0;
+  }
+}
+
+.cell-table {
+  width: 100%;
+  border: 15px solid $color-navy;
+  td {
+    padding: 30px 20px 0 20px;
+    text-align: center;
+  }
+  tr {
+    line-height: 400%;
   }
   th {
     padding: 10px;
@@ -94,40 +161,79 @@ input[type="range"] {
   td:last-child {
     border-right: 0;
   }
-  tr {
-    border-bottom: 2px solid $color-gray-lighter;
-  }
-  tr:last-child {
-    border-bottom: 0;
-  }
   label {
     color: $color-navy;
     position: relative;
-    margin-bottom: -20px;
     margin-top: 10px;
     display: block;
     text-align: center;
     font-weight: 600;
   }
+  &.create {
+    border: 15px solid $color-create;
+  }
+  &.relax {
+    border: 15px solid $color-relax;
+  }
+  &.meditate {
+    border: 15px solid $color-meditate;
+  }
+  &.read {
+    border: 15px solid $color-read;
+  }
+  &.wyrd {
+    border: 15px solid $color-wyrd;
+  }
+  &.focus {
+    border: 15px solid $color-focus;
+  }
+
+  &.table-top {
+    border-bottom: 0;
+  }
+  &.table-bottom {
+    border-top: 0;
+    td {
+      padding: 0 20px;
+    }
+  }
+  .btn-sound-item {
+    &:first-child {
+      float: left;
+    }
+    &:last-child {
+      float: right;
+    }
+  }
+}
+
+.triangle {
+  &.create {
+    fill: $color-create;
+  }
+  &.focus {
+    fill: $color-focus;
+  }
+  &.relax {
+    fill: $color-relax;
+  }
+  &.read {
+    fill: $color-read;
+  }
+  &.meditate {
+    fill: $color-meditate;
+  }
+  &.wyrd {
+    fill: $color-wyrd;
+  }
 }
 
 .table-top {
-  -moz-box-shadow: 1px 0 5px $color-dropshadow;
-  -webkit-box-shadow: 1px 0 5px $color-dropshadow;
-  box-shadow: 1px 0 5px $color-dropshadow;
   height: 125px;
 }
 
 .table-top label {
   bottom: auto;
-}
-
-.table-top label.volume-label {
-  margin-left: 30%;
-}
-
-.table-bottom {
-  border-top: 0;
 }
 
 /* buttons */
@@ -141,18 +247,17 @@ button, a, .btn, .btn-default {
   border-radius: 50%;
   height: 60px;
   width: 60px;
+  padding: 0;
   border: 0;
   outline: 0;
   text-align: center;
-  margin: 0 5px;
-  display: table-cell;
   @include media-breakpoint-only(md) {
-    height: 50px;
-    width: 50px;
+    height: 50px !important;
+    width: 50px !important;
   }
   @include media-breakpoint-down(sm) {
-    height: 40px;
-    width: 40px;
+    height: 40px !important;
+    width: 40px !important;
   }
 }
 
@@ -187,4 +292,108 @@ button, a, .btn, .btn-default {
   letter-spacing: 0.08rem;
   width: 120px;
   text-align: center;
+}
+
+.activity-read {
+  background-color: $color-read;
+}
+
+.activity-relax {
+  background-color: $color-relax;
+}
+
+.activity-meditate {
+  background-color: $color-meditate;
+}
+
+.activity-focus {
+  background-color: $color-focus;
+}
+
+.activity-create {
+  background-color: $color-create;
+}
+
+.activity-wyrd {
+  background-color: $color-wyrd;
+}
+
+.btn-customize {
+  background-color: $color-white;
+  font-size: 2em;
+  font-weight: $font-weight-medium;
+  padding: 10px 15px;
+  border: 0;
+  &:hover, &:focus, &:active {
+    border: 0;
+  }
+  &.relax {
+    background-color: $color-navy;
+    color: $color-relax;
+  }
+  &.focus {
+    background-color: $color-relax;
+    color: $color-focus;
+    &:hover, &:focus, &:active {
+      background-color: $color-white;
+    }
+  }
+  &.meditate, &.create, &.read, &.relax {
+    background-color: $color-navy;
+  }
+  &.meditate {
+    color: $color-meditate;
+    &:hover, &:focus, &:active {
+      background-color: $color-relax;
+    }
+  }
+  &.read {
+    color: $color-read;
+    &:hover, &:focus, &:active {
+      background-color: $color-meditate;
+    }
+  }
+  &.create {
+    color: $color-create;
+    &:hover, &:focus, &:active {
+      background-color: $color-relax;
+    }
+  }
+  &.wyrd {
+    color: $color-wyrd;
+    &:hover, &:focus, &:active {
+      background-color: $color-read;
+    }
+  }
+
+}
+
+.activity-read, .activity-relax,
+.activity-meditate, .activity-create {
+  color: $color-navy;
+  h1 {
+    color: $color-navy;
+  }
+  a {
+    color: $color-navy;
+  }
+
+}
+
+.activity-wyrd, .activity-focus {
+  color: $color-white !important;
+  h1 {
+    color: $color-white;
+  }
+  a {
+    color: $color-white;
+  }
+}
+
+.trapezium {
+  border-bottom: 100px solid #333;
+  border-left: 50px solid transparent;
+  border-right: 50px solid transparent;
+  height: 0;
+  width: 100px;
 }

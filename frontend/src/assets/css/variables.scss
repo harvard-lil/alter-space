@@ -19,8 +19,10 @@ $color-wyrd: #93278f;
 
 $color-dropshadow: rgba(230, 230, 230, 0.8);
 
-/* Typography */
+/* fonts */
+$font-family: "hk_grotesk", sans-serif;
+$font-header: "major_mono_displayregular", sans-serif;
 
-$font-family: brandon-grotesque, sans-serif;
-
-
+$font-weight-light: 200;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
