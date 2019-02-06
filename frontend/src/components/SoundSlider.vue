@@ -37,8 +37,4 @@
     }
   }
 </script>
-<style scoped>
-  input[type="range"] {
-    margin-left: -30px;
-  }
-</style>
+<style scoped></style>

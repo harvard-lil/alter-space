@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="row activity-row">
     <div class="row">
       <button @click="resetActivity()"
               class="btn btn-reset">Reset
@@ -7,7 +7,8 @@
     </div>
     <div class="lever-container col-centered">
       <light-levers class="color-levers"></light-levers>
-      <br/><br/>
+      <div class="filler-background">
+      </div>
       <sound-levers :soundPresets="soundPresets"></sound-levers>
     </div>
   </div>

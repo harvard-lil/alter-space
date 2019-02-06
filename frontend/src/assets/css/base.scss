@@ -17,6 +17,7 @@ body {
   font-family: $font-family;
   @extend .flex-column;
   min-height: 100vh;
+  color: $color-navy;
 }
 
 /* svgs */
@@ -96,10 +97,7 @@ ul {
     @include make-col(7);
   }
   @include media-breakpoint-down(md) {
-    -webkit-box-flex: 0;
-    -ms-flex: 0 0 95%;
-    flex: 0 0 95%;
-    max-width: 95%;
+    @include make-col(11);
   }
 }
 
@@ -110,6 +108,7 @@ h1, h2, h3, h4, h5 {
 
 input[type="range"] {
   cursor: pointer;
+  margin-left: -30px;
 }
 
 /* tables: light levers, sound levers */
@@ -134,10 +133,6 @@ input[type="range"] {
 
 .table {
   display: table;
-  .tr {
-    display: table-row;
-
-  }
   .td, .th {
     text-align: center;
     display: inline-block;
@@ -195,6 +190,9 @@ input[type="range"] {
     border-top: 0;
     td {
       padding: 0 20px;
+    }
+    &.expanded {
+      border-bottom: 0;
     }
   }
   .btn-sound-item {
@@ -280,11 +278,21 @@ button, a, .btn, .btn-default {
   @extend .btn;
   position: absolute;
   right: 20px;
-  margin-top: -25px;
-  background-color: $color-white;
+  color: $color-white;
+  background-color: $color-navy;
+  &:hover, &:active, &:focus {
+    background-color: $color-read;
+  }
 }
 
 /* Activity settings */
+
+// TODO: figure out why this is necessary
+.activity-row {
+  margin-left: 0;
+  margin-right: -30px;
+}
+
 .btn-activity {
   @extend .btn;
   padding: 10px;

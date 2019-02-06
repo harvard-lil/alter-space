@@ -1,7 +1,7 @@
 <template>
   <div class="all-sounds-container">
     <div class="tr sound-list list-inline">
-      <div class="td list-inline-item"
+      <div class="sound-to-choose list-inline-item"
            v-for="audio in allSoundsOfType" :key="audio">
         <soundfile :audio="audio"
                    :soundType="soundType">
