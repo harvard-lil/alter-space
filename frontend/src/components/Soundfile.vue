@@ -26,18 +26,19 @@
         audioBaseUrl: audioBaseUrl,
         audioName: this.$parent.$parent.getAudioName(this.audio),
         audioPath: audioBaseUrl + this.soundType + "/" + this.audio,
-        play: false,
         previousVolume: 100,
         selectedSound: false,
         soundPresets: this.$parent.soundPresets,
+        pause: false,
       }
     },
     mounted() {
       this.audioFile = this.$el.querySelectorAll('audio')[0];
       this.selectedSound = this.soundIsInChosenField();
 
-
+8
       EventBus.$on('pause-music', (tryingToPause) => {
+        this.pause = tryingToPause;
         if (this.soundIsInChosenField()) {
           tryingToPause ? this.pauseSound() : this.playSound();
         }
@@ -62,11 +63,11 @@
         return this.soundPresets.indexOf(this.audio) > -1;
       },
       addSound() {
-        this.play = true;
         this.selectedSound = true;
         this.soundPresets.push(this.audio);
-        this.playSound()
-
+        if (!(this.pause)) {
+          this.playSound();
+        }
       },
       removeSound() {
         let index = this.soundPresets.indexOf(this.audio);
@@ -92,7 +93,6 @@
         // Plays sound if it's in the presets
         if (this.soundIsInChosenField()) {
           this.selectedSound = true;
-          this.play = true;
           this.playSound();
         }
 

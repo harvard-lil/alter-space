@@ -136,7 +136,8 @@
         let name = audioPath.split(".mp3")[0];
         let parts = name.split('_');
         let newName = parts.join(" ");
-        return newName += ',';
+        // return newName += ',';
+        return newName;
       },
       showList(soundType) {
         if (this.showingList && soundType === this.soundType) {

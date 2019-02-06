@@ -29,9 +29,6 @@
     components: {Activity},
     data() {
       return {}
-    },
-    beforeMount() {
-      console.log("preset.vue: hello!")
     }
   }
 
