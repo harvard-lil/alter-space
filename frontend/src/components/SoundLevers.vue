@@ -78,6 +78,18 @@
         </div>
       </div>
     </div>
+    <div class="title-shape"
+         :class="$route.params.name"
+         v-show="showingList">
+      <svgicon icon="triangle-upside-down"
+               width="100%"
+               height="auto"
+               title="Sound Levers"
+               class="triangle"
+               :class="$route.params.name"
+               stroke="0">
+      </svgicon>
+    </div>
   </div>
 
 
