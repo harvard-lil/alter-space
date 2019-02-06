@@ -19,8 +19,13 @@ export default new Router({
       component: Sounds
     },
     {
-      path: '/lights',
-      name: 'Lights',
+      path: '/light',
+      name: 'LightGet',
+      component: Lights
+    },
+    {
+      path: '/light/:id',
+      name: 'LightSet',
       component: Lights
     },
     {
@@ -32,6 +37,6 @@ export default new Router({
       path: '/preset/:name',
       name: 'preset',
       component: Preset
-    }
+    },
   ]
 });
