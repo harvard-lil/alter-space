@@ -6,7 +6,9 @@
       </button>
     </div>
     <div class="lever-container col-centered">
-      <light-levers class="color-levers"></light-levers>
+      <light-levers :lightPresets="lightPresets"
+                    class="color-levers">
+      </light-levers>
       <div class="filler-background">
       </div>
       <sound-levers :soundPresets="soundPresets"></sound-levers>

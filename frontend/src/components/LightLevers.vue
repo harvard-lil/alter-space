@@ -28,7 +28,6 @@
             </button>
             <label class="text-center">colors</label>
           </div>
-
         </div>
         <div class="td col-2">
           <!--TODO: breathe effect-->
@@ -75,6 +74,14 @@
         </button>
       </div>
     </table>
+    <div class="checking-color" v-for="color in colorGradient">
+      <br/><br/><br/>
+
+      <div class="btn-round" :style="{'backgroundColor': color}">
+
+      </div>
+
+    </div>
   </div>
 </template>
 
@@ -86,10 +93,14 @@
   import BrightnessSlider from './BrightnessSlider';
 
   const colorsUrl = process.env.VUE_APP_BACKEND_URL + "lights" + "/colors";
+  const lightUrl = process.env.VUE_APP_BACKEND_URL + "lights" + "/set"
+  // steps between color 1 and color 2
+  const steps = 16;
 
   export default {
-    components: {BrightnessSlider},
     name: "LightLevers",
+    components: {BrightnessSlider},
+    props: ["lightPresets"],
     data() {
       return {
         showColorPicker: false,
@@ -97,6 +108,8 @@
         colors: [],
         showingList: false,
         currentColorIdx: "",
+        light: "",
+        colorGradient: ""
       }
     },
     methods: {
@@ -108,16 +121,92 @@
         }
         this.currentColorIdx = idx;
       },
+      createGradient() {
+        let color0 = this.hex2rgb(this.colorPresets[0]);
+        let color1 = this.hex2rgb(this.colorPresets[1]);
+        let color2 = this.hex2rgb(this.colorPresets[2]);
+
+        let colorGradient1 = this.interpolateColors(color0, color1, steps);
+        let colorGradient2 = this.interpolateColors(color1, color2, steps);
+        this.colorGradient = colorGradient1.concat(colorGradient2);
+        this.createAndSendStates();
+      },
+      createAndSendStates() {
+        let states = [];
+
+        this.colorGradient.forEach((val, idx)=>{
+          states.push({
+            "selector": "id:" + this.light + "|" + idx.toString(),
+            "color": val
+          })
+        });
+        let statesData = {"states": states, "power": "on"};
+        let bodyFormData = new FormData();
+        bodyFormData.set('states', JSON.stringify(statesData));
+        axios({
+          method: "post",
+          url: lightUrl,
+          data: bodyFormData
+        }).then(function(results){
+          console.log(results)
+        })
+      },
       chooseNewColor(hexVal) {
         this.colorPresets.splice([this.currentColorIdx], 1, hexVal);
-        // TODO: change lights here
-      }
+        this.createGradient();
+      },
+      setLight() {
+        this.light = localStorage.getItem('light');
+      },
+
+      // From https://codepen.io/njmcode/pen/axoyD?editors=0010
+      rgb2hex(rgb) {
+        return "#" + ((1 << 24) + (rgb[0] << 16) + (rgb[1] << 8) + rgb[2]).toString(16).slice(1);
+      },
+
+      hex2rgb(hex) {
+        let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        return result ? [
+          parseInt(result[1], 16),
+          parseInt(result[2], 16),
+          parseInt(result[3], 16)
+        ] : null;
+      },
+      // From https://graphicdesign.stackexchange.com/a/83867
+      interpolateColor(color1, color2, factor) {
+        if (arguments.length < 3) {
+          factor = 0.5;
+        }
+        let result = color1.slice();
+        for (let i = 0; i < 3; i++) {
+          result[i] = Math.round(result[i] + factor * (color2[i] - color1[i]));
+        }
+        return this.rgb2hex(result);
+      },
+
+      interpolateColors(color1, color2, steps) {
+        let stepFactor = 1 / (steps - 1),
+            interpolatedColorArray = [];
+
+        for (let i = 0; i < steps; i++) {
+          let interpolated = this.interpolateColor(color1, color2, stepFactor * i);
+          interpolatedColorArray.push(interpolated);
+        }
+        return interpolatedColorArray;
+      },
+
     },
     beforeMount() {
+      /* get available colors */
       axios.get(colorsUrl).then((res) => {
         this.colors = res.data;
       })
-    }
 
+    },
+    created() {
+      this.setLight();
+      console.log("light presets", Object.keys(this.lightPresets));
+      this.createGradient();
+    },
   }
 </script>

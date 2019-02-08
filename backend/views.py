@@ -112,3 +112,13 @@ def create_lights():
 def get_color_presets():
     colors = light_presets.colors
     return jsonify(colors)
+
+
+@backend_app.route("/lights/set", methods=['POST'])
+def set_light():
+    headers = {"Authorization": "Bearer %s" % config.LIGHTS_TOKEN}
+    states_data = request.form.get('states')
+    result = requests.put("https://api.lifx.com/v1/lights/states",
+                          data=states_data, headers=headers)
+
+    return jsonify(result.json())
