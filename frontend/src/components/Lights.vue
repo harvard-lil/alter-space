@@ -1,6 +1,9 @@
 <template>
-  <div class="col-centered col-3">
-    Using light with id: <b>{{light}}</b>
+  <div class="col-centered col-6">
+    <div class="col-12 alert-warning">{{error}}</div>
+    <span class="text-center">
+      Using light with id: <b>{{light}}</b>
+    </span>
   </div>
 </template>
 
@@ -9,7 +12,8 @@
     name: "Lights",
     data() {
       return {
-        light: ""
+        light: "",
+        error: ""
       }
     },
     mounted() {
@@ -18,6 +22,9 @@
         this.light = this.$route.params.id;
       } else {
         this.light = localStorage.getItem('light');
+        if (!(this.light)) {
+          this.error = "Light is not set. Please set light first by going to /light/your-light-id"
+        }
       }
     }
   }
