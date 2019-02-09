@@ -15,3 +15,7 @@ requests
 
 # testing
 pytest-flask
+
+
+# lifx
+lifxlan

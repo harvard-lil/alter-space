@@ -7,7 +7,7 @@ from flask import Blueprint
 from config import config, light_presets, sound_presets
 
 from helpers import get_sound_paths
-
+from backend.lights import set_colors
 backend_app = Blueprint('backend', __name__)
 
 
@@ -112,3 +112,14 @@ def create_lights():
 def get_color_presets():
     colors = light_presets.colors
     return jsonify(colors)
+
+
+@backend_app.route("/lights/set", methods=['POST'])
+def set_light():
+    colors = request.form.get('colors')
+    id = request.form.get('id')
+    try:
+        set_colors(id, json.loads(colors)['color_data'])
+        return "ok"
+    except Exception as e:
+        raise Exception(e, "Something went wrong!")

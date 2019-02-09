@@ -19,21 +19,22 @@
       </div>
     </div>
     <div class="table cell-table table-bottom"
-         :class="$route.params.name">
+         :class="[$route.params.name, {expanded: showingList}]">
       <div class="tr">
-          <div class="td col-1 list-inline-item btn-sound-item"
-               v-for="type in soundTypes"
-               :key="type">
+        <div class="td col-1 list-inline-item btn-sound-item"
+             v-for="type in soundTypes"
+             :key="type">
 
-            <svgicon :icon="type"
-                     width="60"
-                     height="60"
-                     :original="true"
-                     @click="showList(type)"
-                     stroke="0">
-            </svgicon>
-            <label>{{type}}</label>
-          </div>
+          <svgicon :icon="type"
+                   width="60"
+                   height="60"
+                   :original="true"
+                   class="btn-default"
+                   @click="showList(type)"
+                   stroke="0">
+          </svgicon>
+          <label>{{type}}</label>
+        </div>
         <!--Now playing container -->
         <div class="col-1 td"></div>
         <div class="col-8 td now-playing-container text-left">
@@ -41,10 +42,10 @@
           <div class="soundtype-container"
                v-for="soundType in soundTypes"
                :key="soundType">
-            <ul class="list-inline"
-                v-for="sound in soundPresets[soundType]"
-                :key="sound">
-              <li class="list-inline-item">
+            <ul class="list-inline">
+              <li :key="sound"
+                  v-for="sound in soundPresets[soundType]"
+                  class="list-inline-item">
                 {{getAudioName(sound)}}
               </li>
             </ul>
@@ -55,17 +56,15 @@
     <div class="table cell-table table-bottom"
          :class="$route.params.name"
          v-show="showingList">
-      <div class="tr">
-        <div class="th row">
-          <div class="col-6">
-            Select or deselect {{soundType}} tracks
-          </div>
-          <div class="col-6 text-right">
-            <a>
-              Back to main view
-              <span class="btn-x"></span>
-            </a>
-          </div>
+      <div class="tr row">
+        <div class="col-6">
+          Select or deselect {{soundType}} tracks
+        </div>
+        <div class="col-6 text-right">
+          <a>
+            Back to main view
+            <span class="btn-x"></span>
+          </a>
         </div>
       </div>
       <div class="tr">
@@ -78,18 +77,27 @@
         </div>
       </div>
     </div>
+    <div class="title-shape"
+         :class="$route.params.name"
+         v-show="showingList">
+      <svgicon icon="triangle-upside-down"
+               width="100%"
+               height="auto"
+               title="Sound Levers"
+               class="triangle"
+               :class="$route.params.name"
+               stroke="0">
+      </svgicon>
+    </div>
   </div>
-
-
 </template>
 
 <script>
-
-  import EventBus from '../event-bus'
   import "./icons/nature";
   import "./icons/urban";
   import "./icons/abstract";
   import './icons/triangle-sound';
+  import './icons/triangle-upside-down';
 
   import PlayButton from './PlayButton'
   import MuteButton from './MuteButton'
@@ -127,7 +135,9 @@
       getAudioName(audioPath) {
         let name = audioPath.split(".mp3")[0];
         let parts = name.split('_');
-        return parts.join(" ");
+        let newName = parts.join(" ");
+        // return newName += ',';
+        return newName;
       },
       showList(soundType) {
         if (this.showingList && soundType === this.soundType) {

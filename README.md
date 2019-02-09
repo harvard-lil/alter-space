@@ -67,3 +67,8 @@ In your vue component's template, place the svg
 ```html
 <svgicon icon="your-icon" width="60" height="60" :original="true" class="btn-default" stroke="0"></svgicon>
 ```
+
+### Setting your lights IDs
+Since you might use this app in several locations with different light setups, you can key in your specific light IDs by visiting a URL (a more permanent solution to follow).
+Simply go to http://alterspace-dev.lil.tools/#/light/your-light-id to set the light id.
+Check http://alterspace-dev.lil.tools/#/light to verify that the correct ID has been set.

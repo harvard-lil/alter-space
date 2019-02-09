@@ -14,18 +14,21 @@
         </button>
       </router-link>
     </div>
+    <!-- playing activity in the background -->
+    <activity v-show="false"></activity>
   </div>
+
 </template>
 
 <script>
+  import Activity from './Activity'
+
   export default {
     name: "preset",
     props: ["translation"],
+    components: {Activity},
     data() {
       return {}
-    },
-    beforeMount() {
-      console.log("preset.vue: hello!")
     }
   }
 
