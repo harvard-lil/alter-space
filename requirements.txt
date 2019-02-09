@@ -9,6 +9,7 @@ atomicwrites==1.2.1       # via pytest
 attrs==18.2.0             # via pytest
 bcrypt==3.1.6             # via paramiko
 beautifulsoup4==4.7.1
+bitstring==3.1.5          # via lifxlan
 certifi==2018.11.29       # via requests
 cffi==1.11.5              # via bcrypt, cryptography, pynacl
 chardet==3.0.4            # via requests
@@ -21,8 +22,10 @@ gunicorn==19.9.0
 idna==2.8                 # via cryptography, requests
 itsdangerous==1.1.0       # via flask
 jinja2==2.10              # via flask
+lifxlan==1.2.5
 markupsafe==1.1.0         # via jinja2
 more-itertools==5.0.0     # via pytest
+netifaces==0.10.9         # via lifxlan
 paramiko==2.4.2           # via fabric3
 pathlib2==2.3.3           # via pytest
 pip-tools==3.2.0

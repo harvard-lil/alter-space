@@ -74,19 +74,12 @@
         </button>
       </div>
     </table>
-    <div class="checking-color" v-for="color in colorGradient">
-      <br/><br/><br/>
-
-      <div class="btn-round" :style="{'backgroundColor': color}">
-
-      </div>
-
-    </div>
   </div>
 </template>
 
 <script>
   import axios from 'axios';
+
   import './icons/breathe';
   import './icons/triangle-light';
 
@@ -95,7 +88,7 @@
   const colorsUrl = process.env.VUE_APP_BACKEND_URL + "lights" + "/colors";
   const lightUrl = process.env.VUE_APP_BACKEND_URL + "lights" + "/set"
   // steps between color 1 and color 2
-  const steps = 16;
+  const steps = 8;
 
   export default {
     name: "LightLevers",
@@ -132,21 +125,15 @@
         this.createAndSendStates();
       },
       createAndSendStates() {
-        let states = [];
-
-        this.colorGradient.forEach((val, idx)=>{
-          states.push({
-            "selector": "id:" + this.light + "|" + idx.toString(),
-            "color": val
-          })
-        });
-        let statesData = {"states": states, "power": "on"};
         let bodyFormData = new FormData();
-        bodyFormData.set('states', JSON.stringify(statesData));
+        let d = {color_data: this.colorGradient};
+        bodyFormData.set('colors', JSON.stringify(d));
+        bodyFormData.set('id', this.light);
+
         axios({
           method: "post",
           url: lightUrl,
-          data: bodyFormData
+          data: bodyFormData,
         }).then(function(results){
           console.log(results)
         })
@@ -205,8 +192,9 @@
     },
     created() {
       this.setLight();
-      console.log("light presets", Object.keys(this.lightPresets));
       this.createGradient();
     },
   }
+
+
 </script>

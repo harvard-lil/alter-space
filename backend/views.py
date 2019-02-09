@@ -7,7 +7,7 @@ from flask import Blueprint
 from config import config, light_presets, sound_presets
 
 from helpers import get_sound_paths
-
+from backend.lights import set_colors
 backend_app = Blueprint('backend', __name__)
 
 
@@ -116,9 +116,10 @@ def get_color_presets():
 
 @backend_app.route("/lights/set", methods=['POST'])
 def set_light():
-    headers = {"Authorization": "Bearer %s" % config.LIGHTS_TOKEN}
-    states_data = request.form.get('states')
-    result = requests.put("https://api.lifx.com/v1/lights/states",
-                          data=states_data, headers=headers)
-
-    return jsonify(result.json())
+    colors = request.form.get('colors')
+    id = request.form.get('id')
+    try:
+        set_colors(id, json.loads(colors)['color_data'])
+        return "ok"
+    except Exception as e:
+        raise Exception(e, "Something went wrong!")
