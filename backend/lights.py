@@ -1,4 +1,5 @@
 from time import sleep
+from random import randint
 
 from lifxlan import LifxLAN
 from lifxlan.utils import RGBtoHSBK
@@ -31,12 +32,13 @@ def breathe(id):
     bright_zones = []
     for [h, s, v, k] in all_zones:
         dim_zones.append((h, s, 20000, k))
-        bright_zones.append((h, s, 65535, k))
+        bright_zones.append((h, s, 55535, k))
 
+    # print("therefore", low, high)
     strip.set_zone_colors(bright_zones, 2000, True)
-    sleep(2)
+    sleep(randint(2, 10))
     strip.set_zone_colors(dim_zones, 2000, True)
-    sleep(2)
+    sleep(randint(2, 10))
 
 
 def set_colors(id, colors, dim_value):
