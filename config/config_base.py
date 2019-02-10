@@ -15,3 +15,6 @@ LIGHTS_ID = "xyz"
 # SOUNDS
 SOUND_URL = "http://library.law.harvard.edu/projects/files/sounds/"
 
+CELERY_BROKER_URL = 'redis://',
+CELERY_RESULT_BACKEND = 'redis://'
+CELERY_TASK_ALWAYS_EAGER = False
