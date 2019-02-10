@@ -12,6 +12,7 @@
 <script>
   import axios from 'axios'
   import EventBus from '../event-bus';
+
   const dimUrl = process.env.VUE_APP_BACKEND_URL + "lights" + "/dim"
   export default {
     name: "brightness-slider",
@@ -22,9 +23,14 @@
     },
     watch: {
       bright() {
+        this.updateBrightness();
+      }
+    },
+    methods: {
+      updateBrightness() {
         let bodyFormData = new FormData();
         bodyFormData.set('id', this.$parent.light);
-        bodyFormData.set('bright', this.bright);
+        bodyFormData.set('bright', this.bright.toString());
         EventBus.$emit('update-brightness', this.bright);
         axios({
           method: "post",
@@ -33,8 +39,15 @@
         }).then(function (results) {
           console.log(results)
         })
+
       }
     },
+    mounted() {
+      let self = this;
+      EventBus.$on('reset-brightness', function() {
+        self.updateBrightness();
+      })
+    }
 
   }
 </script>

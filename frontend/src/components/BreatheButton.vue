@@ -10,16 +10,16 @@
              stroke="0"></svgicon>
 
     <label v-if="breathe">stop breathe</label>
-    <label v-else="breathe">breathe</label>
+    <label v-else>breathe</label>
   </div>
 
 </template>
 
 <script>
   import axios from 'axios';
+  import EventBus from '../event-bus'
 
   const breatheUrl = process.env.VUE_APP_BACKEND_URL + "lights" + "/breathe"
-
   export default {
     name: "breathe-button",
     data() {
@@ -45,6 +45,9 @@
           data: bodyFormData
         }).then((res) => {
           self.taskID = res.data.task_id;
+          if (!(self.breathe)) {
+            EventBus.$emit('reset-brightness', self.breathe);
+          }
         })
       },
     }
