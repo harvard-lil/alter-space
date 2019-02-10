@@ -6,8 +6,11 @@ lan = LifxLAN()
 lights = lan.get_lights()
 
 
-def get_light(id, lights=[]):
-    if not len(lights):
+def get_light(id):
+    # if not len(lights):
+    lights = lan.get_lights()
+    while not len(lights):
+        sleep(1)
         lights = lan.get_lights()
     mac_addr = ""
     for key, part in enumerate(id):
