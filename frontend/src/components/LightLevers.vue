@@ -29,17 +29,7 @@
             <label class="text-center">colors</label>
           </div>
         </div>
-        <div class="td col-2">
-          <!--TODO: breathe effect-->
-          <svgicon icon="breathe"
-                   width="60"
-                   height="60"
-                   :original="true"
-                   class="btn-round"
-                   stroke="0"></svgicon>
-
-          <label>breathe</label>
-        </div>
+        <breathe-button></breathe-button>
         <div class="td col-6">
           <brightness-slider></brightness-slider>
           <label>brightness</label>
@@ -86,16 +76,19 @@
   import EventBus from '../event-bus';
 
   import BrightnessSlider from './BrightnessSlider';
+  import BreatheButton from "./BreatheButton";
 
   const colorsUrl = process.env.VUE_APP_BACKEND_URL + "lights" + "/colors";
   const lightUrl = process.env.VUE_APP_BACKEND_URL + "lights" + "/set"
-  const breatheUrl = process.env.VUE_APP_BACKEND_URL + "lights" + "/breathe"
+
   // steps between color 1 and color 2
   const steps = 8;
 
   export default {
     name: "LightLevers",
-    components: {BrightnessSlider},
+    components: {
+      BreatheButton,
+      BrightnessSlider},
     props: ["lightPresets"],
     data() {
       return {
@@ -118,6 +111,7 @@
         }
         this.currentColorIdx = idx;
       },
+
       createGradient() {
         let color0 = this.hex2rgb(this.colorPresets[0]);
         let color1 = this.hex2rgb(this.colorPresets[1]);

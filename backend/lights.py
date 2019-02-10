@@ -3,7 +3,7 @@ from time import sleep
 from lifxlan import LifxLAN
 from lifxlan.utils import RGBtoHSBK
 lan = LifxLAN()
-# lights = lan.get_lights()
+lights = lan.get_lights()
 
 
 def get_light(id, lights=[]):
@@ -30,32 +30,43 @@ def breathe(id):
         dim_zones.append((h, s, 20000, k))
         bright_zones.append((h, s, 65535, k))
 
-    try:
-        print("Breathing...")
-        while True:
-            strip.set_zone_colors(bright_zones, 2000, True)
-            sleep(2)
-            strip.set_zone_colors(dim_zones, 2000, True)
-            sleep(2)
-    except KeyboardInterrupt:
-        strip.set_zone_colors(original_zones, 1000, True)
+    strip.set_zone_colors(bright_zones, 2000, True)
+    sleep(2)
+    strip.set_zone_colors(dim_zones, 2000, True)
+    sleep(2)
 
 
-def set_colors(id, colors):
+def set_colors(id, colors, dim_value):
     # TODO: transition nicely
     strip = get_light(id)
     new_zones = []
+    dim_level = get_dim_value(dim_value)
     for idx, color in enumerate(colors):
-        print("color:", color)
         rgb = hex2rgb(color)
         h, s, v, k = RGBtoHSBK(rgb)
-        new_zones.append((h, s, v, k))
+        new_zones.append((h, s, dim_level, k))
     strip.set_zone_colors(new_zones, 3000, False)
 
 
+def dim(id, dim_level):
+    strip = get_light(id)
+    all_zones = strip.get_color_zones()
+    dim_zones = []
+    dim_level = get_dim_value(dim_level)
+    for [h, s, v, k] in all_zones:
+        dim_zones.append((h, s, dim_level, k))
+    strip.set_zone_colors(dim_zones, 3000, False)
+
+
 def hex2rgb(hex):
-    print("getting hex", hex)
     if hex[0] == "#":
         hex = hex.split("#")[1]
     red, green, blue = bytes.fromhex(hex)
     return red, green, blue
+
+
+def get_dim_value(dim_value):
+    dim_value = int(65535 * (int(dim_value)/100))
+    dim_value = 1000 if dim_value < 1000 else dim_value
+    return dim_value
+
