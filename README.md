@@ -70,5 +70,5 @@ In your vue component's template, place the svg
 
 ### Setting your lights IDs
 Since you might use this app in several locations with different light setups, you can key in your specific light IDs by visiting a URL (a more permanent solution to follow).
-Simply go to http://alterspace-dev.lil.tools/#/light/your-light-id to set the light id.
-Check http://alterspace-dev.lil.tools/#/light to verify that the correct ID has been set.
+Simply go to http://localhost:8080/#/light/your-light-id to set the light id.
+Check http://localhost:8080/#/light to verify that the correct ID has been set.
