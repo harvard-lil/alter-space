@@ -93,7 +93,7 @@ ul {
 }
 
 .lever-container {
-  padding-top: 50px;
+  padding-top: 6em;
   @include media-breakpoint-up(lg) {
     @include make-col(7);
   }
@@ -165,6 +165,10 @@ input[type="range"] {
     text-align: center;
     font-weight: 600;
   }
+  &.options {
+    border-bottom: 0 !important;
+  }
+
   &.create {
     border: 15px solid $color-create;
   }
@@ -188,7 +192,7 @@ input[type="range"] {
     border-bottom: 0;
   }
   &.table-bottom {
-    border-top: 0;
+    border-top: 0 !important;
     td {
       padding: 0 20px;
     }
@@ -209,21 +213,41 @@ input[type="range"] {
 .triangle {
   &.create {
     fill: $color-create;
+    text {
+      fill: $color-navy;
+    }
   }
   &.focus {
     fill: $color-focus;
+    text {
+      fill: $color-white;
+    }
   }
   &.relax {
     fill: $color-relax;
+    text {
+      fill: $color-navy;
+    }
   }
   &.read {
     fill: $color-read;
+    text {
+      fill: $color-navy;
+    }
+
   }
   &.meditate {
     fill: $color-meditate;
+    text {
+      fill: $color-navy;
+    }
   }
   &.wyrd {
     fill: $color-wyrd;
+    text {
+      fill: $color-white;
+    }
+
   }
 }
 
@@ -250,13 +274,14 @@ button, a, .btn, .btn-default {
   border: 0;
   outline: 0;
   text-align: center;
+  margin: 5px 3px;
   @include media-breakpoint-only(md) {
-    height: 50px !important;
-    width: 50px !important;
+    height: 50px;
+    width: 50px;
   }
   @include media-breakpoint-down(sm) {
-    height: 40px !important;
-    width: 40px !important;
+    height: 40px;
+    width: 40px;
   }
 }
 
@@ -374,7 +399,34 @@ button, a, .btn, .btn-default {
       background-color: $color-read;
     }
   }
+}
 
+.filler-background {
+  height: 50px;
+  &.relax {
+    background-color: $color-relax;
+    outline: 15px solid $color-relax;
+  }
+  &.focus {
+    background-color: $color-focus;
+    outline: 15px solid $color-focus;
+  }
+  &.meditate {
+    background-color: $color-meditate;
+    outline: 15px solid $color-meditate;
+  }
+  &.read {
+    background-color: $color-read;
+    outline: 15px solid $color-read;
+  }
+  &.create {
+    background-color: $color-create;
+    outline: 15px solid $color-create;
+  }
+  &.wyrd {
+    background-color: $color-wyrd;
+    outline: 15px solid $color-wyrd;
+  }
 }
 
 .activity-read, .activity-relax,
@@ -397,12 +449,4 @@ button, a, .btn, .btn-default {
   a {
     color: $color-white;
   }
-}
-
-.trapezium {
-  border-bottom: 100px solid #333;
-  border-left: 50px solid transparent;
-  border-right: 50px solid transparent;
-  height: 0;
-  width: 100px;
 }

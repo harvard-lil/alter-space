@@ -1,6 +1,14 @@
 /* colorpicker styles */
 .btn-group-color-options {
   padding: 10px;
+  text-align: center;
+  &.read, &.meditate, &.focus {
+    background-color: $color-white;
+    border-top: 1.5px solid $color-navy
+  }
+  &.create, &.relax, &.wyrd {
+    background-color: $color-navy;
+  }
 }
 
 .btn-color {
@@ -9,6 +17,21 @@
     -moz-box-shadow: 2px 1px 5px $color-dropshadow;
     -webkit-box-shadow: 2px 1px 5px $color-dropshadow;
     box-shadow: 2px 1px 5px $color-dropshadow;
+    border: 1.5px solid $color-navy;
+  }
+}
 
+.btn-color-option {
+  height: 30px;
+  width: 30px;
+}
+
+.btn-breathe {
+  @extend .btn-round;
+  background-size: 60px;
+  &.active {
+    path {
+      fill: $color-navy;
+    }
   }
 }

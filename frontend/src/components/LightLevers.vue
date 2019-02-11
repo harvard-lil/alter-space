@@ -11,7 +11,10 @@
       </svgicon>
 
     </div>
-    <div class="table cell-table table-top-single" :class="$route.params.name">
+    <div class="table cell-table table-top-single"
+         :class="[$route.params.name, {
+            options: showingList
+         }]">
       <div class="tr">
         <div class="td col-4">
           <div class="btn-group-color"
@@ -37,26 +40,14 @@
       </div>
     </div>
     <table class="table cell-table table-bottom"
+           :class="$route.params.name"
            v-show="showingList">
-      <div class="tr">
-        <th class="row">
-          <div class="col-6">
-            Choose a new color
-          </div>
-          <div class="col-6 text-right">
-            <a @click="showingList=false">
-              Back to main view
-              <span class="btn-x"></span>
-            </a>
-          </div>
-        </th>
-      </div>
       <div class="btn-group-color-options col-centered"
+           :class="$route.params.name"
            role="group"
            aria-label="color button group">
-
         <button type="button"
-                class="btn-round-small btn-color"
+                class="btn-round-small btn-color-option"
                 v-for="hexVal in colors"
                 v-bind:key="hexVal"
                 @click="chooseNewColor(hexVal)"
@@ -88,18 +79,25 @@
     name: "LightLevers",
     components: {
       BreatheButton,
-      BrightnessSlider},
+      BrightnessSlider
+    },
     props: ["lightPresets"],
     data() {
       return {
         showColorPicker: false,
-        colorPresets: ["#ff6666", "#fbd6e8", "#fbb03b"],
+        colorPresets: [],
         colors: [],
         showingList: false,
         currentColorIdx: "",
         light: "",
         colorGradient: "",
         brightness: 100,
+      }
+    },
+    watch: {
+      lightPresets() {
+        this.colorPresets = this.lightPresets.colors;
+        this.createGradient();
       }
     },
     methods: {
@@ -110,6 +108,7 @@
           this.showingList = !this.showingList;
         }
         this.currentColorIdx = idx;
+        this.$parent.showingLightOptions = this.showingList;
       },
 
       createGradient() {
@@ -132,7 +131,7 @@
           method: "post",
           url: lightUrl,
           data: bodyFormData,
-        }).then(function(results){
+        }).then(function (results) {
           //TODO: disable everything until results are back
           console.log(results)
         })
@@ -186,20 +185,17 @@
       /* get available colors */
       axios.get(colorsUrl).then((res) => {
         this.colors = res.data;
-      })
-
+      });
     },
     mounted() {
       let self = this;
-      EventBus.$on('update-brightness', function(brightness) {
+      EventBus.$on('update-brightness', (brightness) => {
         self.brightness = brightness;
-      })
+      });
     },
     created() {
       this.setLight();
-      this.createGradient();
     },
   }
-
 
 </script>
