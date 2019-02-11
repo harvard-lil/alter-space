@@ -5,8 +5,8 @@
       <div class="button-label-container">
         <a href="/" class="nav-button-group">
           <svgicon icon="home"
-                   width="60"
-                   height="60"
+                   width="45"
+                   height="45"
                    class="icon btn-round"
                    stroke="0"></svgicon>
           <br/>
@@ -23,8 +23,8 @@
       <div class="button-label-container">
         <a href="/about" class="nav-button-group">
           <svgicon icon="info"
-                   width="60"
-                   height="60"
+                   width="45"
+                   height="45"
                    class="icon btn-round"
                    stroke="0"></svgicon>
 

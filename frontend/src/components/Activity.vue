@@ -9,9 +9,11 @@
       <light-levers :lightPresets="lightPresets"
                     class="color-levers">
       </light-levers>
-      <div class="filler-background">
+      <div v-show="!showingLightOptions">
+        <br/><br/><br/>
       </div>
-      <sound-levers :soundPresets="soundPresets"></sound-levers>
+      <sound-levers :soundPresets="soundPresets"
+                    :class="{fillbackground: showingLightOptions}"></sound-levers>
     </div>
   </div>
 </template>
@@ -33,7 +35,9 @@
       return {
         activity: this.$route.params.name,
         soundPresets: [],
-        lightPresets: [],
+        lightPresets: {},
+        showingLightOptions: false,
+        showingSoundOptions: false,
       }
     },
     methods: {
@@ -41,13 +45,14 @@
         window.location.reload();
       }
     },
-    beforeCreate() {
+    beforeMount() {
       let url = activityUrl + this.$route.params.name;
+      let self = this;
       axios.get(url)
           .then((res) => {
-            this.soundPresets = res.data.sound;
-            this.lightPresets = res.data.light;
-          })
+            self.soundPresets = res.data.sound;
+            self.lightPresets = res.data.light;
+          });
     },
   }
 

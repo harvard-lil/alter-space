@@ -2,7 +2,7 @@
   <div :selectedSound="selectedSound"
        :audio="audio">
     <button @click="toggleButton()"
-            class="btn-toggle"
+            class="btn-toggle btn-sound-add"
             v-bind:class="{ on: selectedSound }">
       {{ audioName }}
     </button>
@@ -68,11 +68,14 @@
         if (!(this.pause)) {
           this.playSound();
         }
+        this.$parent.$parent.nowPlayingList.push(this.audio)
       },
       removeSound() {
         let index = this.soundPresets.indexOf(this.audio);
         this.soundPresets.splice(index, 1);
         this.pauseSound();
+        let nowPlayingAudioIndex = this.$parent.$parent.nowPlayingList.indexOf(this.audio);
+        this.$parent.$parent.nowPlayingList.splice(nowPlayingAudioIndex, 1);
       },
       pauseSound() {
         this.audioFile.pause();
@@ -80,7 +83,6 @@
       playSound() {
         this.audioFile.play();
       },
-
       toggleButton() {
         if (this.selectedSound) {
           this.selectedSound = !this.selectedSound;
@@ -94,8 +96,8 @@
         if (this.soundIsInChosenField()) {
           this.selectedSound = true;
           this.playSound();
+          this.$parent.$parent.nowPlayingList.push(this.audio);
         }
-
       }
     },
     beforeDestroy() {

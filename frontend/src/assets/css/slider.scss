@@ -13,7 +13,7 @@ input[type=range]::-webkit-slider-runnable-track {
   cursor: pointer;
   animate: 0.2s;
   box-shadow: 0 0 0 $color-black;
-  background: #3071A9;
+  background: $color-navy;
   border-radius: 5px;
   border: 0 solid $color-black;
 }
@@ -31,7 +31,7 @@ input[type=range]::-webkit-slider-thumb {
 }
 
 input[type=range]:focus::-webkit-slider-runnable-track {
-  background: #3071A9;
+  background: $color-navy;
 }
 
 input[type=range]::-moz-range-track {
@@ -40,7 +40,7 @@ input[type=range]::-moz-range-track {
   cursor: pointer;
   animate: 0.2s;
   box-shadow: 0 0 0 $color-black;
-  background: #3071A9;
+  background: $color-navy;
   border-radius: 5px;
   border: 0 solid $color-black;
 }
@@ -66,14 +66,14 @@ input[type=range]::-ms-track {
 }
 
 input[type=range]::-ms-fill-lower {
-  background: #3071A9;
+  background: $color-navy;
   border: 0 solid $color-black;
   border-radius: 10px;
   box-shadow: 0 0 0 $color-black;
 }
 
 input[type=range]::-ms-fill-upper {
-  background: #3071A9;
+  background: $color-navy;
   border: 0 solid $color-black;
   border-radius: 10px;
   box-shadow: 0 0 0 $color-black;
@@ -91,11 +91,11 @@ input[type=range]::-ms-thumb {
 }
 
 input[type=range]:focus::-ms-fill-lower {
-  background: #3071A9;
+  background: $color-navy;
 }
 
 input[type=range]:focus::-ms-fill-upper {
-  background: #3071A9;
+  background: $color-navy;
 }
 
 input[type=range]::-webkit-slider-thumb {
@@ -107,7 +107,7 @@ input[type=range]::-webkit-slider-thumb {
   background: $color-white;
   cursor: pointer;
   -webkit-appearance: none;
-  margin-top: -17.5px;
+  margin-top: -17.5px !important;
 }
 
 input[type=range]::-moz-range-thumb {
@@ -133,7 +133,7 @@ input[type=range]::-ms-thumb {
 
 /** FF*/
 input[type="range"]::-moz-range-progress {
-  background-color: $color-meditate;
+  background-color: $color-navy;
 }
 
 input[type="range"]::-moz-range-track {
@@ -142,7 +142,7 @@ input[type="range"]::-moz-range-track {
 
 /* IE*/
 input[type="range"]::-ms-fill-lower {
-  background-color: $color-meditate;
+  background-color: $color-navy;
 }
 
 input[type="range"]::-ms-fill-upper {

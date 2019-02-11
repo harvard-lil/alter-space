@@ -5,11 +5,12 @@
              width="60"
              height="60"
              :original="true"
-             class="btn-round"
+             class="btn-round btn-breathe"
              @click="toggleBreathe()"
+             :class="{active: breathe}"
              stroke="0"></svgicon>
 
-    <label v-if="breathe">stop breathe</label>
+    <label v-if="breathe">stop</label>
     <label v-else>breathe</label>
   </div>
 
