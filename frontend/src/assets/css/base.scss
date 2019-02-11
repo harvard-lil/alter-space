@@ -251,6 +251,29 @@ input[type="range"] {
   }
 }
 
+.fillbackground {
+  .title-shape {
+    &.create {
+      background-color: $color-create;
+    }
+    &.focus {
+      background-color: $color-focus;
+    }
+    &.relax {
+      background-color: $color-relax;
+    }
+    &.read {
+      background-color: $color-read;
+    }
+    &.meditate {
+      background-color: $color-meditate;
+    }
+    &.wyrd {
+      background-color: $color-wyrd;
+    }
+  }
+}
+
 .table-top {
   height: 125px;
 }
@@ -275,6 +298,10 @@ button, a, .btn, .btn-default {
   outline: 0;
   text-align: center;
   margin: 5px 3px;
+  -moz-box-shadow: 2px 1px 5px $color-dropshadow;
+  -webkit-box-shadow: 2px 1px 5px $color-dropshadow;
+  box-shadow: 2px 1px 5px $color-dropshadow;
+
   @include media-breakpoint-only(md) {
     height: 50px;
     width: 50px;
@@ -303,7 +330,7 @@ button, a, .btn, .btn-default {
 .btn-reset {
   @extend .btn;
   position: absolute;
-  right: 20px;
+  right: 30px;
   color: $color-white;
   background-color: $color-navy;
   &:hover, &:active, &:focus {
@@ -402,7 +429,6 @@ button, a, .btn, .btn-default {
 }
 
 .filler-background {
-  height: 50px;
   &.relax {
     background-color: $color-relax;
     outline: 15px solid $color-relax;

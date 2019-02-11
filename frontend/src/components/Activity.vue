@@ -9,9 +9,11 @@
       <light-levers :lightPresets="lightPresets"
                     class="color-levers">
       </light-levers>
-      <!-- this is displayed when the color levers are expanded-->
-      <div class="filler-background" :class="activity" v-show="showingLightOptions"></div>
-      <sound-levers :soundPresets="soundPresets"></sound-levers>
+      <div v-show="!showingLightOptions">
+        <br/><br/><br/>
+      </div>
+      <sound-levers :soundPresets="soundPresets"
+                    :class="{fillbackground: showingLightOptions}"></sound-levers>
     </div>
   </div>
 </template>
