@@ -3,10 +3,11 @@
   margin: 5px;
 }
 
-.btn-toggle {
+.btn-sound-add.btn-toggle {
   border: 1px solid $color-navy;
   color: $color-navy;
   background-color: $color-white;
+  padding: 2px 7px 4px 7px;
   &.on {
     background-color: $color-navy;
     color: $color-white;
@@ -15,7 +16,23 @@
     background-color: $color-navy;
     color: $color-white;
   }
+}
 
+.btn-sound-container {
+  -webkit-box-flex: 0;
+  -ms-flex: 0 0 40%;
+  flex: 0 0 40%;
+  max-width: 40%;
+  padding: 0 20px;
+}
+
+.btn-sound-item {
+  &:first-child {
+    float: left;
+  }
+  &:last-child {
+    float: right;
+  }
 }
 
 .volume-range {
@@ -42,8 +59,13 @@
 .now-playing-container {
   display: inline;
   text-align: left;
+  font-size: 16px;
+  font-weight: 600;
+  ul {
+    max-width: 350px;
+  }
   .soundtype-container {
-    display: inline;
+    display: inline-table;
   }
 }
 

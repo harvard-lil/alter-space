@@ -21,33 +21,54 @@
     <div class="table cell-table table-bottom"
          :class="[$route.params.name, {expanded: showingList}]">
       <div class="tr">
-        <div class="td col-1 list-inline-item btn-sound-item"
-             v-for="type in soundTypes"
-             :key="type">
+        <div class="td btn-sound-container">
+          <div class="list-inline-item btn-sound-item"
+               v-for="type in soundTypes"
+               :key="type">
 
-          <svgicon :icon="type"
-                   width="60"
-                   height="60"
-                   :original="true"
-                   class="btn-default"
-                   @click="showList(type)"
-                   stroke="0">
-          </svgicon>
-          <label>{{type}}</label>
+            <svgicon :icon="type"
+                     width="60"
+                     height="60"
+                     :original="true"
+                     class="btn-default"
+                     @click="showList(type)"
+                     stroke="0">
+            </svgicon>
+            <label>{{ type }}</label>
+          </div>
         </div>
         <!--Now playing container -->
-        <div class="col-1 td"></div>
-        <div class="col-8 td now-playing-container text-left">
-          <span>Now playing:</span>
-          <div class="soundtype-container"
-               v-for="soundType in soundTypes"
-               :key="soundType">
+        <div class="td now-playing-container text-left">
+          <span v-show="nowPlayingList.length">Now playing: </span>
+          <div class="soundtype-container">
+            <!-- Complicated logic to show sounds played until they get to be too long -->
+            <!-- in that case, show all sounds until the 5th, then add "[+x]" -->
             <ul class="list-inline">
-              <li :key="sound"
-                  v-for="sound in soundPresets[soundType]"
-                  class="list-inline-item">
-                {{getAudioName(sound)}}
-              </li>
+              <template v-if="nowPlayingList.length > 5">
+                <li :key="sound"
+                    v-for="(sound, key) in nowPlayingList.slice(0, 5)"
+                    class="list-inline-item currently-playing-sound">
+                  <template v-if="key >= 4">
+                    [+{{nowPlayingList.length - 4}}]
+                  </template>
+                  <template v-else>
+                    {{ getAudioName(sound) }},
+                  </template>
+                </li>
+
+              </template>
+              <template v-else>
+                <li :key="sound"
+                    v-for="(sound, key) in nowPlayingList"
+                    class="list-inline-item currently-playing-sound">
+                  <template v-if="nowPlayingList.length-1 === key ">
+                    {{ getAudioName(sound) }}
+                  </template>
+                  <template v-else>
+                    {{ getAudioName(sound) }},
+                  </template>
+                </li>
+              </template>
             </ul>
           </div>
         </div>
@@ -56,17 +77,6 @@
     <div class="table cell-table table-bottom"
          :class="$route.params.name"
          v-show="showingList">
-      <div class="tr row">
-        <div class="col-6">
-          Select or deselect {{soundType}} tracks
-        </div>
-        <div class="col-6 text-right">
-          <a>
-            Back to main view
-            <span class="btn-x"></span>
-          </a>
-        </div>
-      </div>
       <div class="tr">
         <div v-for="type in soundTypes"
              v-bind:key="type"
@@ -119,6 +129,8 @@
         soundTypes: ['nature', 'urban', 'abstract'],
         soundType: "",
         showingList: false,
+        chosenSounds: [],
+        nowPlayingList: [],
       }
     },
     mounted() {
