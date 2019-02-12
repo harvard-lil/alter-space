@@ -68,11 +68,11 @@ def get_light(id, count=0):
         raise Exception("No light found at id %s" % id)
     else:
         # wifi connection is bad? light wasn't found, try again
-        get_light(id, all_lights=[], count=count+1)
+        get_light(id, count=count+1)
 
 
 def breathe(id):
-    strip = get_light(id, all_lights=[])
+    strip = create_or_get_light(id)
     all_zones = strip.get_color_zones()
     # original_zones = all_zones
     dim_zones = []
@@ -90,7 +90,7 @@ def breathe(id):
 
 def set_colors(id, colors, dim_value):
     # TODO: transition nicely
-    strip = get_light(id, all_lights=[])
+    strip = create_or_get_light(id)
     new_zones = []
     dim_level = get_dim_value(dim_value)
     for idx, color in enumerate(colors):
@@ -101,7 +101,7 @@ def set_colors(id, colors, dim_value):
 
 
 def dim(id, dim_level):
-    strip = get_light(id, all_lights=[])
+    strip = create_or_get_light(id)
     all_zones = strip.get_color_zones()
     dim_zones = []
     dim_level = get_dim_value(dim_level)
