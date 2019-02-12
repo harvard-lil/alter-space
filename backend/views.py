@@ -2,13 +2,10 @@ import json
 import logging
 
 import requests
-from flask import jsonify, Blueprint
-from flask import request, render_template
-from flask import Blueprint
+from flask import jsonify, Blueprint, request, render_template
 from config import config, light_presets, sound_presets
 
 from backend import tasks
-# from backend import lights
 
 
 from helpers import get_sound_paths
@@ -134,23 +131,6 @@ def get_activity_presets(activity):
 
 
 # LIGHT CONTROLS
-@backend_app.route("/lights/scenes")
-def list_scenes():
-    headers = {"Authorization": "Bearer %s" % config.LIGHTS_TOKEN}
-    results = requests.get("https://api.lifx.com/v1/scenes", headers=headers)
-    return jsonify(results.json())
-
-
-@backend_app.route("/lights/states")
-def create_lights():
-    headers = {"Authorization": "Bearer %s" % config.LIGHTS_TOKEN}
-    activity = request.args.get('activity', "focus")
-    data = light_presets.presets[activity]
-    # TODO: control each light through different url!!!
-    results = requests.put("https://api.lifx.com/v1/lights/states", data=json.dumps(data), headers=headers)
-    return jsonify(results.json())
-
-
 @backend_app.route("/lights/breathe", methods=['POST'])
 def toggle_breathe():
     breathe = request.form.get('breathe')

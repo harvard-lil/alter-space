@@ -1,40 +1,87 @@
+import os
 from time import sleep
 from random import randint
 
+import pickle
+
 from lifxlan import LifxLAN
 from lifxlan.utils import RGBtoHSBK
+
+from config import config
+
+light_store = os.path.join(config.DIR, 'backend/lightstore')
+
 lan = LifxLAN()
-lights = lan.get_lights()
+# TODO: clear store before setting lights again
 
 
-def get_light(id):
-    # if not len(lights):
+
+def get_lights():
     lights = lan.get_lights()
-    while not len(lights):
-        sleep(1)
-        lights = lan.get_lights()
+    return lights
+
+
+def store_lights(lights, lightdir=light_store):
+    for light in lights:
+        store_light(light, lightdir=lightdir)
+    return lights
+
+
+def store_light(light_obj, lightdir=light_store):
+    light_identifier = light_obj.mac_addr.replace(":", "")
+    light_path = os.path.join(lightdir, light_identifier)
+
+    with open(light_path, "wb") as f:
+        pickle.dump(light_obj, f)
+    return light_obj
+
+
+def create_or_get_light(light_id):
+    if ":" in light_id:
+        # id is a mac address
+        light_id = light_id.replace(":", "")
+    light_path = os.path.join(light_store, light_id)
+    if not os.path.exists(light_path):
+        light_obj = get_light(light_id)
+        store_light(light_obj)
+        return light_obj
+    else:
+        with open(light_path, "rb") as f:
+            return pickle.load(f)
+
+
+def get_light(id, count=0):
+    all_lights = []
+    while not len(all_lights):
+        sleep(0.5)
+        all_lights = lan.get_lights()
+
     mac_addr = ""
     for key, part in enumerate(id):
         if (key + 2) % 2 == 0 and key != 0:
             mac_addr += ":"
         mac_addr += part
-    for light in lights:
+    for light in all_lights:
         if mac_addr in light.device_characteristics_str(""):
             return light
-    raise Exception("No light found at id %s" % id)
+    if count >= 4:
+        raise Exception("No light found at id %s" % id)
+    else:
+        # wifi connection is bad? light wasn't found, try again
+        get_light(id, count=count+1)
 
 
 def breathe(id):
-    strip = get_light(id)
+    strip = create_or_get_light(id)
     all_zones = strip.get_color_zones()
-    original_zones = all_zones
+    # original_zones = all_zones
     dim_zones = []
     bright_zones = []
+
     for [h, s, v, k] in all_zones:
         dim_zones.append((h, s, 20000, k))
         bright_zones.append((h, s, 55535, k))
 
-    # print("therefore", low, high)
     strip.set_zone_colors(bright_zones, 2000, True)
     sleep(randint(2, 10))
     strip.set_zone_colors(dim_zones, 2000, True)
@@ -43,7 +90,7 @@ def breathe(id):
 
 def set_colors(id, colors, dim_value):
     # TODO: transition nicely
-    strip = get_light(id)
+    strip = create_or_get_light(id)
     new_zones = []
     dim_level = get_dim_value(dim_value)
     for idx, color in enumerate(colors):
@@ -54,7 +101,7 @@ def set_colors(id, colors, dim_value):
 
 
 def dim(id, dim_level):
-    strip = get_light(id)
+    strip = create_or_get_light(id)
     all_zones = strip.get_color_zones()
     dim_zones = []
     dim_level = get_dim_value(dim_level)
