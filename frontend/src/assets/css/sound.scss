@@ -26,12 +26,41 @@
   padding: 0 20px;
 }
 
+.sound-type-container {
+  border-top: 1px solid $color-navy;
+}
+
 .btn-sound-item {
   &:first-child {
     float: left;
   }
   &:last-child {
     float: right;
+  }
+  svg.btn-sound-type {
+    &.nature, &.urban, &.abstract {
+      &:hover, &:active, &:focus {
+        path {
+          fill: $color-navy;
+        }
+      }
+    }
+    &.nature.expanded {
+      path {
+        fill: $color-navy;
+      }
+    }
+    &.urban.expanded {
+      path {
+        fill: $color-navy;
+      }
+    }
+    &.abstract.expanded {
+      path {
+        fill: $color-navy;
+      }
+    }
+
   }
 }
 
@@ -62,7 +91,7 @@
   font-size: 16px;
   font-weight: 600;
   ul {
-    max-width: 350px;
+    max-width: 320px;
   }
   .soundtype-container {
     display: inline-table;

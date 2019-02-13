@@ -26,13 +26,18 @@
                     v-for="(color, idx) in colorPresets"
                     v-bind:key="idx"
                     @click="showList(idx)"
-                    :class="{active: color === colorPresets[currentColorIdx] && showingList}"
+                    :class="{active: color === colorPresets[currentColorIdx] && showingList && currentColorIdx === idx}"
                     :style="{'backgroundColor': color}">
             </button>
             <label class="text-center">colors</label>
           </div>
         </div>
-        <breathe-button></breathe-button>
+        <breathe-button
+                v-show="$route.params.name !== 'wyrd'">
+        </breathe-button>
+        <chase-button
+                v-show="$route.params.name === 'wyrd'">
+        </chase-button>
         <div class="td col-6">
           <brightness-slider></brightness-slider>
           <label>brightness</label>
@@ -46,10 +51,14 @@
            :class="$route.params.name"
            role="group"
            aria-label="color button group">
+        <svgicon icon="arrow-up"
+                 class="arrow-up colors"
+                 :class="['color-'+currentColorIdx, $route.params.name]">
+        </svgicon>
         <button type="button"
                 class="btn-round-small btn-color-option"
-                v-for="hexVal in colors"
-                v-bind:key="hexVal"
+                v-for="(hexVal, idx) in colors"
+                v-bind:key="idx"
                 @click="chooseNewColor(hexVal)"
                 :style="{'backgroundColor': hexVal}">
         </button>
@@ -63,14 +72,16 @@
 
   import './icons/breathe';
   import './icons/triangle-light';
+  import './icons/arrow-up';
 
   import EventBus from '../event-bus';
 
   import BrightnessSlider from './BrightnessSlider';
+  import ChaseButton from "./ChaseButton";
   import BreatheButton from "./BreatheButton";
 
   const colorsUrl = process.env.VUE_APP_BACKEND_URL + "lights" + "/colors";
-  const lightUrl = process.env.VUE_APP_BACKEND_URL + "lights" + "/set"
+  const lightUrl = process.env.VUE_APP_BACKEND_URL + "lights" + "/set";
 
   // steps between color 1 and color 2
   const steps = 8;
@@ -79,9 +90,10 @@
     name: "LightLevers",
     components: {
       BreatheButton,
+      ChaseButton,
       BrightnessSlider
     },
-    props: ["lightPresets"],
+    props: ["lightPresets", "collapseLightOptions"],
     data() {
       return {
         showColorPicker: false,
@@ -98,6 +110,12 @@
       lightPresets() {
         this.colorPresets = this.lightPresets.colors;
         this.createGradient();
+      },
+      collapseLightOptions() {
+        if (this.collapseLightOptions) {
+          this.showingList = false;
+          this.$parent.showingLightOptions = false;
+        }
       }
     },
     methods: {

@@ -330,12 +330,53 @@ button, a, .btn, .btn-default {
   }
 }
 
+.arrow-up {
+  margin-top: -10px;
+  position: absolute;
+  &.nature {
+    margin-left: 40px;
+  }
+  &.urban {
+    margin-left: 109px;
+  }
+  &.abstract {
+    margin-left: 175px;
+  }
+
+  path {
+    &:first-child {
+      fill:$color-white;
+    }
+    &:last-child {
+      fill: $color-navy;
+    }
+  }
+}
+
+.arrow-up.colors {
+  margin-top: -21px;
+  &.color-0 {
+    margin-left: 38px;
+  }
+  &.color-1 {
+    margin-left: 93px;
+  }
+  &.color-2 {
+    margin-left: 150px;
+  }
+  &.create, &.relax, &.wyrd, &.read {
+    path {
+      fill: $color-navy;
+    }
+  }
+}
+
+
 /* Activity settings */
 
 // TODO: figure out why this is necessary
 .activity-row {
   margin-left: 0;
-  margin-right: -30px;
 }
 
 .btn-activity {

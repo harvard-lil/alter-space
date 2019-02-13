@@ -23,5 +23,3 @@ def test_activity(client):
     result = response.json
     assert "light" in result.keys()
     assert "sound" in result.keys()
-
-    sound = result['sound']

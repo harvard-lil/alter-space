@@ -1,6 +1,7 @@
 /* eslint-disable */
 require('./abstract')
 require('./breathe')
+require('./chase')
 require('./home')
 require('./info')
 require('./mute')

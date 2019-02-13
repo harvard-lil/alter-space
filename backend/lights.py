@@ -5,6 +5,7 @@ from random import randint
 import pickle
 
 from lifxlan import LifxLAN
+from lifxlan.errors import WorkflowException
 from lifxlan.utils import RGBtoHSBK
 
 from config import config
@@ -12,8 +13,9 @@ from config import config
 light_store = os.path.join(config.DIR, 'backend/lightstore')
 
 lan = LifxLAN()
-# TODO: clear store before setting lights again
 
+
+# TODO: clear store before setting lights again
 
 
 def get_lights():
@@ -36,7 +38,7 @@ def store_light(light_obj, lightdir=light_store):
     return light_obj
 
 
-def create_or_get_light(light_id):
+def get_or_create_light(light_id):
     if ":" in light_id:
         # id is a mac address
         light_id = light_id.replace(":", "")
@@ -68,29 +70,47 @@ def get_light(id, count=0):
         raise Exception("No light found at id %s" % id)
     else:
         # wifi connection is bad? light wasn't found, try again
-        get_light(id, count=count+1)
+        get_light(id, count=count + 1)
+
+
+def chase(id):
+    try:
+        strip = get_or_create_light(id)
+        all_zones = strip.get_color_zones()
+        last = all_zones.pop()
+        all_zones.insert(0, last)
+        strip.set_zone_colors(all_zones)
+    except WorkflowException as err:
+        print("caught exception", err)
+        sleep(0.5)
+        chase(id)
 
 
 def breathe(id):
-    strip = create_or_get_light(id)
-    all_zones = strip.get_color_zones()
-    # original_zones = all_zones
-    dim_zones = []
-    bright_zones = []
+    #TODO: deep breath is 4 to inhale, 7 to hold, and 8 to exhale
+    try:
+        strip = get_or_create_light(id)
+        all_zones = strip.get_color_zones()
+        dim_zones = []
+        bright_zones = []
 
-    for [h, s, v, k] in all_zones:
-        dim_zones.append((h, s, 20000, k))
-        bright_zones.append((h, s, 55535, k))
+        for [h, s, v, k] in all_zones:
+            dim_zones.append((h, s, 20000, k))
+            bright_zones.append((h, s, 55535, k))
 
-    strip.set_zone_colors(bright_zones, 2000, True)
-    sleep(randint(2, 10))
-    strip.set_zone_colors(dim_zones, 2000, True)
-    sleep(randint(2, 10))
+        strip.set_zone_colors(bright_zones, 2000, True)
+        sleep(randint(2, 10))
+        strip.set_zone_colors(dim_zones, 2000, True)
+        sleep(randint(2, 10))
+    except WorkflowException as err:
+        print("caught exception", err)
+        sleep(0.5)
+        breathe(id)
 
 
 def set_colors(id, colors, dim_value):
     # TODO: transition nicely
-    strip = create_or_get_light(id)
+    strip = get_or_create_light(id)
     new_zones = []
     dim_level = get_dim_value(dim_value)
     for idx, color in enumerate(colors):
@@ -101,13 +121,18 @@ def set_colors(id, colors, dim_value):
 
 
 def dim(id, dim_level):
-    strip = create_or_get_light(id)
-    all_zones = strip.get_color_zones()
-    dim_zones = []
-    dim_level = get_dim_value(dim_level)
-    for [h, s, v, k] in all_zones:
-        dim_zones.append((h, s, dim_level, k))
-    strip.set_zone_colors(dim_zones, 3000, False)
+    try:
+        strip = get_or_create_light(id)
+        all_zones = strip.get_color_zones()
+        dim_zones = []
+        dim_level = get_dim_value(dim_level)
+        for [h, s, v, k] in all_zones:
+            dim_zones.append((h, s, dim_level, k))
+        strip.set_zone_colors(dim_zones, 3000, False)
+    except WorkflowException as err:
+        print("caught exception", err)
+        sleep(0.5)
+        dim(id, dim_level)
 
 
 def hex2rgb(hex):
@@ -118,7 +143,6 @@ def hex2rgb(hex):
 
 
 def get_dim_value(dim_value):
-    dim_value = int(65535 * (int(dim_value)/100))
+    dim_value = int(65535 * (int(dim_value) / 100))
     dim_value = 1000 if dim_value < 1000 else dim_value
     return dim_value
-

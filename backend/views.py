@@ -2,7 +2,7 @@ import json
 import logging
 
 import requests
-from flask import jsonify, Blueprint, request, render_template
+from flask import jsonify, Blueprint, request, render_template, make_response
 from config import config, light_presets, sound_presets
 
 from backend import tasks
@@ -30,6 +30,14 @@ def view_start_task(task_name):
         id = request.form.get('id')
         task = tasks.breathe_task.apply_async(kwargs={'id': id})
         data = {"id": id}
+    elif task_name == "chase":
+        id = request.form.get('id')
+        task = tasks.chase_task.apply_async(kwargs={'id': id})
+        data = {"id": id}
+    else:
+        error_message = "Task with name %s was not found" % task_name
+        return make_response(error_message, 404)
+
     logger.info('return task...')
 
     return jsonify({
@@ -63,6 +71,8 @@ def view_check_task(task_name, task_id):
         task = tasks.wait_task.AsyncResult(task_id)
     elif task_name == "breathe":
         task = tasks.breathe_task.AsyncResult(task_id)
+    elif task_name == "chase":
+        task = tasks.chase_task.AsyncResult(task_id)
     output = {'task_id': task.id, 'state': task.state}
     if task.state == 'SUCCESS':
         output.update({'result': task.result})
@@ -73,30 +83,6 @@ def view_check_task(task_name, task_id):
 def index():
     return render_template("index.html")
 
-
-@backend_app.route("/lights")
-def lights():
-    color_string = request.args.get('color_string', None)
-    hex_color = "#ff0000"
-    result = {
-        "color_string": color_string,
-        "color": hex_color
-    }
-
-    print(hex_color, request.args)
-    headers = {"Authorization": "Bearer %s" % config.LIGHTS_TOKEN}
-    data = {
-        "power": "off",
-        "fast": "true"
-    }
-    # url = "https://api.lifx.com/v1/lights/%s/state" % config.LIGHTS_ID
-    # requests.put(url, data=data, headers=headers)
-    return jsonify(result)
-
-
-#
-# @backend_app.route("/colorpresets")
-# def getcolorpresets():
 
 @backend_app.route("/sounds")
 def sounds():
@@ -131,19 +117,18 @@ def get_activity_presets(activity):
 
 
 # LIGHT CONTROLS
-@backend_app.route("/lights/breathe", methods=['POST'])
-def toggle_breathe():
-    breathe = request.form.get('breathe')
-    breathe = True if breathe == "true" else False
+@backend_app.route("/lights/effects/<effect_type>", methods=['POST'])
+def toggle_effect(effect_type):
+    effect_status = request.form.get('effect')
+    effect_status = True if effect_status == "true" else False
     light_id = request.form.get('id')
     data = {"id": light_id}
-
-    if breathe:
-        results = requests.post("http://localhost:5000/task/start/breathe", data=data)
+    if effect_status:
+        results = requests.post("http://localhost:5000/task/start/%s" % effect_type, data=data)
         return jsonify(results.json())
     else:
         data["task_id"] = request.form.get('task_id')
-        results = requests.post("http://localhost:5000/task/stop/breathe", data=data)
+        results = requests.post("http://localhost:5000/task/stop/%s" % effect_type, data=data)
         return jsonify(results.json())
 
 

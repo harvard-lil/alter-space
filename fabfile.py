@@ -8,12 +8,19 @@ def run_flask(port="5000"):
 
 
 @task
+def celery():
+    local("celery -A backend.tasks worker")
+
+
+@task
 def npm_install():
     local("cd frontend && npm install")
+
 
 @task
 def npm():
     local("cd frontend && npm run serve")
+
 
 @task
 def build():

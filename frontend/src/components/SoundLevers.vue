@@ -30,7 +30,8 @@
                      width="60"
                      height="60"
                      :original="true"
-                     class="btn-default"
+                     class="btn-default btn-sound-type"
+                     :class="[type, {expanded: showingList && soundType === type }]"
                      @click="showList(type)"
                      stroke="0">
             </svgicon>
@@ -77,14 +78,18 @@
     <div class="table cell-table table-bottom"
          :class="$route.params.name"
          v-show="showingList">
-      <div class="tr">
-        <div v-for="type in soundTypes"
-             v-bind:key="type"
-             v-show="type === soundType">
-          <Sounds :soundPresets="soundPresets[type]"
-                  :soundType="type">
-          </Sounds>
-        </div>
+      <div class="tr sound-type-container"
+           :class="type"
+           v-for="type in soundTypes"
+           v-bind:key="type"
+           v-show="type === soundType">
+        <svgicon icon="arrow-up"
+                 class="arrow-up"
+                 :class="type">
+        </svgicon>
+        <Sounds :soundPresets="soundPresets[type]"
+                :soundType="type">
+        </Sounds>
       </div>
     </div>
     <div class="title-shape"
@@ -108,6 +113,7 @@
   import "./icons/abstract";
   import './icons/triangle-sound';
   import './icons/triangle-upside-down';
+  import './icons/arrow-up';
 
   import PlayButton from './PlayButton'
   import MuteButton from './MuteButton'
@@ -122,7 +128,7 @@
       PlayButton,
       MuteButton
     },
-    props: ['soundPresets'],
+    props: ["soundPresets", "collapseSoundOptions"],
     data() {
       return {
         showToggles: true,
@@ -140,16 +146,21 @@
         if (soundType !== self.soundType) {
           self.showingList = false;
         }
-      })
-
+      });
+    },
+    watch: {
+      collapseSoundOptions() {
+        if (this.collapseSoundOptions) {
+          this.showingList = false;
+          this.$parent.showingSoundOptions = false;
+        }
+      }
     },
     methods: {
       getAudioName(audioPath) {
         let name = audioPath.split(".mp3")[0];
         let parts = name.split('_');
-        let newName = parts.join(" ");
-        // return newName += ',';
-        return newName;
+        return parts.join(" ");
       },
       showList(soundType) {
         if (this.showingList && soundType === this.soundType) {
@@ -160,6 +171,7 @@
           this.showingList = true;
           this.$emit("sounds-collapse-list", this.soundType);
         }
+        this.$parent.showingSoundOptions = true;
       }
     },
   }

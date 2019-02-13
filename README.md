@@ -54,6 +54,7 @@ We use the lovely [vue-svgicon](https://github.com/MMF-FE/vue-svgicon#use-genera
 To use, place all svg assets into frontend/svg-icons.
 Run the following command to compile (assets will be placed in frontend/components/icons):
 ```
+$ cd ./frontend
 $ npm run generate-icons
 ```
 

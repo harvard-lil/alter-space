@@ -18,8 +18,15 @@ def wait_task(self, sleep_time):
 
 
 @celery.task(bind=True)
+def chase_task(self, id):
+    print("chase_task", id)
+    while True:
+        lights.chase(id)
+
+
+@celery.task(bind=True)
 def breathe_task(self, id):
-    """sample task that sleeps 5 seconds then returns the current datetime"""
+    print("breathe_task", id)
     while True:
         lights.breathe(id)
 
