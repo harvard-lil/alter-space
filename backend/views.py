@@ -71,6 +71,8 @@ def view_check_task(task_name, task_id):
         task = tasks.wait_task.AsyncResult(task_id)
     elif task_name == "breathe":
         task = tasks.breathe_task.AsyncResult(task_id)
+    elif task_name == "chase":
+        task = tasks.chase_task.AsyncResult(task_id)
     output = {'task_id': task.id, 'state': task.state}
     if task.state == 'SUCCESS':
         output.update({'result': task.result})

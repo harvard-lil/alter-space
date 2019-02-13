@@ -5,6 +5,7 @@ from random import randint
 import pickle
 
 from lifxlan import LifxLAN
+from lifxlan.errors import WorkflowException
 from lifxlan.utils import RGBtoHSBK
 
 from config import config
@@ -73,28 +74,38 @@ def get_light(id, count=0):
 
 
 def chase(id):
-    strip = get_or_create_light(id)
-    all_zones = strip.get_color_zones()
-    last = all_zones.pop()
-    all_zones.insert(0, last)
-    strip.set_zone_colors(all_zones)
+    try:
+        strip = get_or_create_light(id)
+        all_zones = strip.get_color_zones()
+        last = all_zones.pop()
+        all_zones.insert(0, last)
+        strip.set_zone_colors(all_zones)
+    except WorkflowException as err:
+        print("caught exception", err)
+        sleep(0.5)
+        chase(id)
 
 
 def breathe(id):
     #TODO: deep breath is 4 to inhale, 7 to hold, and 8 to exhale
-    strip = get_or_create_light(id)
-    all_zones = strip.get_color_zones()
-    dim_zones = []
-    bright_zones = []
+    try:
+        strip = get_or_create_light(id)
+        all_zones = strip.get_color_zones()
+        dim_zones = []
+        bright_zones = []
 
-    for [h, s, v, k] in all_zones:
-        dim_zones.append((h, s, 20000, k))
-        bright_zones.append((h, s, 55535, k))
+        for [h, s, v, k] in all_zones:
+            dim_zones.append((h, s, 20000, k))
+            bright_zones.append((h, s, 55535, k))
 
-    strip.set_zone_colors(bright_zones, 2000, True)
-    sleep(randint(2, 10))
-    strip.set_zone_colors(dim_zones, 2000, True)
-    sleep(randint(2, 10))
+        strip.set_zone_colors(bright_zones, 2000, True)
+        sleep(randint(2, 10))
+        strip.set_zone_colors(dim_zones, 2000, True)
+        sleep(randint(2, 10))
+    except WorkflowException as err:
+        print("caught exception", err)
+        sleep(0.5)
+        breathe(id)
 
 
 def set_colors(id, colors, dim_value):
@@ -110,13 +121,18 @@ def set_colors(id, colors, dim_value):
 
 
 def dim(id, dim_level):
-    strip = get_or_create_light(id)
-    all_zones = strip.get_color_zones()
-    dim_zones = []
-    dim_level = get_dim_value(dim_level)
-    for [h, s, v, k] in all_zones:
-        dim_zones.append((h, s, dim_level, k))
-    strip.set_zone_colors(dim_zones, 3000, False)
+    try:
+        strip = get_or_create_light(id)
+        all_zones = strip.get_color_zones()
+        dim_zones = []
+        dim_level = get_dim_value(dim_level)
+        for [h, s, v, k] in all_zones:
+            dim_zones.append((h, s, dim_level, k))
+        strip.set_zone_colors(dim_zones, 3000, False)
+    except WorkflowException as err:
+        print("caught exception", err)
+        sleep(0.5)
+        dim(id, dim_level)
 
 
 def hex2rgb(hex):
