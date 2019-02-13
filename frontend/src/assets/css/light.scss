@@ -2,11 +2,11 @@
 .btn-group-color-options {
   padding: 10px;
   text-align: center;
-  &.read, &.meditate, &.focus {
+   &.meditate, &.focus {
     background-color: $color-white;
-    border-top: 1.5px solid $color-navy
+    border-top: 1px solid $color-navy
   }
-  &.create, &.relax, &.wyrd {
+  &.create, &.relax, &.wyrd, &.read {
     background-color: $color-navy;
   }
 }
@@ -19,15 +19,14 @@
 }
 
 .btn-color-option {
-  height: 30px;
-  width: 30px;
+  height: 29px;
+  width: 29px;
   -moz-box-shadow: none;
   -webkit-box-shadow: none;
   box-shadow: none;
-
 }
 
-.btn-breathe {
+.btn-breathe, .btn-chase {
   @extend .btn-round;
   background-size: 60px;
   &.active, &:hover, &:focus, &:active {

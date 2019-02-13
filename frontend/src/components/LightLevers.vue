@@ -51,10 +51,14 @@
            :class="$route.params.name"
            role="group"
            aria-label="color button group">
+        <svgicon icon="arrow-up"
+                 class="arrow-up colors"
+                 :class="['color-'+currentColorIdx, $route.params.name]">
+        </svgicon>
         <button type="button"
                 class="btn-round-small btn-color-option"
-                v-for="hexVal in colors"
-                v-bind:key="hexVal"
+                v-for="(hexVal, idx) in colors"
+                v-bind:key="idx"
                 @click="chooseNewColor(hexVal)"
                 :style="{'backgroundColor': hexVal}">
         </button>
@@ -68,6 +72,7 @@
 
   import './icons/breathe';
   import './icons/triangle-light';
+  import './icons/arrow-up';
 
   import EventBus from '../event-bus';
 

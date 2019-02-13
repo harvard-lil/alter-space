@@ -26,6 +26,10 @@
   padding: 0 20px;
 }
 
+.sound-type-container {
+  border-top: 1px solid $color-navy;
+}
+
 .btn-sound-item {
   &:first-child {
     float: left;

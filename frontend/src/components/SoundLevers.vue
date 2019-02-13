@@ -78,14 +78,18 @@
     <div class="table cell-table table-bottom"
          :class="$route.params.name"
          v-show="showingList">
-      <div class="tr">
-        <div v-for="type in soundTypes"
-             v-bind:key="type"
-             v-show="type === soundType">
-          <Sounds :soundPresets="soundPresets[type]"
-                  :soundType="type">
-          </Sounds>
-        </div>
+      <div class="tr sound-type-container"
+           :class="type"
+           v-for="type in soundTypes"
+           v-bind:key="type"
+           v-show="type === soundType">
+        <svgicon icon="arrow-up"
+                 class="arrow-up"
+                 :class="type">
+        </svgicon>
+        <Sounds :soundPresets="soundPresets[type]"
+                :soundType="type">
+        </Sounds>
       </div>
     </div>
     <div class="title-shape"
@@ -109,6 +113,7 @@
   import "./icons/abstract";
   import './icons/triangle-sound';
   import './icons/triangle-upside-down';
+  import './icons/arrow-up';
 
   import PlayButton from './PlayButton'
   import MuteButton from './MuteButton'
