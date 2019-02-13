@@ -30,7 +30,8 @@
                      width="60"
                      height="60"
                      :original="true"
-                     class="btn-default"
+                     class="btn-default btn-sound-type"
+                     :class="[type, {expanded: showingList && soundType === type }]"
                      @click="showList(type)"
                      stroke="0">
             </svgicon>
@@ -147,9 +148,7 @@
       getAudioName(audioPath) {
         let name = audioPath.split(".mp3")[0];
         let parts = name.split('_');
-        let newName = parts.join(" ");
-        // return newName += ',';
-        return newName;
+        return parts.join(" ");
       },
       showList(soundType) {
         if (this.showingList && soundType === this.soundType) {
