@@ -131,19 +131,18 @@ def get_activity_presets(activity):
 
 
 # LIGHT CONTROLS
-@backend_app.route("/lights/breathe", methods=['POST'])
-def toggle_breathe():
-    breathe = request.form.get('breathe')
-    breathe = True if breathe == "true" else False
+@backend_app.route("/lights/effects/<effect_type>", methods=['POST'])
+def toggle_effect(effect_type):
+    effect_status = request.form.get('effect')
+    effect_status = True if effect_status == "true" else False
     light_id = request.form.get('id')
     data = {"id": light_id}
-
-    if breathe:
-        results = requests.post("http://localhost:5000/task/start/breathe", data=data)
+    if effect_status:
+        results = requests.post("http://localhost:5000/task/start/%s" % effect_type, data=data)
         return jsonify(results.json())
     else:
         data["task_id"] = request.form.get('task_id')
-        results = requests.post("http://localhost:5000/task/stop/breathe", data=data)
+        results = requests.post("http://localhost:5000/task/stop/%s" % effect_type, data=data)
         return jsonify(results.json())
 
 
