@@ -26,7 +26,7 @@
                     v-for="(color, idx) in colorPresets"
                     v-bind:key="idx"
                     @click="showList(idx)"
-                    :class="{active: color === colorPresets[currentColorIdx] && showingList}"
+                    :class="{active: color === colorPresets[currentColorIdx] && showingList && currentColorIdx === idx}"
                     :style="{'backgroundColor': color}">
             </button>
             <label class="text-center">colors</label>
