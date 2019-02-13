@@ -70,7 +70,7 @@
   import BreatheButton from "./BreatheButton";
 
   const colorsUrl = process.env.VUE_APP_BACKEND_URL + "lights" + "/colors";
-  const lightUrl = process.env.VUE_APP_BACKEND_URL + "lights" + "/set"
+  const lightUrl = process.env.VUE_APP_BACKEND_URL + "lights" + "/set";
 
   // steps between color 1 and color 2
   const steps = 8;
@@ -81,7 +81,7 @@
       BreatheButton,
       BrightnessSlider
     },
-    props: ["lightPresets"],
+    props: ["lightPresets", "collapseLightOptions"],
     data() {
       return {
         showColorPicker: false,
@@ -98,6 +98,12 @@
       lightPresets() {
         this.colorPresets = this.lightPresets.colors;
         this.createGradient();
+      },
+      collapseLightOptions() {
+        if (this.collapseLightOptions) {
+          this.showingList = false;
+          this.$parent.showingLightOptions = false;
+        }
       }
     },
     methods: {

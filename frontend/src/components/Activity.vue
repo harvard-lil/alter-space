@@ -7,13 +7,16 @@
     </div>
     <div class="lever-container col-centered">
       <light-levers :lightPresets="lightPresets"
+                    :collapseLightOptions="showingSoundOptions"
                     class="color-levers">
       </light-levers>
-      <div v-show="!showingLightOptions">
-        <br/><br/><br/>
-      </div>
+      <!--including space when not showing light options-->
+      <div v-show="!showingLightOptions"><br/><br/><br/></div>
+
       <sound-levers :soundPresets="soundPresets"
-                    :class="{fillbackground: showingLightOptions}"></sound-levers>
+                    :collapseSoundOptions="showingLightOptions"
+                    :class="{fillbackground: showingLightOptions}">
+      </sound-levers>
     </div>
   </div>
 </template>

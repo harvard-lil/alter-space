@@ -123,7 +123,7 @@
       PlayButton,
       MuteButton
     },
-    props: ['soundPresets'],
+    props: ["soundPresets", "collapseSoundOptions"],
     data() {
       return {
         showToggles: true,
@@ -141,8 +141,15 @@
         if (soundType !== self.soundType) {
           self.showingList = false;
         }
-      })
-
+      });
+    },
+    watch: {
+      collapseSoundOptions() {
+        if (this.collapseSoundOptions) {
+          this.showingList = false;
+          this.$parent.showingSoundOptions = false;
+        }
+      }
     },
     methods: {
       getAudioName(audioPath) {
@@ -159,6 +166,7 @@
           this.showingList = true;
           this.$emit("sounds-collapse-list", this.soundType);
         }
+        this.$parent.showingSoundOptions = true;
       }
     },
   }
