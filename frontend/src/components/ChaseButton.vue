@@ -1,54 +1,52 @@
 <template>
   <div class="td col-2">
-    <svgicon icon="breathe"
+    <svgicon icon="chase"
              width="60"
              height="60"
              :original="true"
-             class="btn-round btn-breathe"
-             @click="toggleBreathe()"
-             :class="{active: breathe}"
+             class="btn-round btn-chase"
+             @click="toggleChase()"
+             :class="{active: chase}"
              stroke="0"></svgicon>
 
-    <label v-if="breathe">stop</label>
-    <label v-else>breathe</label>
+    <label v-if="chase">stop</label>
+    <label v-else>chase</label>
   </div>
 
 </template>
 
 <script>
   import axios from 'axios';
-  import EventBus from '../event-bus'
-  import "./icons/breathe";
-  const breatheUrl = process.env.VUE_APP_BACKEND_URL + "lights/effects" + "/breathe";
+  import "./icons/chase";
+
+  const chaseUrl = process.env.VUE_APP_BACKEND_URL + "lights/effects" + "/chase";
 
   export default {
-    name: "breathe-button",
+    name: "chase-button",
     data() {
       return {
-        breathe: false,
+        chase: false,
         taskID: ""
       }
     },
     methods: {
-      toggleBreathe() {
+      toggleChase() {
         let self = this;
-        self.breathe = !(self.breathe);
+        self.chase = !(self.chase);
         let bodyFormData = new FormData();
         bodyFormData.set('id', self.$parent.light);
-        bodyFormData.set('effect', self.breathe);
+        bodyFormData.set('effect', self.chase);
         if (self.taskID) {
           bodyFormData.set('task_id', self.taskID);
         }
 
         axios({
           method: "post",
-          url: breatheUrl,
+          url: chaseUrl,
           data: bodyFormData
         }).then((res) => {
           self.taskID = res.data.task_id;
-          if (!(self.breathe)) {
-            EventBus.$emit('reset-brightness', self.breathe);
-          }
+
         })
       },
     }

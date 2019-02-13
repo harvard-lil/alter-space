@@ -2,7 +2,7 @@ import json
 import logging
 
 import requests
-from flask import jsonify, Blueprint, request, render_template
+from flask import jsonify, Blueprint, request, render_template, make_response
 from config import config, light_presets, sound_presets
 
 from backend import tasks
@@ -30,6 +30,14 @@ def view_start_task(task_name):
         id = request.form.get('id')
         task = tasks.breathe_task.apply_async(kwargs={'id': id})
         data = {"id": id}
+    elif task_name == "chase":
+        id = request.form.get('id')
+        task = tasks.chase_task.apply_async(kwargs={'id': id})
+        data = {"id": id}
+    else:
+        error_message = "Task with name %s was not found" % task_name
+        return make_response(error_message, 404)
+
     logger.info('return task...')
 
     return jsonify({

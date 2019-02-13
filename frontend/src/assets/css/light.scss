@@ -30,7 +30,7 @@
 .btn-breathe {
   @extend .btn-round;
   background-size: 60px;
-  &.active {
+  &.active, &:hover, &:focus, &:active {
     path {
       fill: $color-navy;
     }

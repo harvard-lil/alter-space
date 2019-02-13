@@ -32,7 +32,12 @@
             <label class="text-center">colors</label>
           </div>
         </div>
-        <breathe-button></breathe-button>
+        <breathe-button
+                v-show="$route.params.name !== 'wyrd'">
+        </breathe-button>
+        <chase-button
+                v-show="$route.params.name === 'wyrd'">
+        </chase-button>
         <div class="td col-6">
           <brightness-slider></brightness-slider>
           <label>brightness</label>
@@ -67,6 +72,7 @@
   import EventBus from '../event-bus';
 
   import BrightnessSlider from './BrightnessSlider';
+  import ChaseButton from "./ChaseButton";
   import BreatheButton from "./BreatheButton";
 
   const colorsUrl = process.env.VUE_APP_BACKEND_URL + "lights" + "/colors";
@@ -79,6 +85,7 @@
     name: "LightLevers",
     components: {
       BreatheButton,
+      ChaseButton,
       BrightnessSlider
     },
     props: ["lightPresets", "collapseLightOptions"],
