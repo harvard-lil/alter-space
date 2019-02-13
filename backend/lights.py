@@ -76,8 +76,7 @@ def chase(id):
     strip = get_or_create_light(id)
     all_zones = strip.get_color_zones()
     last = all_zones.pop()
-    all_zones.insert(last, 0)
-    sleep(0.05)
+    all_zones.insert(0, last)
     strip.set_zone_colors(all_zones)
 
 
