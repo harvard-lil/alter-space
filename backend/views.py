@@ -74,30 +74,6 @@ def index():
     return render_template("index.html")
 
 
-@backend_app.route("/lights")
-def lights():
-    color_string = request.args.get('color_string', None)
-    hex_color = "#ff0000"
-    result = {
-        "color_string": color_string,
-        "color": hex_color
-    }
-
-    print(hex_color, request.args)
-    headers = {"Authorization": "Bearer %s" % config.LIGHTS_TOKEN}
-    data = {
-        "power": "off",
-        "fast": "true"
-    }
-    # url = "https://api.lifx.com/v1/lights/%s/state" % config.LIGHTS_ID
-    # requests.put(url, data=data, headers=headers)
-    return jsonify(result)
-
-
-#
-# @backend_app.route("/colorpresets")
-# def getcolorpresets():
-
 @backend_app.route("/sounds")
 def sounds():
     nature_paths = get_sound_paths('nature')
