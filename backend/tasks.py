@@ -9,6 +9,8 @@ from backend import lights
 logger = logging.getLogger()
 celery = Celery(__name__, autofinalize=False)
 
+lights.setup_light_store()
+
 
 @celery.task(bind=True)
 def wait_task(self, sleep_time):

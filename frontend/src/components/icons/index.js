@@ -1,5 +1,6 @@
 /* eslint-disable */
 require('./abstract')
+require('./arrow-up')
 require('./breathe')
 require('./chase')
 require('./home')
