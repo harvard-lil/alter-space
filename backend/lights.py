@@ -112,16 +112,22 @@ def breathe(id):
         breathe(id)
 
 
-def set_colors(id, colors, dim_value):
+def set_colors(id, colors, dim_value=100):
     # TODO: transition nicely
     strip = get_or_create_light(id)
     new_zones = []
     dim_level = get_dim_value(dim_value)
+
     for idx, color in enumerate(colors):
         rgb = hex2rgb(color)
         h, s, v, k = RGBtoHSBK(rgb)
         new_zones.append((h, s, dim_level, k))
-    strip.set_zone_colors(new_zones, 3000, False)
+    try:
+        strip.set_zone_colors(new_zones, 3000, False)
+    except WorkflowException as err:
+        print("caught exception", err)
+        sleep(0.5)
+        set_colors(id, colors, dim_value)
 
 
 def dim(id, dim_level):
