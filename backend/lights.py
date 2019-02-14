@@ -1,4 +1,5 @@
 import os
+import shutil
 from time import sleep
 from random import randint
 
@@ -15,7 +16,10 @@ light_store = os.path.join(config.DIR, 'backend/lightstore')
 lan = LifxLAN()
 
 
-# TODO: clear store before setting lights again
+# Clear store before setting lights again
+if os.path.exists(light_store):
+    shutil.rmtree(light_store)
+    os.mkdir(light_store)
 
 
 def get_lights():
