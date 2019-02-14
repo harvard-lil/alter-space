@@ -16,10 +16,13 @@ light_store = os.path.join(config.DIR, 'backend/lightstore')
 lan = LifxLAN()
 
 
-# Clear store before setting lights again
-if os.path.exists(light_store):
-    shutil.rmtree(light_store)
-    os.mkdir(light_store)
+def setup_light_store():
+    # Clear store before setting lights again
+
+    if os.path.exists(light_store):
+        print("removing and creating dir")
+        shutil.rmtree(light_store)
+        os.mkdir(light_store)
 
 
 def get_lights():
