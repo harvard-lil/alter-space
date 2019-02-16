@@ -122,6 +122,9 @@
       },
       effectPlaying() {
         this.disableButtons = this.effectPlaying;
+        if (this.disableButtons) {
+          this.showingList = false;
+        }
       }
     },
     methods: {
