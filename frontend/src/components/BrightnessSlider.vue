@@ -6,6 +6,7 @@
          max="100"
          value="100"
          autocomplete="off"
+         :disabled="disable"
          v-model.lazy.number="bright"/>
 </template>
 
@@ -16,6 +17,7 @@
   const dimUrl = process.env.VUE_APP_BACKEND_URL + "lights" + "/dim"
   export default {
     name: "brightness-slider",
+    props: ["disable"],
     data() {
       return {
         bright: 100

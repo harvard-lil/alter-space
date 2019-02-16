@@ -46,6 +46,7 @@
           data: bodyFormData
         }).then((res) => {
           self.taskID = res.data.task_id;
+          self.$parent.effectPlaying = self.chase;
           if (!(self.chase)) {
             EventBus.$emit('reset-brightness', self.breathe);
           }
