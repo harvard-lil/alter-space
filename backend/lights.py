@@ -25,6 +25,13 @@ def setup_light_store():
         os.mkdir(light_store)
 
 
+def turn_light_on(light_obj):
+    power = light_obj.get_power()
+    if not power:
+        light_obj.set_power(True)
+    return light_obj.get_power()
+
+
 def get_lights():
     lights = lan.get_lights()
     return lights
@@ -53,10 +60,13 @@ def get_or_create_light(light_id):
     if not os.path.exists(light_path):
         light_obj = get_light(light_id)
         store_light(light_obj)
+        turn_light_on(light_obj)
         return light_obj
     else:
         with open(light_path, "rb") as f:
-            return pickle.load(f)
+            light_obj = pickle.load(f)
+        turn_light_on(light_obj)
+        return light_obj
 
 
 def get_light(id, count=0):

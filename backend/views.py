@@ -2,7 +2,7 @@ import json
 import logging
 
 import requests
-from flask import jsonify, Blueprint, request, render_template, make_response
+from flask import jsonify, Blueprint, request, render_template, make_response, url_for
 from config import config, light_presets, sound_presets
 
 from backend import tasks
@@ -18,7 +18,7 @@ tsk = Blueprint('backend.tasks', __name__)
 
 @tsk.route('/task/start/<task_name>', methods=['POST'])
 @backend_app.route('/task/start/<task_name>', methods=['POST'])
-def view_start_task(task_name):
+def start_task(task_name):
     """start task, return task_id"""
 
     logger.info('start task...')
@@ -65,7 +65,7 @@ def stop_task(task_name):
 
 @tsk.route('/task/<task_name>/<task_id>', methods=['GET'])
 @backend_app.route('/task/<task_name>/<task_id>', methods=['GET'])
-def view_check_task(task_name, task_id):
+def check_task(task_name, task_id):
     """return task state"""
     if task_name == "wait":
         task = tasks.wait_task.AsyncResult(task_id)
@@ -124,11 +124,11 @@ def toggle_effect(effect_type):
     light_id = request.form.get('id')
     data = {"id": light_id}
     if effect_status:
-        results = requests.post("http://localhost:5000/task/start/%s" % effect_type, data=data)
+        results = requests.post(url_for("backend.start_task", task_name=effect_type, _external=True), data=data)
         return jsonify(results.json())
     else:
         data["task_id"] = request.form.get('task_id')
-        results = requests.post("http://localhost:5000/task/stop/%s" % effect_type, data=data)
+        results = requests.post(url_for("backend.stop_task", task_name=effect_type, _external=True), data=data)
         return jsonify(results.json())
 
 
