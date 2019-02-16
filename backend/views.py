@@ -10,7 +10,8 @@ from backend import tasks
 
 from helpers import get_sound_paths
 
-logger = logging.getLogger()
+logging.basicConfig(filename=config.LOG_FILENAME, format=config.LOG_FORMAT, level=config.LOG_LEVEL)
+logger = logging.getLogger(__name__)
 
 backend_app = Blueprint('backend', __name__)
 tsk = Blueprint('backend.tasks', __name__)
@@ -52,7 +53,7 @@ def stop_task(task_name):
     """start task, return task_id"""
 
     task_id = request.form.get('task_id')
-    print('stop task...', task_id)
+    logging.info('stop task...', task_id)
 
     task = tasks.stop_task.delay(task_name, task_id)
     data = {"id": task_id}

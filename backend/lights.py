@@ -2,6 +2,7 @@ import os
 import shutil
 from time import sleep
 from random import randint
+import logging
 
 import pickle
 
@@ -11,6 +12,9 @@ from lifxlan.utils import RGBtoHSBK
 
 from config import config
 
+logging.basicConfig(filename=config.LOG_FILENAME, format=config.LOG_FORMAT, level=config.LOG_LEVEL)
+logger = logging.getLogger(__name__)
+
 light_store = os.path.join(config.DIR, 'backend/lightstore')
 
 lan = LifxLAN()
@@ -18,15 +22,17 @@ lan = LifxLAN()
 
 def setup_light_store():
     # Clear store before setting lights again
+    logger.info("setup_light_store")
 
     if os.path.exists(light_store):
-        print("removing and creating dir")
+        logger.info("removing and creating dir")
         shutil.rmtree(light_store)
         os.mkdir(light_store)
 
 
 def turn_light_on(light_obj):
     power = light_obj.get_power()
+    logger.info("turning light on")
     if not power:
         light_obj.set_power(True)
     return light_obj.get_power()
@@ -34,6 +40,7 @@ def turn_light_on(light_obj):
 
 def get_lights():
     lights = lan.get_lights()
+    logger.info("getting lights", lights)
     return lights
 
 
@@ -58,7 +65,9 @@ def get_or_create_light(light_id):
         light_id = light_id.replace(":", "")
     light_path = os.path.join(light_store, light_id)
     if not os.path.exists(light_path):
+        logger.info("creating light")
         light_obj = get_light(light_id)
+        # turn light on
         store_light(light_obj)
         turn_light_on(light_obj)
         return light_obj
@@ -98,13 +107,14 @@ def chase(id):
         all_zones.insert(0, last)
         strip.set_zone_colors(all_zones)
     except WorkflowException as err:
-        print("caught exception", err)
+        logger.info("caught exception", err)
         sleep(0.5)
         chase(id)
 
 
 def breathe(id):
-    #TODO: deep breath is 4 to inhale, 7 to hold, and 8 to exhale
+    # TODO: deep breath is 4 to inhale, 7 to hold, and 8 to exhale
+    logger.info("id", id)
     try:
         strip = get_or_create_light(id)
         all_zones = strip.get_color_zones()
@@ -114,19 +124,21 @@ def breathe(id):
         for [h, s, v, k] in all_zones:
             dim_zones.append((h, s, 20000, k))
             bright_zones.append((h, s, 55535, k))
-
+        logger.info("brightening")
         strip.set_zone_colors(bright_zones, 2000, True)
         sleep(randint(2, 10))
+        logger.info("dimming")
         strip.set_zone_colors(dim_zones, 2000, True)
         sleep(randint(2, 10))
     except WorkflowException as err:
-        print("caught exception", err)
+        logger.info("caught exception", err)
         sleep(0.5)
         breathe(id)
 
 
 def set_colors(id, colors, dim_value=100):
     # TODO: transition nicely
+    logger.info("set colors called")
     strip = get_or_create_light(id)
     new_zones = []
     dim_level = get_dim_value(dim_value)
@@ -138,7 +150,7 @@ def set_colors(id, colors, dim_value=100):
     try:
         strip.set_zone_colors(new_zones, 3000, False)
     except WorkflowException as err:
-        print("caught exception", err)
+        logger.info("caught exception", err)
         sleep(0.5)
         set_colors(id, colors, dim_value)
 
@@ -153,7 +165,7 @@ def dim(id, dim_level):
             dim_zones.append((h, s, dim_level, k))
         strip.set_zone_colors(dim_zones, 3000, False)
     except WorkflowException as err:
-        print("caught exception", err)
+        logger.info("caught exception", err)
         sleep(0.5)
         dim(id, dim_level)
 

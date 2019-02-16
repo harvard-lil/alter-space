@@ -1,5 +1,10 @@
 import os
 
+# logging levels: 10 = debug, 20 = info, 30 = warning, 40 = error
+LOG_LEVEL = 10
+LOG_FILENAME = "alterspace.log"
+LOG_FORMAT = '%(levelname)s: %(message)s'
+
 DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 
 ACTIVITIES = ["relax",
