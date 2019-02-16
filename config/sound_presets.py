@@ -1,57 +1,50 @@
 presets = {
     "relax": {
         "nature": [
-            "Bonfire.mp3",
-            "Forest_meadow.mp3"
         ],
         "urban": [
 
         ],
         "abstract": [
-
+            "Relax.mp3"
         ]},
     "read": {
         "nature": [
-            "Cafe.mp3",
-            "Winter_storm.mp3"
         ],
         "urban": [
 
         ],
         "abstract": [
-
+            "Read.mp3"
         ]
     },
     "meditate": {
         "nature": [
-            "Water_over_stones.mp3",
         ],
         "urban": [
 
         ],
         "abstract": [
-
+            "Meditate.mp3"
         ]},
     "wyrd": {
         "nature": [
-            "White_noise.mp3"
         ],
         "urban": [
 
         ],
         "abstract": [
-
+            "Be%20Weird.mp3"
         ]
     },
     "focus": {
         "nature": [
-            "Winter_storm.mp3"
         ],
         "urban": [
 
         ],
         "abstract": [
-
+            "Focus.mp3"
         ]},
     "create": {
         "nature": [
@@ -61,6 +54,6 @@ presets = {
 
         ],
         "abstract": [
-
+            "Create.mp3"
         ]},
 }
