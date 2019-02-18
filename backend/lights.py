@@ -29,7 +29,7 @@ def setup_light_store():
     if os.path.exists(light_store):
         logger.info("removing and creating dir")
         shutil.rmtree(light_store)
-        os.mkdir(light_store)
+    os.mkdir(light_store)
 
 
 def turn_light_on(light_obj):
