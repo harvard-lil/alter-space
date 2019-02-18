@@ -24,29 +24,29 @@ def wait_task(self, sleep_time):
 
 
 @celery.task(bind=True)
-def chase_task(self, id):
-    logger.info("chase_task", id)
+def chase_task(self, light_id):
+    logger.info("chase_task %s" % light_id)
     while True:
-        lights.chase(id)
+        lights.chase(light_id)
 
 
 @celery.task(bind=True)
-def breathe_task(self, id):
-    logger.info("breathe_task", id)
+def breathe_task(self, light_id, breathe_type):
+    logger.info("breathe_task %s" % light_id, breathe_type)
     while True:
-        lights.breathe(id)
+        lights.breathe(light_id, breathe_type=breathe_type)
 
 
 @celery.task(bind=True)
-def light_task(self, id, colors, dim_value):
-    logger.info("light_Task", id)
-    lights.set_colors(id, colors, dim_value)
+def light_task(self, light_id, colors, dim_value):
+    logger.info("light_task %s" % light_id)
+    lights.set_colors(light_id, colors, dim_value)
 
 
 @celery.task(bind=True)
-def dim_task(self, id, dim_value):
-    logger.info("dim_task", id)
-    lights.dim(id, dim_value)
+def dim_task(self, light_id, dim_value):
+    logger.info("dim_task %s dim_value: %s" % (light_id, dim_value))
+    lights.dim(light_id, dim_value)
 
 
 def revoke_chain(last_result):

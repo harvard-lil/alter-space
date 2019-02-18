@@ -3,14 +3,15 @@
       :class="'activity-'+$route.params.name">
     <li class="nav-item col-2">
       <div class="button-label-container">
-        <a href="/" class="nav-button-group">
+        <router-link to="/"
+        class="nav-button-group">
           <svgicon icon="home"
                    width="45"
                    height="45"
                    class="icon btn-round"
                    stroke="0"></svgicon>
           <br/>
-          Home</a>
+          Home</router-link>
       </div>
     </li>
     <li class="nav-item col-8">

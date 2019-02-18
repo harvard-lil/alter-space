@@ -22,24 +22,23 @@ tsk = Blueprint('backend.tasks', __name__)
 def start_task(task_name):
     """start task, return task_id"""
 
-    logger.info('start task...')
+    logger.info('start task... %s' % task_name)
     if task_name == "wait":
         sleep_time = int(request.form.get('sleep_time', 5))
-        task = tasks.wait_task.apply_async(kwargs={'sleep_time': sleep_time})
         data = {"sleep_time": sleep_time}
+        task = tasks.wait_task.apply_async(kwargs=data)
     elif task_name == "breathe":
-        id = request.form.get('id')
-        task = tasks.breathe_task.apply_async(kwargs={'id': id})
-        data = {"id": id}
+        light_id = request.form.get('light_id')
+        breathe_type = request.form.get('breathe_type')
+        data = {'light_id': light_id, 'breathe_type': breathe_type}
+        task = tasks.breathe_task.apply_async(kwargs=data)
     elif task_name == "chase":
-        id = request.form.get('id')
-        task = tasks.chase_task.apply_async(kwargs={'id': id})
-        data = {"id": id}
+        light_id = request.form.get('light_id')
+        data = {"light_id": light_id}
+        task = tasks.chase_task.apply_async(kwargs=data)
     else:
         error_message = "Task with name %s was not found" % task_name
         return make_response(error_message, 404)
-
-    logger.info('return task...')
 
     return jsonify({
         'task_id': task.id,
@@ -53,7 +52,7 @@ def stop_task(task_name):
     """start task, return task_id"""
 
     task_id = request.form.get('task_id')
-    logging.info('stop task...', task_id)
+    logging.info('stop task...%s' % task_id)
 
     task = tasks.stop_task.delay(task_name, task_id)
     data = {"id": task_id}
@@ -122,8 +121,9 @@ def get_activity_presets(activity):
 def toggle_effect(effect_type):
     effect_status = request.form.get('effect')
     effect_status = True if effect_status == "true" else False
-    light_id = request.form.get('id')
-    data = {"id": light_id}
+    data = {"light_id": request.form.get('light_id')}
+    if effect_type == "breathe":
+        data["breathe_type"] = request.form.get("breathe_type")
     if effect_status:
         results = requests.post(url_for("backend.start_task", task_name=effect_type, _external=True), data=data)
         return jsonify(results.json())
@@ -146,7 +146,8 @@ def set_light():
     dim_value = request.form.get('bright', 100)
 
     try:
-        tasks.light_task.apply_async(kwargs={'id': light_id, 'colors': colors, 'dim_value': dim_value})
+
+        tasks.light_task.apply_async(kwargs={'light_id': light_id, 'colors': colors, 'dim_value': dim_value})
         return "ok"
     except Exception as e:
         raise Exception(e, "Something went wrong!")
@@ -157,7 +158,7 @@ def set_dim():
     light_id = request.form.get('id')
     dim_level = request.form.get('bright', 100)
     try:
-        tasks.dim_task.apply_async(kwargs={'id': light_id, 'dim_value': dim_level})
+        tasks.dim_task.apply_async(kwargs={'light_id': light_id, 'dim_value': dim_level})
         return "ok"
     except Exception as e:
         raise Exception(e, "Something went wrong!")

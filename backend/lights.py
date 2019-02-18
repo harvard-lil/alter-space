@@ -24,10 +24,10 @@ retry_count = 5
 
 def setup_light_store():
     # Clear store before setting lights again
-    logger.info("setup_light_store")
+    logger.info("Setting up light store")
 
     if os.path.exists(light_store):
-        logger.info("removing and creating dir")
+        logger.info("Removing and creating light store dir")
         shutil.rmtree(light_store)
     os.mkdir(light_store)
 
@@ -56,6 +56,8 @@ def store_light(light_obj, lightdir=light_store):
 
 
 def get_or_create_light(light_id):
+    if not light_id:
+        raise Exception("No light found", light_id)
     if ":" in light_id:
         # id is a mac address
         light_id = light_id.replace(":", "")
@@ -77,10 +79,11 @@ def get_or_create_light(light_id):
 def get_light(light_id, count=0):
     all_lights = []
     getting_lights_count = 0
-        logger.info("Getting all lights")
     while not (len(all_lights) and getting_lights_count < retry_count):
+        logger.info("Getting all lights")
         sleep(0.5 * getting_lights_count)
         all_lights = lan.get_lights()
+        logger.info("All lights: %s" % all_lights)
         getting_lights_count += 1
 
     mac_addr = ""
@@ -90,7 +93,7 @@ def get_light(light_id, count=0):
         mac_addr += part
     for light in all_lights:
         if mac_addr in light.device_characteristics_str(""):
-            logger.info("Light was found:", mac_addr)
+            logger.info("Light was found: %s" % mac_addr)
             return light
     if count < retry_count:
         # wifi connection is bad? light wasn't found, try again
@@ -118,8 +121,19 @@ def chase(light_id, count=0):
             pass
 
 
-def breathe(light_id, count=0):
-    # TODO: deep breath is 4 to inhale, 7 to hold, and 8 to exhale
+def breathe(light_id, count=0, breathe_type=None):
+    if breathe_type == "relax":
+        # deep breath is 4 to inhale, 7 to hold, and 8 to exhale
+        bright_timer = 4000
+        dim_timer = 2000
+        wait_timer_1 = 7
+        wait_timer_2 = 2
+    else:
+        bright_timer = 2000
+        dim_timer = 2000
+        wait_timer_1 = 2
+        wait_timer_2 = 2
+
     try:
         strip = get_or_create_light(light_id)
         all_zones = strip.get_color_zones()
@@ -130,11 +144,11 @@ def breathe(light_id, count=0):
             dim_zones.append((h, s, 20000, k))
             bright_zones.append((h, s, 55535, k))
         logger.info("Brightening %s" % light_id)
-        strip.set_zone_colors(bright_zones, 2000, True)
-        sleep(randint(2, 10))
+        strip.set_zone_colors(bright_zones, bright_timer, True)
+        sleep(wait_timer_1)
         logger.info("Dimming %s" % light_id)
-        strip.set_zone_colors(dim_zones, 2000, True)
-        sleep(randint(2, 10))
+        strip.set_zone_colors(dim_zones, dim_timer, True)
+        sleep(wait_timer_2)
     except WorkflowException as err:
         logger.error("Breathe: Caught exception %s" % err)
         if count < retry_count:
@@ -144,9 +158,9 @@ def breathe(light_id, count=0):
             pass
 
 
-def set_colors(id, colors, dim_value=100, count=0):
+def set_colors(light_id, colors, dim_value=100, count=0):
     logger.info("set colors called")
-    strip = get_or_create_light(id)
+    strip = get_or_create_light(light_id)
     new_zones = []
     dim_level = get_dim_value(dim_value)
 
@@ -160,7 +174,7 @@ def set_colors(id, colors, dim_value=100, count=0):
         logger.error("set_colors: Caught exception %s" % err)
         if count < retry_count:
             sleep(0.5 * (count + 1))
-            set_colors(id, colors, dim_value=dim_value, count=count+1)
+            set_colors(light_id, colors, dim_value=dim_value, count=count+1)
         else:
             pass
 
