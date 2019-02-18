@@ -20,7 +20,7 @@
     </div>
     <div class="table cell-table table-bottom"
          :class="[$route.params.name, {expanded: showingList}]">
-      <div class="tr">
+      <div class="tr table-with-top-divider">
         <div class="td btn-sound-container">
           <div class="list-inline-item btn-sound-item"
                v-for="type in soundTypes"

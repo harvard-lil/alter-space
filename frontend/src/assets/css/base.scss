@@ -200,7 +200,7 @@ input[type="range"] {
       border-bottom: 0;
     }
   }
-  &.table-with-top-divider {
+  .tr.table-with-top-divider {
     border-top: 1px solid $color-navy !important;
   }
 }
@@ -281,6 +281,12 @@ input[type="range"] {
 button, a, .btn, .btn-default {
   cursor: pointer;
   border-radius: 0;
+}
+
+button, .btn, .btn-default {
+  &:disabled {
+    cursor: not-allowed !important;
+  }
 }
 
 .btn-round {

@@ -1,31 +1,73 @@
+.bright-range {
+  top: -20px;
+  position: relative;
+}
+
 input[type=range] {
   -webkit-appearance: none;
   width: 100%;
+  cursor: pointer;
 }
 
 input[type=range]:focus {
   outline: none;
 }
 
+input[type=range][disabled="disabled"] {
+  cursor: not-allowed;
+  background-color: transparent;
+  &::-moz-range-track {
+    background: $color-gray-lighter;
+  }
+  &::-webkit-slider-runnable-track {
+    background: $color-gray-lighter;
+  }
+  &::-webkit-slider-thumb {
+    background: $color-gray-lighter;
+  }
+  &::-ms-fill-lower {
+    background: $color-gray-lighter;
+  }
+  &::-ms-fill-upper {
+    background: $color-gray-lighter;
+  }
+  &::-moz-range-thumb {
+    background: $color-gray-lighter;
+  }
+  &::-ms-thumb {
+    background: $color-gray-lighter;
+  }
+  &::-moz-range-progress {
+    background-color: $color-gray-lighter;
+  }
+  &::-moz-range-track {
+    background-color: $color-gray-lighter;
+  }
+  /* IE*/
+  &::-ms-fill-lower {
+    background-color: $color-gray-lighter;
+  }
+  &::-ms-fill-upper {
+    background-color: $color-gray-lighter;
+  }
+
+}
+
 input[type=range]::-webkit-slider-runnable-track {
   width: 100%;
   height: 5px;
-  cursor: pointer;
   animate: 0.2s;
-  box-shadow: 0 0 0 $color-black;
   background: $color-navy;
   border-radius: 5px;
-  border: 0 solid $color-black;
+  border: none;
 }
 
 input[type=range]::-webkit-slider-thumb {
-  box-shadow: 0 0 3px $color-black;
-  border: 0 solid $color-black;
+  border: none;
   height: 40px;
   width: 40px;
   border-radius: 40px;
-  background: $color-white;
-  cursor: pointer;
+  background: $color-relax;
   -webkit-appearance: none;
   margin-top: -17.5px;
 }
@@ -37,28 +79,15 @@ input[type=range]:focus::-webkit-slider-runnable-track {
 input[type=range]::-moz-range-track {
   width: 100%;
   height: 5px;
-  cursor: pointer;
   animate: 0.2s;
-  box-shadow: 0 0 0 $color-black;
   background: $color-navy;
   border-radius: 5px;
-  border: 0 solid $color-black;
-}
-
-input[type=range]::-moz-range-thumb {
-  box-shadow: 0 0 3px $color-black;
-  border: 0 solid $color-black;
-  height: 40px;
-  width: 40px;
-  border-radius: 40px;
-  background: $color-white;
-  cursor: pointer;
+  border: none;
 }
 
 input[type=range]::-ms-track {
   width: 100%;
   height: 5px;
-  cursor: pointer;
   animate: 0.2s;
   background: transparent;
   border-color: transparent;
@@ -67,27 +96,14 @@ input[type=range]::-ms-track {
 
 input[type=range]::-ms-fill-lower {
   background: $color-navy;
-  border: 0 solid $color-black;
+  border: none;
   border-radius: 10px;
-  box-shadow: 0 0 0 $color-black;
 }
 
 input[type=range]::-ms-fill-upper {
   background: $color-navy;
-  border: 0 solid $color-black;
+  border: none;
   border-radius: 10px;
-  box-shadow: 0 0 0 $color-black;
-}
-
-input[type=range]::-ms-thumb {
-  margin-top: 1px;
-  box-shadow: 0 0 3px $color-black;
-  border: 0 solid $color-black;
-  height: 40px;
-  width: 40px;
-  border-radius: 40px;
-  background: $color-white;
-  cursor: pointer;
 }
 
 input[type=range]:focus::-ms-fill-lower {
@@ -99,36 +115,30 @@ input[type=range]:focus::-ms-fill-upper {
 }
 
 input[type=range]::-webkit-slider-thumb {
-  box-shadow: 0 0 3px $color-black;
-  border: 0 solid $color-black;
+  border: none;
   height: 30px;
   width: 30px;
   border-radius: 30px;
-  background: $color-white;
-  cursor: pointer;
+  background: $color-relax;
   -webkit-appearance: none;
   margin-top: -17.5px !important;
 }
 
 input[type=range]::-moz-range-thumb {
-  box-shadow: 0 0 3px $color-black;
-  border: 0 solid $color-black;
+  border: none;
   height: 30px;
   width: 30px;
   border-radius: 30px;
-  background: $color-white;
-  cursor: pointer;
+  background: $color-relax;
 }
 
 input[type=range]::-ms-thumb {
   margin-top: 1px;
-  box-shadow: 0 0 3px $color-black;
-  border: 0 solid $color-black;
+  border: none;
   height: 30px;
   width: 30px;
   border-radius: 30px;
-  background: $color-white;
-  cursor: pointer;
+  background: $color-relax;
 }
 
 /** FF*/
@@ -137,7 +147,7 @@ input[type="range"]::-moz-range-progress {
 }
 
 input[type="range"]::-moz-range-track {
-  background-color: $color-gray;
+  background-color: $color-gray-lighter;
 }
 
 /* IE*/
@@ -146,5 +156,5 @@ input[type="range"]::-ms-fill-lower {
 }
 
 input[type="range"]::-ms-fill-upper {
-  background-color: $color-gray;
+  background-color: $color-gray-lighter;
 }
