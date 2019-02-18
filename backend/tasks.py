@@ -1,15 +1,12 @@
 import datetime
 import time
-import logging
 from celery import Celery
 from celery import current_app
+from celery.utils.log import get_task_logger
 
 from backend import lights
 
-from config import config
-logging.basicConfig(filename=config.LOG_FILENAME, format=config.LOG_FORMAT, level=config.LOG_LEVEL)
-
-logger = logging.getLogger(__name__)
+logger = get_task_logger(__name__)
 
 celery = Celery(__name__, autofinalize=False)
 

@@ -12,8 +12,7 @@ from lifxlan.utils import RGBtoHSBK
 
 from config import config
 
-logging.basicConfig(filename=config.LOG_FILENAME, format=config.LOG_FORMAT, level=config.LOG_LEVEL)
-logger = logging.getLogger(__name__)
+logger = logging.getLogger()
 
 light_store = os.path.join(config.DIR, 'backend/lightstore')
 

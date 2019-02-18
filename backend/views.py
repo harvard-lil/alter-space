@@ -10,8 +10,7 @@ from backend import tasks
 
 from helpers import get_sound_paths
 
-logging.basicConfig(filename=config.LOG_FILENAME, format=config.LOG_FORMAT, level=config.LOG_LEVEL)
-logger = logging.getLogger(__name__)
+logger = logging.getLogger()
 
 backend_app = Blueprint('backend', __name__)
 tsk = Blueprint('backend.tasks', __name__)
