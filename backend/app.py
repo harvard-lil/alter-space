@@ -9,6 +9,7 @@ from backend import tasks
 
 from config import config
 
+logging.basicConfig(filename=config.LOG_FILENAME, format=config.LOG_FORMAT, level=config.LOG_LEVEL)
 logger = logging.getLogger()
 
 

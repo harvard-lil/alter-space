@@ -19,6 +19,7 @@
   import axios from 'axios';
   import "./icons/chase";
 
+  import EventBus from '../event-bus';
   const chaseUrl = process.env.VUE_APP_BACKEND_URL + "lights/effects" + "/chase";
 
   export default {
@@ -29,12 +30,13 @@
         taskID: ""
       }
     },
+
     methods: {
       toggleChase() {
         let self = this;
         self.chase = !(self.chase);
         let bodyFormData = new FormData();
-        bodyFormData.set('id', self.$parent.light);
+        bodyFormData.set('light_id', self.$parent.light);
         bodyFormData.set('effect', self.chase);
         if (self.taskID) {
           bodyFormData.set('task_id', self.taskID);
@@ -46,6 +48,12 @@
           data: bodyFormData
         }).then((res) => {
           self.taskID = res.data.task_id;
+          self.$parent.$parent.taskID = self.taskID;
+          self.$parent.$parent.effect = "chase";
+          self.$parent.effectPlaying = self.chase;
+          if (!(self.chase)) {
+            EventBus.$emit('reset-brightness', self.breathe);
+          }
 
         })
       },

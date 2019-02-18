@@ -25,6 +25,7 @@
                     class="btn-round btn-color"
                     v-for="(color, idx) in colorPresets"
                     v-bind:key="idx"
+                    :disabled="disableButtons"
                     @click="showList(idx)"
                     :class="{active: color === colorPresets[currentColorIdx] && showingList && currentColorIdx === idx}"
                     :style="{'backgroundColor': color}">
@@ -39,7 +40,7 @@
                 v-show="$route.params.name === 'wyrd'">
         </chase-button>
         <div class="td col-6">
-          <brightness-slider></brightness-slider>
+          <brightness-slider :disable="disableButtons"></brightness-slider>
           <label>brightness</label>
         </div>
       </div>
@@ -104,6 +105,8 @@
         light: "",
         colorGradient: "",
         brightness: 100,
+        effectPlaying: false,
+        disableButtons: false,
       }
     },
     watch: {
@@ -115,6 +118,12 @@
         if (this.collapseLightOptions) {
           this.showingList = false;
           this.$parent.showingLightOptions = false;
+        }
+      },
+      effectPlaying() {
+        this.disableButtons = this.effectPlaying;
+        if (this.disableButtons) {
+          this.showingList = false;
         }
       }
     },
@@ -137,6 +146,7 @@
         let colorGradient1 = this.interpolateColors(color0, color1, steps);
         let colorGradient2 = this.interpolateColors(color1, color2, steps);
         this.colorGradient = colorGradient1.concat(colorGradient2);
+        console.log("gradient:", this.colorGradient);
         this.createAndSendStates();
       },
       createAndSendStates() {

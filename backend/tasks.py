@@ -1,13 +1,16 @@
 import datetime
 import time
-import logging
 from celery import Celery
 from celery import current_app
+from celery.utils.log import get_task_logger
 
 from backend import lights
 
-logger = logging.getLogger()
+logger = get_task_logger(__name__)
+
 celery = Celery(__name__, autofinalize=False)
+
+lights.setup_light_store()
 
 
 @celery.task(bind=True)
@@ -18,31 +21,33 @@ def wait_task(self, sleep_time):
 
 
 @celery.task(bind=True)
-def chase_task(self, id):
-    print("chase_task", id)
+def chase_task(self, light_id):
+    logger.info("chase_task %s" % light_id)
     while True:
-        lights.chase(id)
+        lights.chase(light_id)
 
 
 @celery.task(bind=True)
-def breathe_task(self, id):
-    print("breathe_task", id)
+def breathe_task(self, light_id, breathe_type):
+    logger.info("breathe_task %s" % light_id, breathe_type)
     while True:
-        lights.breathe(id)
+        lights.breathe(light_id, breathe_type=breathe_type)
 
 
 @celery.task(bind=True)
-def light_task(self, id, colors, dim_value):
-    lights.set_colors(id, colors, dim_value)
+def light_task(self, light_id, colors, dim_value):
+    logger.info("light_task %s" % light_id)
+    lights.set_colors(light_id, colors, dim_value)
 
 
 @celery.task(bind=True)
-def dim_task(self, id, dim_value):
-    lights.dim(id, dim_value)
+def dim_task(self, light_id, dim_value):
+    logger.info("dim_task %s dim_value: %s" % (light_id, dim_value))
+    lights.dim(light_id, dim_value)
 
 
 def revoke_chain(last_result):
-    print('[CALLER] Revoking: %s' % last_result.task_id)
+    logger.info('[CALLER] Revoking: %s' % last_result.task_id)
     last_result.revoke(terminate=True, signal='SIGKILL')
     if last_result.parent is not None:
         revoke_chain(last_result.parent)

@@ -34,8 +34,9 @@
         let self = this;
         self.breathe = !(self.breathe);
         let bodyFormData = new FormData();
-        bodyFormData.set('id', self.$parent.light);
+        bodyFormData.set('light_id', self.$parent.light);
         bodyFormData.set('effect', self.breathe);
+        bodyFormData.set('breathe_type', self.$route.params.name);
         if (self.taskID) {
           bodyFormData.set('task_id', self.taskID);
         }
@@ -46,6 +47,9 @@
           data: bodyFormData
         }).then((res) => {
           self.taskID = res.data.task_id;
+          self.$parent.$parent.taskID = self.taskID;
+          self.$parent.effectPlaying = self.breathe;
+          self.$parent.$parent.effect = "breathe";
           if (!(self.breathe)) {
             EventBus.$emit('reset-brightness', self.breathe);
           }

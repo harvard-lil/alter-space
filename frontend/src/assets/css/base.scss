@@ -160,7 +160,7 @@ input[type="range"] {
   label {
     color: $color-navy;
     position: relative;
-    margin-top: 10px;
+    margin-top: 6px;
     display: block;
     text-align: center;
     font-weight: 600;
@@ -199,6 +199,9 @@ input[type="range"] {
     &.expanded {
       border-bottom: 0;
     }
+  }
+  .tr.table-with-top-divider {
+    border-top: 1px solid $color-navy !important;
   }
 }
 
@@ -278,6 +281,12 @@ input[type="range"] {
 button, a, .btn, .btn-default {
   cursor: pointer;
   border-radius: 0;
+}
+
+button, .btn, .btn-default {
+  &:disabled {
+    cursor: not-allowed !important;
+  }
 }
 
 .btn-round {

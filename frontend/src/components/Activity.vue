@@ -41,6 +41,8 @@
         lightPresets: {},
         showingLightOptions: false,
         showingSoundOptions: false,
+        taskID: "",
+        effect: ""
       }
     },
     methods: {
@@ -57,6 +59,30 @@
             self.lightPresets = res.data.light;
           });
     },
+    beforeRouteLeave(to, from, next) {
+      // disable chasing and breathing effects
+      let self = this;
+      if (self.taskID && self.effect) {
+        let url = process.env.VUE_APP_BACKEND_URL + "lights/effects/" + this.effect;
+        let light = localStorage.getItem('light');
+        let bodyFormData = new FormData();
+        bodyFormData.set('id', light);
+        bodyFormData.set('effect', self.effect);
+        bodyFormData.set('task_id', self.taskID);
+
+        axios({
+          method: "post",
+          url: url,
+          data: bodyFormData
+        }).then((res) => {
+          self.taskID = res.data.task_id;
+          self.$parent.$parent.taskID = self.taskID;
+          self.$parent.effectPlaying = self.breathe;
+        });
+      }
+      next()
+    },
+
   }
 
 </script>
