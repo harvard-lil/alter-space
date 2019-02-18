@@ -77,8 +77,8 @@ def get_or_create_light(light_id):
 def get_light(light_id, count=0):
     all_lights = []
     getting_lights_count = 0
-    while not len(all_lights) & getting_lights_count < retry_count:
         logger.info("Getting all lights")
+    while not (len(all_lights) and getting_lights_count < retry_count):
         sleep(0.5 * getting_lights_count)
         all_lights = lan.get_lights()
         getting_lights_count += 1
