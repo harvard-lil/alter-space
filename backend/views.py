@@ -1,12 +1,12 @@
+import os
 import json
 import logging
 
 import requests
-from flask import jsonify, Blueprint, request, render_template, make_response, url_for
+from flask import jsonify, Blueprint, request, render_template, make_response, url_for, send_file
 from config import config, light_presets, sound_presets
 
 from backend import tasks
-
 
 from helpers import get_sound_paths
 
@@ -99,6 +99,13 @@ def sounds():
 def sounds_of_type(sound_type):
     paths = get_sound_paths(sound_type)
     return jsonify(paths)
+
+
+@backend_app.route("/sounds/<sound_type>/<sound_name>")
+def sound_file(sound_type, sound_name):
+    sound_dir = os.path.join(config.DIR, "sounds")
+    single_file = os.path.join(sound_dir, "%s/%s" % (sound_type, sound_name))
+    return send_file(single_file)
 
 
 @backend_app.route("/activities")
