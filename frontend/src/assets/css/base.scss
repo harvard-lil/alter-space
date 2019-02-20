@@ -382,10 +382,10 @@ button, .btn, .btn-default {
 
 
 /* Activity settings */
+.activity-container {
+  height: 100vh;
+  min-width: 100%;
 
-// TODO: figure out why this is necessary
-.activity-row {
-  margin-left: 0;
 }
 
 .btn-activity {

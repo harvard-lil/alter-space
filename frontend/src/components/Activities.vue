@@ -3,7 +3,7 @@
       <tr v-for="(level, l_idx) in activities" v-bind:key="l_idx">
         <td v-for="activity in activities[l_idx]" :key="activity">
           <router-link :id="activity"
-                       :to="{ path: 'preset/' + activity}">
+                       :to="{ path: 'activity/' + activity}">
             <button class="btn btn-primary btn-activity"
                     v-if="activity === 'wyrd'">
               w3!rd
@@ -27,6 +27,7 @@
 
   export default {
     name: "Activities",
+    props: ["translation"],
     data() {
       return {
         activities: [],
@@ -47,10 +48,7 @@
               }
               this.activities = activitiesForRendering;
             })
-            .catch(function () {
-              window.errors = arguments
-            })
-      }
+              }
     },
     created() {
       this.getActivities();

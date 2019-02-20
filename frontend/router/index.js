@@ -3,15 +3,13 @@ import Router from 'vue-router';
 import Sounds from '@/components/Sounds';
 import Lights from '@/components/Lights';
 import Activity from '@/components/Activity';
-import Preset from '@/components/Preset';
 
 Vue.use(Router);
-
 export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Home'
+      name: 'Home',
     },
     {
       path: '/sounds',
@@ -31,12 +29,8 @@ export default new Router({
     {
       path: '/activity/:name',
       name: 'activity',
-      component: Activity
+      component: Activity,
     },
-    {
-      path: '/preset/:name',
-      name: 'preset',
-      component: Preset
-    },
+
   ]
 });
