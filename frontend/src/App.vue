@@ -16,7 +16,7 @@
               Welcome to
             </h4>
             <h1 class="text-center">
-              ALTeRsPaCeF
+              ALTeRsPaCe
             </h1>
             <h5 class="text-center">
               What would you like to do today?
@@ -24,7 +24,6 @@
           </div>
         </div>
         <Activities :translation="translation"></Activities>
-        <!--<blob-animation></blob-animation>-->
       </template>
     </div>
   </div>
@@ -35,7 +34,6 @@
 
   import topnav from './components/TopNav';
   import Activities from './components/Activities';
-  // import BlobAnimation from './components/BlobAnimation';
   import "./components/icons/home";
   import "./components/icons/info";
 
