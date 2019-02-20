@@ -1,6 +1,8 @@
 <template>
   <div id="app"
-       :class="'app-activity-'+$route.params.name">
+       :class="['app-activity-'+$route.params.name, {
+       home: $route.name === 'Home'
+       }]">
 
     <topnav :translation="translation"></topnav>
 
@@ -11,14 +13,14 @@
 
       <template v-if="$route.name === 'Home'">
         <div class="row">
-          <div class="col-8 col-centered">
-            <h4 class="text-center">
+          <div class="col-8 header col-centered text-center">
+            <h5>
               Welcome to
-            </h4>
-            <h1 class="text-center">
+            </h5>
+            <h3 class="crazy-font">
               ALTeRsPaCe
-            </h1>
-            <h5 class="text-center">
+            </h3>
+            <h5 class="question-text">
               What would you like to do today?
             </h5>
           </div>
