@@ -39,7 +39,7 @@
   }
   svg.btn-sound-type {
     &.nature, &.urban, &.abstract {
-      &:hover, &:active, &:focus {
+      &:hover, &:active {
         path {
           fill: $color-navy;
         }
