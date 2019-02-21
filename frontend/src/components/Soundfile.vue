@@ -16,7 +16,9 @@
 <script>
   import EventBus from '../event-bus';
 
-  const audioBaseUrl = process.env.VUE_APP_SOUND_URL;
+  const audioBaseUrl = process.env.VUE_APP_SOUND_LOCATION === "LOCAL" ? process.env.VUE_APP_SOUND_LOCAL_URL : process.env.VUE_APP_SOUND_REMOTE_URL;
+  // eslint-disable-next-line
+  console.log(audioBaseUrl);
 
   export default {
     props: ['audio', 'soundType'],
