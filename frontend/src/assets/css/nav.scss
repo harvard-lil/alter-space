@@ -30,6 +30,7 @@
     text-decoration: none;
   }
 }
+
 .button-label-container {
   margin-top: -10px;
 }
@@ -38,7 +39,6 @@
   font-size: 1em;
   font-weight: $font-weight-semibold;
   .icon {
-    opacity: 0.75;
     -moz-box-shadow: none;
     -webkit-box-shadow: none;
     box-shadow: none;
@@ -46,9 +46,17 @@
     height: 50px;
 
   }
+  .btn-nav {
+    fill: $color-meditate;
+    &:focus, &:hover {
+      fill: $color-white;
+    }
+  }
+
 }
 
-.app-activity-read {
+.app-activity-read,
+.app-activity-meditate {
   .nav-button-group {
     color: $color-navy;
     .icon {

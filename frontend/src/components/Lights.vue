@@ -1,17 +1,14 @@
 <template>
   <div class="col-centered col-6">
     <div class="col-12 alert-warning">{{error}}</div>
-    <form>
-    <span class="text-center">
-      // TODO: fix this for future iterations, we shouldn't need to hardcode max and min like this
-      Using light with id: <input title="light"
-                                  type="number"
-                                  max="2"
-                                  min="1"
-                                  v-model="light">
-    </span>
-      <button type="submit" @click="setLight">Submit</button>
-    </form>
+    <br/>
+    <ul class="btn-group list-inline">
+      <li v-for="val in lights" class="list-inline-item">
+      <button class="btn btn-default btn-light-choice" @click="setLight(val)">
+        {{val}}
+      </button>
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -20,12 +17,14 @@
     name: "Lights",
     data() {
       return {
+        lights: ["1", "2"],
         light: "",
         error: ""
       }
     },
     methods: {
-      setLight() {
+      setLight(val) {
+        this.light = val;
         localStorage.setItem('light', this.light);
         this.$router.replace('/');
       }
@@ -39,7 +38,7 @@
       } else {
         this.light = localStorage.getItem('light');
         if (!(this.light)) {
-          this.error = "Light is not set. Please set light first by going to /light/your-light-id"
+          this.error = "Light is not set. Please set light first by clicking one of the options below."
         }
       }
     }
