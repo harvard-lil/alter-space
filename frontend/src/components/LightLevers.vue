@@ -146,7 +146,6 @@
         let colorGradient1 = this.interpolateColors(color0, color1, steps);
         let colorGradient2 = this.interpolateColors(color1, color2, steps);
         this.colorGradient = colorGradient1.concat(colorGradient2);
-        console.log("gradient:", this.colorGradient);
         this.createAndSendStates();
       },
       createAndSendStates() {

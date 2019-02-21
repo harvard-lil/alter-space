@@ -38,8 +38,6 @@
           method: "post",
           url: dimUrl,
           data: bodyFormData,
-        }).then(function (results) {
-          console.log(results)
         })
 
       }

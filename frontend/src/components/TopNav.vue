@@ -8,7 +8,7 @@
           <svgicon icon="home"
                    width="45"
                    height="45"
-                   class="icon btn-round"
+                   class="icon btn-round btn-nav"
                    stroke="0"></svgicon>
           <br/>
           Home</router-link>
@@ -26,7 +26,7 @@
           <svgicon icon="info"
                    width="45"
                    height="45"
-                   class="icon btn-round"
+                   class="icon btn-round btn-nav"
                    stroke="0"></svgicon>
 
           <br/>

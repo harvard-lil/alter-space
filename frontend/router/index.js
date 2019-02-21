@@ -9,7 +9,7 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Home',
+      name: 'Home'
     },
     {
       path: '/sounds',
@@ -29,7 +29,7 @@ export default new Router({
     {
       path: '/activity/:name',
       name: 'activity',
-      component: Activity,
+      component: Activity
     },
 
   ]

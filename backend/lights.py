@@ -57,9 +57,12 @@ def store_light(light_obj, lightdir=light_store):
 def get_or_create_light(light_id):
     if not light_id:
         raise Exception("No light found", light_id)
+    # convert light id to actual hardware id
+    light_id = config.LIGHTS[light_id]
     if ":" in light_id:
         # id is a mac address
         light_id = light_id.replace(":", "")
+
     light_path = os.path.join(light_store, light_id)
     if not os.path.exists(light_path):
         logger.info("Creating light %s" % light_id)
