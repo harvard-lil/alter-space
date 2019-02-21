@@ -7,7 +7,7 @@
       {{ audioName }}
     </button>
     <!-- audio files are hidden from DOM / view -->
-    <audio loop controls>
+    <audio loop controls preload="none">
       <source :id="audio" :src="`${audioPath}`" type="audio/mpeg">
     </audio>
   </div>
