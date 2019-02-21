@@ -35,25 +35,24 @@
     mounted() {
       this.audioFile = this.$el.querySelectorAll('audio')[0];
       this.selectedSound = this.soundIsInChosenField();
-
-8
+      let self = this;
       EventBus.$on('pause-music', (tryingToPause) => {
         this.pause = tryingToPause;
-        if (this.soundIsInChosenField()) {
-          tryingToPause ? this.pauseSound() : this.playSound();
+        if (self.soundIsInChosenField()) {
+          tryingToPause ? self.pauseSound() : self.playSound();
         }
       });
 
       EventBus.$on('update-volume', (volume) => {
-        if (this.selectedSound) {
-          this.audioFile.volume = volume / 100;
-          this.previousVolume = volume;
+        if (self.selectedSound) {
+          self.audioFile.volume = volume / 100;
+          self.previousVolume = volume;
         }
       });
 
       EventBus.$on('mute-volume', (mute) => {
-        if (this.selectedSound) {
-          this.audioFile.volume = mute ? 0 : this.previousVolume / 100
+        if (self.selectedSound) {
+          self.audioFile.volume = mute ? 0 : self.previousVolume / 100
         }
       });
       this.initializePresetSound();
