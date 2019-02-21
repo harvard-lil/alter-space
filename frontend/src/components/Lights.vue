@@ -1,9 +1,17 @@
 <template>
   <div class="col-centered col-6">
     <div class="col-12 alert-warning">{{error}}</div>
+    <form>
     <span class="text-center">
-      Using light with id: <b>{{light}}</b>
+      // TODO: fix this for future iterations, we shouldn't need to hardcode max and min like this
+      Using light with id: <input title="light"
+                                  type="number"
+                                  max="2"
+                                  min="1"
+                                  v-model="light">
     </span>
+      <button type="submit" @click="setLight">Submit</button>
+    </form>
   </div>
 </template>
 
@@ -16,6 +24,14 @@
         error: ""
       }
     },
+    methods: {
+      setLight() {
+        localStorage.setItem('light', this.light);
+        this.$router.replace('/');
+      }
+
+    },
+
     mounted() {
       if (this.$route.params.id) {
         localStorage.setItem('light', this.$route.params.id);

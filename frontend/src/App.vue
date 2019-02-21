@@ -47,6 +47,7 @@
     },
     data() {
       return {
+        light: "",
         translation: {
           'relax': 'ReLaX',
           'read': 'READ',
@@ -57,5 +58,11 @@
         }
       }
     },
+    mounted() {
+      this.light = localStorage.getItem("light");
+      if (!(this.light)) {
+        this.$router.replace('/light');
+      }
+    }
   }
 </script>
