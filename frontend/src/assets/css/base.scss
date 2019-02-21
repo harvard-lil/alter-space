@@ -21,6 +21,10 @@ body {
   color: $color-navy;
 }
 
+.crazy-font {
+  font-family: "major_mono_displayregular"
+}
+
 /* svgs */
 
 .svg-icon {
@@ -60,6 +64,7 @@ ul {
   margin: 0;
 }
 
+
 .container-full {
   margin: 0 auto;
   width: 100%;
@@ -68,6 +73,12 @@ ul {
 .container-preset {
   @extend .container-full;
   height: 100vh;
+}
+
+.home {
+  @extend .container-preset;
+  background: url("../img/home-background.png") no-repeat;
+  background-size: cover;
 }
 
 .preset-content {
@@ -104,7 +115,18 @@ ul {
 
 /* Headers */
 h1, h2, h3, h4, h5 {
-  color: $color-gray;
+  color: $color-navy;
+}
+
+.header {
+  margin-top: 120px;
+  color: $color-navy;
+}
+
+.question-text {
+  margin-top: 40px;
+  margin-bottom: 40px;
+  font-weight: $font-weight-normal;
 }
 
 input[type="range"] {
@@ -354,7 +376,7 @@ button, .btn, .btn-default {
 
   path {
     &:first-child {
-      fill:$color-white;
+      fill: $color-white;
     }
     &:last-child {
       fill: $color-navy;
@@ -380,21 +402,24 @@ button, .btn, .btn-default {
   }
 }
 
-
 /* Activity settings */
+.activity-container {
+  height: 100vh;
+  min-width: 100%;
 
-// TODO: figure out why this is necessary
-.activity-row {
-  margin-left: 0;
 }
 
 .btn-activity {
   @extend .btn;
-  padding: 10px;
-  text-transform: lowercase;
+  text-transform: capitalize;
   letter-spacing: 0.08rem;
-  width: 120px;
+  width: 170px;
+  height: 90px;
   text-align: center;
+  background-color: $color-white;
+  font-size: 30px;
+  margin: 20px;
+  color: $color-navy;
 }
 
 .activity-read {

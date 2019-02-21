@@ -1,36 +1,33 @@
 <template>
   <div id="app"
-       :class="'app-activity-'+$route.params.name">
+       :class="['app-activity-'+$route.params.name, {
+       home: $route.name === 'Home'
+       }]">
 
     <topnav :translation="translation"></topnav>
-    <template v-if="$route.name === 'preset'">
-      <preset :translation="translation"></preset>
-    </template>
 
 
-    <template v-else>
-      <!-- Top level navigation -->
-      <div class="container-fluid">
-        <router-view :key="$route.fullPath"></router-view>
+    <!-- Top level navigation -->
+    <div class="container-fluid">
+      <router-view :key="$route.fullPath"></router-view>
 
-        <template v-if="$route.name === 'Home'">
-          <div class="row">
-            <div class="col-8 col-centered">
-              <h4 class="text-center">
-                Welcome to
-              </h4>
-              <h1 class="text-center">
-                ALTeRsPaCe
-              </h1>
-              <h5 class="text-center">
-                What would you like to do today?
-              </h5>
-            </div>
+      <template v-if="$route.name === 'Home'">
+        <div class="row">
+          <div class="col-8 header col-centered text-center">
+            <h5>
+              Welcome to
+            </h5>
+            <h3 class="crazy-font">
+              ALTeRsPaCe
+            </h3>
+            <h5 class="question-text">
+              What would you like to do today?
+            </h5>
           </div>
-          <Activities></Activities>
-        </template>
-      </div>
-    </template>
+        </div>
+        <Activities :translation="translation"></Activities>
+      </template>
+    </div>
   </div>
 </template>
 
@@ -39,8 +36,6 @@
 
   import topnav from './components/TopNav';
   import Activities from './components/Activities';
-  import Preset from './components/Preset';
-
   import "./components/icons/home";
   import "./components/icons/info";
 
@@ -48,8 +43,7 @@
     name: 'app',
     components: {
       topnav,
-      Preset,
-      Activities
+      Activities,
     },
     data() {
       return {
