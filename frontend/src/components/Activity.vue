@@ -1,8 +1,7 @@
 <template>
   <div class="row activity-row">
     <div class="container-preset" :class="'activity-'+$route.params.name" v-if="!(customizing)">
-      <div class="preset-content text-center"
-      >
+      <div class="preset-content text-center">
         <h1>
           {{translation[$route.params.name]}}
         </h1>
@@ -80,6 +79,10 @@
         this.customizing = !(this.customizing);
         EventBus.$emit('customizing', this.customizing);
       },
+      notCustomizing() {
+        this.customizing = false;
+        EventBus.$emit('customizing', false);
+      },
       resetActivity() {
         //TODO: use this.getPresets(): and make sure the sounds work
         window.location.reload();
@@ -93,7 +96,6 @@
               self.lightPresets = res.data.light;
             });
       }
-
     },
     beforeMount() {
       this.getPresets();
@@ -101,7 +103,7 @@
     beforeRouteLeave(to, from, next) {
       // disable chasing and breathing effects
       let self = this;
-      self.toggleCustomizing();
+      self.notCustomizing();
       if (self.taskID && self.effect) {
         let url = process.env.VUE_APP_BACKEND_URL + "lights/effects/" + this.effect;
         let light = localStorage.getItem('light');
