@@ -230,38 +230,38 @@ input[type="range"] {
 .triangle {
   &.create {
     fill: $color-create;
-    text {
+    [data-name="text"] {
       fill: $color-navy;
     }
   }
   &.focus {
     fill: $color-focus;
-    text {
+    [data-name="text"] {
       fill: $color-white;
     }
   }
   &.relax {
     fill: $color-relax;
-    text {
+    [data-name="text"] {
       fill: $color-navy;
     }
   }
   &.read {
     fill: $color-read;
-    text {
+    [data-name="text"] {
       fill: $color-navy;
     }
 
   }
   &.meditate {
     fill: $color-meditate;
-    text {
+    [data-name="text"] {
       fill: $color-navy;
     }
   }
   &.wyrd {
     fill: $color-wyrd;
-    text {
+    [data-name="text"] {
       fill: $color-white;
     }
 
