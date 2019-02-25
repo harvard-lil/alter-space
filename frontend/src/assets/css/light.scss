@@ -2,7 +2,7 @@
 .btn-group-color-options {
   padding: 10px;
   text-align: center;
-   &.meditate, &.focus {
+  &.meditate, &.focus {
     background-color: $color-white;
     border-top: 1px solid $color-navy
   }
@@ -13,9 +13,22 @@
 
 .btn-color {
   margin: 2px;
+  height: 50px;
+  width: 50px;
   &.active {
     border: 1px solid $color-navy;
   }
+}
+
+.gradient-example {
+  margin-bottom: -12px;
+  margin-top: -3px;
+}
+
+.gradient-pixel {
+  width: 9.5px;
+  height: 9.5px;
+  margin: 0 !important;
 }
 
 .btn-color-option {

@@ -13,7 +13,8 @@ input[type=range]:focus {
   outline: none;
 }
 
-input[type=range][disabled="disabled"] {
+input[type=range][disabled="disabled"],
+input[type=range][disabled="disabled"].slider-small {
   cursor: not-allowed;
   background-color: transparent;
   &::-moz-range-track {
@@ -67,7 +68,7 @@ input[type=range]::-webkit-slider-thumb {
   height: 40px;
   width: 40px;
   border-radius: 40px;
-  background: $color-relax;
+  background: $color-navy;
   -webkit-appearance: none;
   margin-top: -13px;
 }
@@ -119,7 +120,7 @@ input[type=range]::-webkit-slider-thumb {
   height: 30px;
   width: 30px;
   border-radius: 30px;
-  background: $color-relax;
+  background: $color-navy;
   -webkit-appearance: none;
   margin-top: -13px !important;
 }
@@ -129,7 +130,7 @@ input[type=range]::-moz-range-thumb {
   height: 30px;
   width: 30px;
   border-radius: 30px;
-  background: $color-relax;
+  background: $color-navy;
 }
 
 input[type=range]::-ms-thumb {
@@ -138,7 +139,7 @@ input[type=range]::-ms-thumb {
   height: 30px;
   width: 30px;
   border-radius: 30px;
-  background: $color-relax;
+  background: $color-navy;
 }
 
 /** FF*/
@@ -157,4 +158,43 @@ input[type="range"]::-ms-fill-lower {
 
 input[type="range"]::-ms-fill-upper {
   background-color: $color-gray-lighter;
+}
+
+input[type="range"].slider-small {
+  width: 150px;
+  margin: 0 auto;
+}
+
+input[type="range"].slider-small::-webkit-slider-thumb {
+  height: 15px !important;
+  width: 15px !important;
+  border-radius: 15px;
+  background: $color-navy;
+  -webkit-appearance: none;
+  margin-top: -5px !important;
+}
+
+input[type="range"].slider-small::-moz-range-thumb {
+  height: 15px !important;
+  width: 15px !important;
+  border-radius: 15px;
+  background: $color-navy;
+  -webkit-appearance: none;
+  margin-top: -5px !important;
+}
+
+input[type="range"].slider-small::-ms-thumb {
+  height: 5px !important;
+  width: 5px !important;
+  border-radius: 5px;
+  background: $color-navy;
+  margin-top: 1px;
+}
+
+input[type="range"].slider-small::-webkit-slider-runnable-track {
+  height: 3px;
+}
+
+input[type="range"].slider-small::-moz-range-track {
+  height: 3px;
 }

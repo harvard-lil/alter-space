@@ -30,6 +30,13 @@
                     :class="{active: color === colorPresets[currentColorIdx] && showingList && currentColorIdx === idx}"
                     :style="{'backgroundColor': color}">
             </button>
+            <ul class="gradient-example list-inline">
+              <li class="gradient-pixel list-inline-item"
+                    v-for="(pixel, idx) in colorGradient"
+                    v-bind:key="idx"
+                    :style="{'backgroundColor': pixel}"></li>
+            </ul>
+
             <label class="text-center">colors</label>
           </div>
         </div>
@@ -103,7 +110,7 @@
         showingList: false,
         currentColorIdx: "",
         light: "",
-        colorGradient: "",
+        colorGradient: [],
         brightness: 100,
         effectPlaying: false,
         disableButtons: false,
@@ -158,10 +165,8 @@
           method: "post",
           url: lightUrl,
           data: bodyFormData,
-        }).then(function (results) {
-          //TODO: disable everything until results are back
-          console.log(results)
         })
+        //TODO: disable everything until results are back
       },
       chooseNewColor(hexVal) {
         this.colorPresets.splice([this.currentColorIdx], 1, hexVal);

@@ -3,7 +3,7 @@
   <div class="td col-8">
     <input type="range"
            class="volume-range"
-           min="0"
+           min="1"
            max="100"
            value="100"
            autocomplete="off"
@@ -25,8 +25,8 @@
     name: "sound-slider",
     components: {},
     watch: {
-      volume() {
-        EventBus.$emit('update-volume', this.volume);
+      volume(newVal, oldVal) {
+        EventBus.$emit('update-volume', {from: oldVal, to: newVal});
       }
     },
     data() {
