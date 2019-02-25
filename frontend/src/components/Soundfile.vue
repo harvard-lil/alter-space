@@ -46,7 +46,7 @@
     },
     watch: {
       volume() {
-        this.audioFile.volume = this.volume/100;
+        this.audioFile.volume = this.volume / 100;
       }
     },
     mounted() {
@@ -98,7 +98,10 @@
       pauseSound() {
         this.audioFile.pause();
       },
-      playSound() {
+      playSound(volume) {
+        if (volume) {
+          this.volume = volume;
+        }
         this.audioFile.volume = this.volume / 100;
         this.audioFile.play();
       },
@@ -114,7 +117,8 @@
         // Plays sound if it's in the presets
         if (this.soundIsInChosenField()) {
           this.selectedSound = true;
-          this.playSound();
+          // start off preset sounds at 100. Might need to move this at a later point to sound_presets.py
+          this.playSound(100);
           this.$parent.$parent.nowPlayingList.push(this.audio);
         }
       }
