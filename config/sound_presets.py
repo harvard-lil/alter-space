@@ -34,7 +34,7 @@ presets = {
 
         ],
         "abstract": [
-            "Be%20Weird.mp3"
+            "Be Weird.mp3"
         ]
     },
     "focus": {
