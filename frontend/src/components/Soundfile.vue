@@ -6,6 +6,15 @@
             v-bind:class="{ on: selectedSound }">
       {{ audioName }}
     </button>
+    <br/>
+    <input type="range"
+           class="col-centered slider-small"
+           :disabled="selectedSound === false"
+           min="1"
+           max="100"
+           value="50"
+           autocomplete="off"
+           v-model.lazy.number="volume"/>
     <!-- audio files are hidden from DOM / view -->
     <audio loop controls preload="none">
       <source :id="audio" :src="`${audioPath}`" type="audio/mpeg">
@@ -32,6 +41,12 @@
         selectedSound: false,
         soundPresets: this.$parent.soundPresets,
         pause: false,
+        volume: 50,
+      }
+    },
+    watch: {
+      volume() {
+        this.audioFile.volume = this.volume/100;
       }
     },
     mounted() {
@@ -45,10 +60,12 @@
         }
       });
 
-      EventBus.$on('update-volume', (volume) => {
+      EventBus.$on('update-volume', ({from: oldVol, to: newVol}) => {
         if (self.selectedSound) {
-          self.audioFile.volume = volume / 100;
-          self.previousVolume = volume;
+          //get old local volume here
+          self.previousVolume = self.audioFile.volume * 100;
+          //set volume proportionally to global volume
+          self.audioFile.volume = (newVol / oldVol) * self.audioFile.volume;
         }
       });
 
@@ -82,6 +99,7 @@
         this.audioFile.pause();
       },
       playSound() {
+        this.audioFile.volume = this.volume / 100;
         this.audioFile.play();
       },
       toggleButton() {
