@@ -26,7 +26,6 @@
     components: {},
     watch: {
       volume(newVal, oldVal) {
-        console.log("old and new:", newVal, oldVal)
         EventBus.$emit('update-volume', {from: oldVal, to: newVal});
       }
     },

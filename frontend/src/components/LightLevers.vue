@@ -165,10 +165,8 @@
           method: "post",
           url: lightUrl,
           data: bodyFormData,
-        }).then(function (results) {
-          //TODO: disable everything until results are back
-          console.log(results)
         })
+        //TODO: disable everything until results are back
       },
       chooseNewColor(hexVal) {
         this.colorPresets.splice([this.currentColorIdx], 1, hexVal);
