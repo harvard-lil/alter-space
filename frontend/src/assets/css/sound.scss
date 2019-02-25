@@ -8,11 +8,12 @@
   color: $color-navy;
   background-color: $color-white;
   padding: 2px 7px 4px 7px;
+  width: 150px;
   &.on {
     background-color: $color-navy;
     color: $color-white;
   }
-  &:hover, &:active, &:focus {
+  &:hover  {
     background-color: $color-navy;
     color: $color-white;
   }
@@ -39,28 +40,18 @@
   }
   svg.btn-sound-type {
     &.nature, &.urban, &.abstract {
-      &:hover, &:active {
+      &:hover {
         path {
           fill: $color-navy;
         }
       }
-    }
-    &.nature.expanded {
-      path {
-        fill: $color-navy;
-      }
-    }
-    &.urban.expanded {
-      path {
-        fill: $color-navy;
-      }
-    }
-    &.abstract.expanded {
-      path {
-        fill: $color-navy;
-      }
-    }
 
+    }
+    &.nature.expanded, &.urban.expanded, &.abstract.expanded {
+      path {
+        fill: $color-navy;
+      }
+    }
   }
 }
 

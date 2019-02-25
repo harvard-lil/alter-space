@@ -3,7 +3,7 @@
     <div class="col-12 alert-warning">{{error}}</div>
     <br/>
     <ul class="btn-group list-inline">
-      <li v-for="val in lights" class="list-inline-item">
+      <li v-for="val in lights" class="list-inline-item" v-bind:key="val">
       <button class="btn btn-default btn-light-choice" @click="setLight(val)">
         {{val}}
       </button>
