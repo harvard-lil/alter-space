@@ -66,6 +66,7 @@
           self.previousVolume = self.audioFile.volume * 100;
           //set volume proportionally to global volume
           self.audioFile.volume = (newVol / oldVol) * self.audioFile.volume;
+          this.volume = self.audioFile.volume * 100;
         }
       });
 
