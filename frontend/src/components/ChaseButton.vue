@@ -6,7 +6,7 @@
              :original="true"
              class="btn-round btn-chase"
              @click="toggleChase()"
-             :class="{active: chase}"
+             :class="{active: chase, disabled: disable}"
              stroke="0"></svgicon>
 
     <label v-if="chase">stop</label>
@@ -24,6 +24,7 @@
 
   export default {
     name: "chase-button",
+    props: ["disable"],
     data() {
       return {
         chase: false,

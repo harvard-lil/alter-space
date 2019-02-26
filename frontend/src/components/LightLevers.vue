@@ -25,29 +25,31 @@
                     class="btn-round btn-color"
                     v-for="(color, idx) in colorPresets"
                     v-bind:key="idx"
-                    :disabled="disableButtons"
+                    :disabled="disableColors"
                     @click="showList(idx)"
                     :class="{active: color === colorPresets[currentColorIdx] && showingList && currentColorIdx === idx}"
                     :style="{'backgroundColor': color}">
             </button>
             <ul class="gradient-example list-inline">
               <li class="gradient-pixel list-inline-item"
-                    v-for="(pixel, idx) in colorGradient"
-                    v-bind:key="idx"
-                    :style="{'backgroundColor': pixel}"></li>
+                  v-for="(pixel, idx) in colorGradient"
+                  v-bind:key="idx"
+                  :style="{'backgroundColor': pixel}"></li>
             </ul>
 
             <label class="text-center">colors</label>
           </div>
         </div>
         <breathe-button
+                :disable="disableEffect"
                 v-show="$route.params.name !== 'wyrd'">
         </breathe-button>
         <chase-button
+                :disable="disableEffect"
                 v-show="$route.params.name === 'wyrd'">
         </chase-button>
         <div class="td col-6">
-          <brightness-slider :disable="disableButtons"></brightness-slider>
+          <brightness-slider :disable="disableBrightness"></brightness-slider>
           <label>brightness</label>
         </div>
       </div>
@@ -56,7 +58,7 @@
            :class="$route.params.name"
            v-show="showingList">
       <div class="btn-group-color-options col-centered"
-           :class="$route.params.name"
+           :class="[$route.params.name, {disabled: disableColors}]"
            role="group"
            aria-label="color button group">
         <svgicon icon="arrow-up"
@@ -113,7 +115,10 @@
         colorGradient: [],
         brightness: 100,
         effectPlaying: false,
-        disableButtons: false,
+        disableBrightness: false,
+        disableColors: false,
+        disableEffect: false,
+
       }
     },
     watch: {
@@ -128,8 +133,10 @@
         }
       },
       effectPlaying() {
-        this.disableButtons = this.effectPlaying;
-        if (this.disableButtons) {
+        let toDisable = this.effectPlaying;
+        this.disableBrightness = toDisable;
+        this.disableColors = toDisable;
+        if (toDisable) {
           this.showingList = false;
         }
       }
@@ -161,12 +168,20 @@
         bodyFormData.set('colors', JSON.stringify(d));
         bodyFormData.set('id', this.light);
         bodyFormData.set('bright', this.brightness.toString());
+        //disabling all buttons until results are backs
+        this.disableEffect = true;
+        this.disableColors = true;
+        this.disableBrightness = true;
+        let self = this;
         axios({
           method: "post",
           url: lightUrl,
           data: bodyFormData,
+        }).then(() => {
+          self.disableEffect = false;
+          self.disableColors = false;
+          self.disableBrightness = false;
         })
-        //TODO: disable everything until results are back
       },
       chooseNewColor(hexVal) {
         this.colorPresets.splice([this.currentColorIdx], 1, hexVal);

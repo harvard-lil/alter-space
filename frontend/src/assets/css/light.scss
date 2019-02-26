@@ -9,6 +9,10 @@
   &.create, &.relax, &.wyrd, &.read {
     background-color: $color-navy;
   }
+  &.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
 }
 
 .btn-color {
@@ -46,5 +50,8 @@
     path {
       fill: $color-navy;
     }
+  }
+  &.disabled {
+    opacity: 0.5;
   }
 }
