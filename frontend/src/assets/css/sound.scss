@@ -1,6 +1,7 @@
 
 .sound-to-choose {
-  margin: 5px;
+  margin: 5px 25px;
+  margin-right: 0.5em;
 }
 
 .btn-sound-add.btn-toggle {
@@ -8,12 +9,9 @@
   color: $color-navy;
   background-color: $color-white;
   padding: 2px 7px 4px 7px;
-  width: 150px;
+  width: 140px;
+  font-size: 14px;
   &.on {
-    background-color: $color-navy;
-    color: $color-white;
-  }
-  &:hover  {
     background-color: $color-navy;
     color: $color-white;
   }
@@ -70,7 +68,7 @@
 
 .sound-list {
   background-color: $color-white;
-  padding: 20px;
+  padding: 20px 10px 10px 10px;
   &.show {
     display: inline-block;
   }

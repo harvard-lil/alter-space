@@ -35,7 +35,8 @@
                      @click="showList(type)"
                      stroke="0">
             </svgicon>
-            <label>{{ type }}</label>
+            <label v-if="type === 'abstract' ">tone</label>
+            <label v-else>{{type}}</label>
           </div>
         </div>
         <!--Now playing container -->

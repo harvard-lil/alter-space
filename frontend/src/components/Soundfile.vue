@@ -66,6 +66,7 @@
           self.previousVolume = self.audioFile.volume * 100;
           //set volume proportionally to global volume
           self.audioFile.volume = (newVol / oldVol) * self.audioFile.volume;
+          this.volume = self.audioFile.volume * 100;
         }
       });
 
@@ -78,19 +79,18 @@
     },
     methods: {
       soundIsInChosenField() {
-        return this.soundPresets.indexOf(this.audio) > -1;
+        return Object.keys(this.soundPresets).indexOf(this.audio) > -1;
       },
       addSound() {
         this.selectedSound = true;
-        this.soundPresets.push(this.audio);
+        this.soundPresets[this.audio] = this.volume;
         if (!(this.pause)) {
           this.playSound();
         }
         this.$parent.$parent.nowPlayingList.push(this.audio)
       },
       removeSound() {
-        let index = this.soundPresets.indexOf(this.audio);
-        this.soundPresets.splice(index, 1);
+        delete this.soundPresets[this.audio];
         this.pauseSound();
         let nowPlayingAudioIndex = this.$parent.$parent.nowPlayingList.indexOf(this.audio);
         this.$parent.$parent.nowPlayingList.splice(nowPlayingAudioIndex, 1);
@@ -118,7 +118,8 @@
         if (this.soundIsInChosenField()) {
           this.selectedSound = true;
           // start off preset sounds at 100. Might need to move this at a later point to sound_presets.py
-          this.playSound(100);
+          this.volume = this.soundPresets[this.audio];
+          this.playSound(this.volume);
           this.$parent.$parent.nowPlayingList.push(this.audio);
         }
       }
