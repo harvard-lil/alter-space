@@ -1,5 +1,6 @@
 import os
 import requests
+import urllib.parse
 from bs4 import BeautifulSoup
 
 from config import config
@@ -19,8 +20,9 @@ def get_sound_paths(sound_type='nature'):
         all_files = os.listdir(os.path.join(sound_dir, sound_type))
         music_files = []
         for f in all_files:
-            if f[-4:] == ".mp3":
-                music_files.append(f)
+            if is_sound_filepath(f):
+                name = urllib.parse.unquote(f)
+                music_files.append(name)
         return music_files
     else:
         sound_dir = os.path.join(config.SOUND_URL, sound_type)
@@ -31,5 +33,6 @@ def get_sound_paths(sound_type='nature'):
         for a_tag in a_tags:
             href = a_tag.get('href')
             if is_sound_filepath(href):
-                sound_urls.append(href)
+                name = urllib.parse.unquote(href)
+                sound_urls.append(name)
         return sound_urls
