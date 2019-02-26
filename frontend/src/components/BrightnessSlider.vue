@@ -34,10 +34,16 @@
         bodyFormData.set('id', this.$parent.light);
         bodyFormData.set('bright', this.bright.toString());
         EventBus.$emit('update-brightness', this.bright);
+        this.$parent.disableColors = true;
+        this.$parent.disableEffect = true;
+        let self = this;
         axios({
           method: "post",
           url: dimUrl,
           data: bodyFormData,
+        }).then(()=>{
+          self.$parent.disableColors = false;
+          self.$parent.disableEffect = false;
         })
 
       }
