@@ -17,7 +17,6 @@
           participate in the first installation and will be invited to provide feedback for future improvements.
         </p>
         <br/>
-        <br/>
           <h4>Credits</h4>
           Alterspace is a collaboration between Harvard's
         <span class="unclickable">metaLAB</span> and
@@ -29,9 +28,49 @@
           supported by the <span class="unclickable">Knight Foundation</span>.
         <br/><br/>
         <h6>Sounds used</h6>
+
         <ul>
-          <li></li>
+          <li>
+            <b>Bonfire:</b> BBC Sound Effects - Research and Education
+          </li>
+          <li>
+            <b>Water:</b> BBC Sound Effects - Research and Education
+          </li>
+          <li>
+            <b>Winter Storm:</b> BBC Sound Effects - Research and Education
+          </li>
+          <li>
+            <b>Thunder Storm:</b> BBC Sound Effects - Research and Education
+          </li>
+          <li>
+            <b>Waterfall:</b> BBC Sound Effects - Research and Education
+          </li>
+          <li>
+            <b>Forest at Night:</b> BBC Sound Effects - Research and Education
+            </li>
+          <li>
+            <b>Polar Wind:</b> BBC Sound Effects - Research and Education
+          </li>
+          <li>
+            <b>Morning Bird Song:</b> BBC Sound Effects - Research and Education
+          </li>
+          <li>
+            <b>Crowd:</b> BBC Sound Effects - Research and Education
+          </li>
+          <li>
+            <b>Park:</b> BBC Sound Effects - Research and Education
+          </li>
+          <li>
+          <b>Outside Cafe:</b> BBC Sound Effects - Research and Education
+          </li>
+          <li>
+            <b>Forest At Night:</b> FreeToUseSounds
+          </li>
+          <li>
+            <b>Light Rain:</b> Soniss.com - Beautiful BamBam
+          </li>
         </ul>
+        <br/><br/>
         <h6>Icons used (Noun Project)</h6>
         <ul>
           <li>
@@ -53,6 +92,7 @@
             <b>Cycle:</b> Andrey
           </li>
         </ul>
+        <br/><br/>
       </div>
 
     </div>
