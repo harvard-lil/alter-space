@@ -1,8 +1,6 @@
 <template>
   <div id="app"
-       :class="['app-activity-'+$route.params.name, {
-       home: $route.name === 'Home'
-       }]">
+       :class="['app-activity-'+$route.params.name, $route.name]">
 
     <topnav :translation="translation"></topnav>
 
@@ -11,7 +9,7 @@
     <div class="container-fluid">
       <router-view :key="$route.fullPath"></router-view>
 
-      <template v-if="$route.name === 'Home'">
+      <template v-if="$route.name === 'home'">
         <div class="row">
           <div class="col-8 header col-centered text-center">
             <h5>

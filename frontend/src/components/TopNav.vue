@@ -21,7 +21,7 @@
       </h1>
       <h1 class="page-header" v-if="$route.name === 'about'">ABOuT</h1>
     </li>
-    <li class="nav-item col-2">
+    <li class="nav-item col-2" v-if="$route.name !== 'about'">
       <div class="button-label-container">
         <router-link to="/about" class="nav-button-group">
           <svgicon icon="info"

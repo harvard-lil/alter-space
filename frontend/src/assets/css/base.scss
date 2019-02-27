@@ -20,6 +20,15 @@ body {
   color: $color-navy;
 }
 
+#app {
+  height: 100vh;
+}
+
+#app.about {
+  background-color: $color-navy;
+  color: $color-white;
+}
+
 .crazy-font {
   font-family: "major_mono_displayregular"
 }
@@ -123,13 +132,11 @@ h1, h2, h3, h4, h5 {
 }
 
 .about-page {
-  height: 100vh;
   background-color: $color-navy;
-  overflow-y: hidden;
   .about-page-shape {
     background-color: $color-white;
     max-width: 730px;
-    max-height: 60%;
+    max-height: 600px;
     transform: skewY(4deg);
     @extend .col-centered;
     overflow-y:scroll;
@@ -138,7 +145,7 @@ h1, h2, h3, h4, h5 {
     color: $color-navy;
     transform: skewY(-4deg);
     margin-top: 40px;
-    @extend .col-8;
+    @extend .col-10;
     @extend .col-centered;
   }
   .unclickable {
