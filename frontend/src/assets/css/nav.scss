@@ -13,6 +13,18 @@
   .btn-link {
     margin: 0 auto;
   }
+  &.about {
+    background-color: $color-navy;
+    h1 {
+      color: $color-white;
+    }
+    .nav-button-group {
+      color: $color-white;
+    }
+    .btn-nav {
+      fill: $color-white;
+    }
+  }
   h1, .h1 {
     text-align: center;
     margin-top: -20px;

@@ -17,7 +17,6 @@ body {
   -webkit-font-smoothing: antialiased;
   font-family: $font-family;
   @extend .flex-column;
-  min-height: 100vh;
   color: $color-navy;
 }
 
@@ -121,6 +120,30 @@ h1, h2, h3, h4, h5 {
 .header {
   margin-top: 120px;
   color: $color-navy;
+}
+
+.about-page {
+  height: 100vh;
+  background-color: $color-navy;
+  overflow-y: hidden;
+  .about-page-shape {
+    background-color: $color-white;
+    max-width: 730px;
+    max-height: 60%;
+    transform: skewY(4deg);
+    @extend .col-centered;
+    overflow-y:scroll;
+  }
+  .about-content {
+    color: $color-navy;
+    transform: skewY(-4deg);
+    margin-top: 40px;
+    @extend .col-8;
+    @extend .col-centered;
+  }
+  .unclickable {
+    border-bottom: 1px solid $color-navy;
+  }
 }
 
 .question-text {
@@ -405,9 +428,7 @@ button, .btn, .btn-default {
 
 /* Activity settings */
 .activity-container {
-  height: 100vh;
   min-width: 100%;
-
 }
 
 .btn-activity {

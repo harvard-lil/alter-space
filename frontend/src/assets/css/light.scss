@@ -9,6 +9,10 @@
   &.create, &.relax, &.wyrd, &.read {
     background-color: $color-navy;
   }
+  &.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
 }
 
 .btn-color {
@@ -26,8 +30,8 @@
 }
 
 .gradient-pixel {
-  width: 9.5px;
-  height: 9.5px;
+  width: 6px;
+  height: 8px;
   margin: 0 !important;
 }
 
@@ -46,5 +50,8 @@
     path {
       fill: $color-navy;
     }
+  }
+  &.disabled {
+    opacity: 0.5;
   }
 }

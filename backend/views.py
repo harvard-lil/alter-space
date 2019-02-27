@@ -1,7 +1,7 @@
 import os
 import json
 import logging
-
+from time import sleep
 import requests
 from flask import jsonify, Blueprint, request, render_template, make_response, url_for, send_file
 from config import config, light_presets, sound_presets
@@ -14,6 +14,12 @@ logger = logging.getLogger()
 
 backend_app = Blueprint('backend', __name__)
 tsk = Blueprint('backend.tasks', __name__)
+
+throttle_time = 0.3
+
+
+def throttle(throttle_duration=throttle_time):
+    sleep(throttle_duration)
 
 
 @tsk.route('/task/start/<task_name>', methods=['POST'])
@@ -132,11 +138,11 @@ def toggle_effect(effect_type):
         data["breathe_type"] = request.form.get("breathe_type")
     if effect_status:
         results = requests.post(url_for("backend.start_task", task_name=effect_type, _external=True), data=data)
-        return jsonify(results.json())
     else:
         data["task_id"] = request.form.get('task_id')
         results = requests.post(url_for("backend.stop_task", task_name=effect_type, _external=True), data=data)
-        return jsonify(results.json())
+    throttle()
+    return jsonify(results.json())
 
 
 @backend_app.route("/lights/colors")
@@ -152,8 +158,8 @@ def set_light():
     dim_value = request.form.get('bright', 100)
 
     try:
-
         tasks.light_task.apply_async(kwargs={'light_id': light_id, 'colors': colors, 'dim_value': dim_value})
+        throttle()
         return "ok"
     except Exception as e:
         raise Exception(e, "Something went wrong!")
@@ -165,6 +171,7 @@ def set_dim():
     dim_level = request.form.get('bright', 100)
     try:
         tasks.dim_task.apply_async(kwargs={'light_id': light_id, 'dim_value': dim_level})
+        throttle()
         return "ok"
     except Exception as e:
         raise Exception(e, "Something went wrong!")

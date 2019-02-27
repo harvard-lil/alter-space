@@ -1,6 +1,6 @@
 <template>
   <ul class="nav"
-      :class="'activity-'+$route.params.name">
+      :class="['activity-'+$route.params.name, {about: $route.name === 'about'}]">
     <li class="nav-item col-2">
       <div class="button-label-container">
         <router-link to="/"
@@ -19,10 +19,11 @@
           v-if="$route.name === 'activity' && $route.params.name && customizing">
         {{translation[$route.params.name]}}
       </h1>
+      <h1 class="page-header" v-if="$route.name === 'about'">ABOuT</h1>
     </li>
     <li class="nav-item col-2">
       <div class="button-label-container">
-        <a href="/about" class="nav-button-group">
+        <router-link to="/about" class="nav-button-group">
           <svgicon icon="info"
                    width="45"
                    height="45"
@@ -30,7 +31,7 @@
                    stroke="0"></svgicon>
 
           <br/>
-          About</a>
+          About</router-link>
       </div>
     </li>
   </ul>

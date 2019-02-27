@@ -6,7 +6,7 @@
              :original="true"
              class="btn-round btn-breathe"
              @click="toggleBreathe()"
-             :class="{active: breathe}"
+             :class="{active: breathe, disabled: disable}"
              stroke="0"></svgicon>
 
     <label v-if="breathe">stop</label>
@@ -23,6 +23,7 @@
 
   export default {
     name: "breathe-button",
+    props: ["disable"],
     data() {
       return {
         breathe: false,
