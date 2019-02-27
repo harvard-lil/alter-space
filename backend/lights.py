@@ -113,7 +113,8 @@ def chase(light_id, count=0):
         all_zones = strip.get_color_zones()
         last = all_zones.pop()
         all_zones.insert(0, last)
-        strip.set_zone_colors(all_zones)
+        strip.set_zone_colors(all_zones, 500, False)
+        sleep(0.5)
     except WorkflowException as err:
         logger.error("Chase: Caught exception %s" % err)
         if count < retry_count:

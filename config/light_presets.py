@@ -25,7 +25,7 @@ presets = {
         "brightness": 100
     },
     "wyrd": {
-        "colors": ["#E7FF81", "#7FFF00", "#C0FF80",],
+        "colors": ["#7FFF00", "#FE004D", "#02b3ff"],
         "effects": {},
         "brightness": 100
     }
