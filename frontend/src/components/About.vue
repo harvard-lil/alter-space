@@ -3,7 +3,7 @@
     <div class="about-page-shape">
       <div class="about-content">
         <p>
-          Alterspace is an immersive library experience that puts visitors in charge of their surroundings. The
+          <b>Alterspace</b> is an immersive library experience that puts visitors in charge of their surroundings. The
           library’s collection can transport patrons
           into the worlds of fiction, history, art. Alterspace extends that experience into the physical world, allowing
           patrons to create environments that best suit their needs.
@@ -16,16 +16,22 @@
           available to any library who would like to replicate it. Visitors to the Cambridge Public Library will
           participate in the first installation and will be invited to provide feedback for future improvements.
         </p>
-        <p>
-        <h4>Credits</h4>
-        Alterspace is a collaboration between Harvard's <span class="unclickable">metaLAB</span> and <span
-              class="unclickable">Library Innovation Lab</span>
-        featuring the work of <span class="unclickable">FK Production</span> and <span
-              class="unclickable">Alisa Kolot</span>
-        supported by the <span class="unclickable">Knight Foundation</span>.
-        </p>
-        <p>
+        <br/>
+        <br/>
+          <h4>Credits</h4>
+          Alterspace is a collaboration between Harvard's
+        <span class="unclickable">metaLAB</span> and
+        <span class="unclickable">Library Innovation Lab</span>
+          featuring the work of
+        <span class="unclickable">FK Production</span>
+        and
+        <span class="unclickable">Alisa Kolot</span>
+          supported by the <span class="unclickable">Knight Foundation</span>.
+        <br/><br/>
         <h6>Sounds used</h6>
+        <ul>
+          <li></li>
+        </ul>
         <h6>Icons used (Noun Project)</h6>
         <ul>
           <li>
@@ -47,7 +53,6 @@
             <b>Cycle:</b> Andrey
           </li>
         </ul>
-        </p>
       </div>
 
     </div>
