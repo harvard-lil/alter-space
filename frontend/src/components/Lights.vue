@@ -17,7 +17,7 @@
     name: "Lights",
     data() {
       return {
-        lights: ["1", "2"],
+        lights: ["1", "2", "3"],
         light: "",
         error: ""
       }

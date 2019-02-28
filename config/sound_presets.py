@@ -21,7 +21,7 @@ presets = {
     "wyrd": {
         "nature": {},
         "urban": {
-            "Outside_cafe.mp3": 80,
+            "Outside_cafe.mp3": 100,
         },
         "abstract": {
             "Be Weird.mp3": 100,

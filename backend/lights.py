@@ -113,14 +113,14 @@ def chase(light_id, count=0):
         all_zones = strip.get_color_zones()
         last = all_zones.pop()
         all_zones.insert(0, last)
-        strip.set_zone_colors(all_zones)
+        strip.set_zone_colors(all_zones, 500, False)
+        sleep(0.5)
     except WorkflowException as err:
-        logger.error("Chase: Caught exception %s" % err)
         if count < retry_count:
             sleep(0.5 * (count + 1))
             chase(light_id, count=count+1)
         else:
-            pass
+            logger.error("Chase: Caught exception %s" % err)
 
 
 def breathe(light_id, count=0, breathe_type=None):
@@ -152,12 +152,11 @@ def breathe(light_id, count=0, breathe_type=None):
         strip.set_zone_colors(dim_zones, dim_timer, True)
         sleep(wait_timer_2)
     except WorkflowException as err:
-        logger.error("Breathe: Caught exception %s" % err)
         if count < retry_count:
             sleep(0.5 * (count + 1))
             breathe(light_id, count=count+1)
         else:
-            pass
+            logger.error("Breathe: Caught exception %s" % err)
 
 
 def set_colors(light_id, colors, dim_value=100, count=0):
@@ -173,12 +172,11 @@ def set_colors(light_id, colors, dim_value=100, count=0):
     try:
         strip.set_zone_colors(new_zones, 3000, False)
     except WorkflowException as err:
-        logger.error("set_colors: Caught exception %s" % err)
         if count < retry_count:
             sleep(0.5 * (count + 1))
             set_colors(light_id, colors, dim_value=dim_value, count=count+1)
         else:
-            pass
+            logger.error("set_colors: Caught exception %s" % err)
 
 
 def dim(light_id, dim_level, count=0):
@@ -191,12 +189,11 @@ def dim(light_id, dim_level, count=0):
             dim_zones.append((h, s, dim_level, k))
         strip.set_zone_colors(dim_zones, 3000, False)
     except WorkflowException as err:
-        logger.error("dim: Caught exception %s" % err)
         if count < retry_count:
             sleep(0.5 * (count + 1))
             dim(light_id, dim_level, count=count+1)
         else:
-            pass
+            logger.error("dim: Caught exception %s" % err)
 
 
 def hex2rgb(hex):

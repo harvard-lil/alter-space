@@ -1,32 +1,32 @@
 presets = {
     "relax": {
         "colors": ["#1E18FF", "#80DCFF", "#02B3FF"],
-        "effects": {},
+        "effect": "breathe",
         "brightness": 100
     },
     "read": {
         "colors": ["#9190DA", "#F896A6", "#FFC0CB"],
-        "effects": {},
+        "effect": "",
         "brightness": 100
     },
     "meditate": {
         "colors": ["#508E36", "#2AA5A2", "#C0FF80"],
-        "effects": {},
+        "effect": "",
         "brightness": 100
     },
     "focus": {
         "colors": ["#EFAAA2", "#FFCD81", "#EEC900"],
-        "effects": {},
+        "effect": "",
         "brightness": 100
     },
     "create": {
         "colors": ["#FE004D", "#80007F", "#1E18FF"],
-        "effects": {},
+        "effect": "",
         "brightness": 100
     },
     "wyrd": {
-        "colors": ["#E7FF81", "#7FFF00", "#C0FF80",],
-        "effects": {},
+        "colors": ["#7FFF00", "#FE004D", "#02b3ff"],
+        "effect": "chase",
         "brightness": 100
     }
 }

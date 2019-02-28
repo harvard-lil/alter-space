@@ -64,15 +64,23 @@
       fill: $color-white;
     }
   }
-
 }
 
 .app-activity-read,
+.app-activity-create,
 .app-activity-meditate {
   .nav-button-group {
     color: $color-navy;
     .icon {
       fill: $color-navy;
+    }
+  }
+}
+.app-activity-wyrd, .app-activity-focus  {
+  .nav-button-group {
+    color: $color-white;
+    .icon {
+      fill: $color-white;
     }
   }
 }

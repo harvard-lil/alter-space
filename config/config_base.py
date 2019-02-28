@@ -7,6 +7,8 @@ LOG_FORMAT = '%(levelname)s: %(message)s'
 
 DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 
+ALTERSPACE_IP = "127.0.0.1"
+
 ACTIVITIES = ["relax",
               "read",
               "meditate",
