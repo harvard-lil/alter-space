@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+
+CELERY_PID=/var/run/alterspace-celery.pid
+FABRIC_PID=/var/run/alterspace-fabric.pid
+
+function start {
+  local ALTERSPACE_DIR
+  ALTERSPACE_DIR="$(dirname "$0")/../"
+  (cd "${ALTERSPACE_DIR}" && fab run) &
+  (cd "${ALTERSPACE_DIR}" && fab celery) &
+}
+
+function stop {
+    local celery_pid
+    local fabric_pid
+    celery_pid="$(cat ${CELERY_PID})"
+    fabric_pid="$(cat ${FABRIC_PID})"
+    echo "attempting to perform a graceful exit..."
+    kill -15 "${celery_pid}"
+    kill -15 "${fabric_pid}"
+    sleep 5
+    pgrep --pidfile "${CELERY_PID}" && echo "celery still running, force-killing" && kill -9 "${celery_pid}"
+    pgrep --pidfile "${FABRIC_PID}" && echo "fabric still running, force-killing" && kill -9 "${fabric_pid}"
+}
+
+
+case "$1" in
+  start) start ;;
+  stop) stop ;;
+  *)
+    echo "Control the alterspace processes"
+    echo ""
+    echo "Usage:"
+    echo " ./runner [start|stop]"
+    echo ""
+    echo "Options:"
+    echo " start     start celery and fabric jobs"
+    echo " stop      stop celery and fabric jobs"
+    echo ""
+    echo "For more details, see https://github.com/harvard-lil/alter-space"
+  ;;
+esac

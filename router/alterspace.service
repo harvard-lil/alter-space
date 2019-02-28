@@ -1,0 +1,19 @@
+[Unit]
+# Start this systemd unit after we have set up our wireless access point (hostapd) and dhcpd server (isc-dhcpd-server)
+After=hostapd.service isc-dhcpd-server.service
+# If we require an online network before running this service
+# Wants=network-online.target
+
+[Service]
+ExecStart=ALTERSPACE_DIRECTORY/runner start
+ExecStop=ALTERSPACE_DIRECTORY/runner stop
+# Environment variables to set. Takes the form of:
+# Environment=SYSTEMD_LOG_LEVEL=debug
+Environment=
+Type=oneshot
+Restart=always
+RestartSec=30
+
+[Install]
+WantedBy=default.target
+

@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+ALTERSPACE_DIRECTORY=$(pwd)
+INSTALL_DIRECTORY=/etc/systemd/system/alterspace.service
+
+function cleanup {
+   rm tmp.service
+}
+trap cleanup EXIT
+
+if ls ./*alterspace.service &>/dev/null ; then
+    echo "sudo required to copy alterspace.service to /etc/systemd/system"
+    sed -E "s/ALTERSPACE_DIRECTORY/${ALTERSPACE_DIRECTORY}/" alterspace.service > tmp.service
+    sudo cp tmp.service $INSTALL_DIRECTORY || cleanup "failed to copy alterspace.service to ${INSTALL_DIRECTORY}" && exit 1
+
+    echo "Enabling alterspace.service"
+    sudo systemd enable alterspace.service || echo "failed to enable alterspace.service! Do this manually." && exit 1
+
+    echo "Installation done!"
+    exit 0
+else
+    echo "Can't install service file. alterspace.service not in current directory."
+    echo ""
+    echo "Please call ./install from router directory that contains alterspace.service"
+    exit 1
+fi
+
