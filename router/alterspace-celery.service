@@ -1,0 +1,16 @@
+[Unit]
+# Start this systemd unit after we have set up our wireless access point (hostapd) and dhcpd server (isc-dhcpd-server)
+After=hostapd.service isc-dhcpd-server.service
+
+[Service]
+
+ExecStart=/home/pi/.local/bin/celery -A backend.tasks worker --pidfile /var/run/alterspace/celery.pid
+WorkingDirectory=/home/pi/alter-space/
+# KillMode=process
+# Type=forking
+Type=simple
+User=pi
+Group=pi
+
+[Install]
+WantedBy=multi-user.target

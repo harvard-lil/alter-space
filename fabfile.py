@@ -4,12 +4,12 @@ from fabric.decorators import task
 
 @task(alias='run')
 def run_flask(port="5000"):
-    local("FLASK_APP=run.py FLASK_DEBUG=1 python -m flask run --pidfile /var/run/alterspace-fabric.pid -p %s" % port)
+    local("FLASK_APP=run.py FLASK_DEBUG=1 python -m flask run -p %s" % port)
 
 
 @task
 def celery():
-    local("celery -A backend.tasks worker --pidfile /var/run/alterspace-celery.pid ")
+    local("celery -A backend.tasks worker --pidfile /var/run/alterspace/celery.pid ")
 
 
 @task

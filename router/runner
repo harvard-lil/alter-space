@@ -1,32 +1,38 @@
 #!/usr/bin/env bash
 
-CELERY_PID=/var/run/alterspace-celery.pid
-FABRIC_PID=/var/run/alterspace-fabric.pid
+CELERY_PID=/var/run/alterspace/celery.pid
+FLASK_PID=/var/run/alterspace/flask.pid
 
-function start {
+function start_all {
   local ALTERSPACE_DIR
   ALTERSPACE_DIR="$(dirname "$0")/../"
-  (cd "${ALTERSPACE_DIR}" && fab run) &
-  (cd "${ALTERSPACE_DIR}" && fab celery) &
+  cd "${ALTERSPACE_DIR}"
+  FLASK_APP=run.py FLASK_DEBUG=1 python -m flask run -p 5000 &
+  celery -A backend.tasks worker --pidfile /var/run/alterspace/celery.pid &
 }
 
-function stop {
-    local celery_pid
-    local fabric_pid
-    celery_pid="$(cat ${CELERY_PID})"
-    fabric_pid="$(cat ${FABRIC_PID})"
-    echo "attempting to perform a graceful exit..."
-    kill -15 "${celery_pid}"
-    kill -15 "${fabric_pid}"
+function halt_job {
+    job="${1}"
+    pid="$(cat "${2}")"
+    echo "Performing graceful exit of ${job}..."
+    kill -15 "${pid}"
     sleep 5
-    pgrep --pidfile "${CELERY_PID}" && echo "celery still running, force-killing" && kill -9 "${celery_pid}"
-    pgrep --pidfile "${FABRIC_PID}" && echo "fabric still running, force-killing" && kill -9 "${fabric_pid}"
+    pgrep --pidfile "${2}" && echo "${job} still running. Attempting to force-kill. Doublecheck manually" && kill -9 "${pid}"
 }
 
+function nuke_python {
+    killall python
+}
+
+function stop_all {
+    halt_job "celery" "${CELERY_PID}" &
+    # halt_job "flask" "${FLASK_PID}" &
+    nuke_python &
+}
 
 case "$1" in
-  start) start ;;
-  stop) stop ;;
+  start) start_all ;;
+  stop) stop_all ;;
   *)
     echo "Control the alterspace processes"
     echo ""
@@ -34,8 +40,8 @@ case "$1" in
     echo " ./runner [start|stop]"
     echo ""
     echo "Options:"
-    echo " start     start celery and fabric jobs"
-    echo " stop      stop celery and fabric jobs"
+    echo " start     start celery and flask jobs"
+    echo " stop      stop celery and flask jobs"
     echo ""
     echo "For more details, see https://github.com/harvard-lil/alter-space"
   ;;

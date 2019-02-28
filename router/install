@@ -1,19 +1,23 @@
 #!/usr/bin/env bash
-ALTERSPACE_DIRECTORY=$(pwd)
-INSTALL_DIRECTORY=/etc/systemd/system/alterspace.service
+# ALTERSPACE_DIRECTORY=$(pwd)
+# SERVICE_FILE=/etc/systemd/system/alterspace.service
 
-function cleanup {
-   rm tmp.service
-}
-trap cleanup EXIT
+# function cleanup {
+# #   rm tmp.service
+# }
+# trap cleanup EXIT
 
 if ls ./*alterspace.service &>/dev/null ; then
-    echo "sudo required to copy alterspace.service to /etc/systemd/system"
-    sed -E "s/ALTERSPACE_DIRECTORY/${ALTERSPACE_DIRECTORY}/" alterspace.service > tmp.service
-    sudo cp tmp.service $INSTALL_DIRECTORY || cleanup "failed to copy alterspace.service to ${INSTALL_DIRECTORY}" && exit 1
+    sudo mkdir -p /var/run/alterspace
+    sudo chown "$(whoami)" /var/run/alterspace
+    # echo "sudo required to copy alterspace.service to /etc/systemd/system"
+    # sed -e "s/ALTERSPACE_DIRECTORY/${ALTERSPACE_DIRECTORY}/" alterspace.service > tmp.service
+    sudo cp alterspace.service        /etc/systemd/system/alterspace.service        # || cleanup "failed to copy alterspace.service to ${SERVICE_FILE}" && exit 1
+    sudo cp alterspace-celery.service /etc/systemd/system/alterspace-celery.service # || cleanup "failed to copy alterspace.service to ${SERVICE_FILE}" && exit 1
 
-    echo "Enabling alterspace.service"
-    sudo systemd enable alterspace.service || echo "failed to enable alterspace.service! Do this manually." && exit 1
+    # echo "Enabling alterspace.service"
+    sudo systemctl enable alterspace-celery.service # || echo "failed to enable alterspace.service! Do this manually." && exit 1
+    sudo systemctl enable alterspace.service # || echo "failed to enable alterspace.service! Do this manually." && exit 1
 
     echo "Installation done!"
     exit 0
