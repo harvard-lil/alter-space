@@ -136,7 +136,6 @@
       if (!(this.effect)) {
         this.effect = "breathe";
       }
-      console.log("beforeRouteLeave", this.effect, this.taskID);
       this.stopEffectTask(() => {
         next();
       })
