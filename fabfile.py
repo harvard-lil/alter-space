@@ -1,10 +1,10 @@
 from fabric.api import local
 from fabric.decorators import task
-
+from config import config
 
 @task(alias='run')
 def run_flask(port="5000"):
-    local("FLASK_APP=run.py FLASK_DEBUG=1 python3 -m flask run -p %s" % port)
+    local("FLASK_APP=run.py FLASK_DEBUG=1 python3 -m flask run --host=%s -p %s" % (config.ALTERSPACE_IP, port))
 
 
 @task
