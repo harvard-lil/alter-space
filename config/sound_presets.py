@@ -3,28 +3,28 @@ presets = {
         "nature": {},
         "urban": {},
         "abstract": {
-            "Relax.mp3": 100,
+            "Relax.mp3": 80,
         }},
     "read": {
         "nature": {"Bonfire.mp3": 2},
         "urban": {},
         "abstract": {
-            "Read.mp3": 100,
+            "Read.mp3": 80,
         }
     },
     "meditate": {
         "nature": {"Polar_wind.mp3": 2},
         "urban": {},
         "abstract": {
-            "Meditate.mp3": 100,
+            "Meditate.mp3": 80,
         }},
     "wyrd": {
         "nature": {},
         "urban": {
-            "Outside_cafe.mp3": 100,
+            "Outside_cafe.mp3": 80,
         },
         "abstract": {
-            "Be Weird.mp3": 100,
+            "Be Weird.mp3": 80,
         }
     },
     "focus": {
@@ -33,7 +33,7 @@ presets = {
         },
         "urban": {},
         "abstract": {
-            "Focus.mp3": 100
+            "Focus.mp3": 80
         }},
     "create": {
         "nature": {
@@ -41,6 +41,6 @@ presets = {
         },
         "urban": {},
         "abstract": {
-            "Create.mp3": 100
+            "Create.mp3": 80
         }},
 }
