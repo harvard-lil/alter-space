@@ -9,7 +9,7 @@ def run_flask(port="5000"):
 
 @task
 def celery():
-    local("celery -A backend.tasks worker")
+    local("celery -A backend.tasks worker --pidfile /var/run/alterspace/celery.pid ")
 
 
 @task
