@@ -40,14 +40,10 @@
             <label class="text-center">colors</label>
           </div>
         </div>
-        <breathe-button
+        <effect-button
                 :disable="disableEffect"
-                v-show="$route.params.name !== 'wyrd'">
-        </breathe-button>
-        <chase-button
-                :disable="disableEffect"
-                v-show="$route.params.name === 'wyrd'">
-        </chase-button>
+                :effectInPreset="effectOn">
+        </effect-button>
         <div class="td col-6">
           <brightness-slider :disable="disableBrightness"></brightness-slider>
           <label>brightness</label>
@@ -87,8 +83,7 @@
   import EventBus from '../event-bus';
 
   import BrightnessSlider from './BrightnessSlider';
-  import ChaseButton from "./ChaseButton";
-  import BreatheButton from "./BreatheButton";
+  import EffectButton from "./EffectButton";
 
   const colorsUrl = process.env.VUE_APP_BACKEND_URL + "lights" + "/colors";
   const lightUrl = process.env.VUE_APP_BACKEND_URL + "lights" + "/set";
@@ -99,11 +94,10 @@
   export default {
     name: "LightLevers",
     components: {
-      BreatheButton,
-      ChaseButton,
+      EffectButton,
       BrightnessSlider
     },
-    props: ["lightPresets", "collapseLightOptions"],
+    props: ["lightPresets", "collapseLightOptions", "effectOn"],
     data() {
       return {
         showColorPicker: false,
@@ -118,7 +112,7 @@
         disableBrightness: false,
         disableColors: false,
         disableEffect: false,
-
+        effectInPreset: ""
       }
     },
     watch: {

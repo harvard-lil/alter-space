@@ -25,6 +25,7 @@
       <div class="lever-container col-centered">
         <light-levers :lightPresets="lightPresets"
                       :collapseLightOptions="showingSoundOptions"
+                      :effectOn="effectOn"
                       class="color-levers">
         </light-levers>
         <!--including space when not showing light options-->
@@ -64,6 +65,7 @@
         taskID: "",
         effect: "",
         customizing: false,
+        effectOn: "",
         translation: {
           'relax': 'ReLaX',
           'read': 'READ',
@@ -84,7 +86,6 @@
         EventBus.$emit('customizing', false);
       },
       resetActivity() {
-        //TODO: use this.getPresets(): and make sure the sounds work
         this.stopEffectTask(()=>{
           window.location.reload();
         });
@@ -120,15 +121,22 @@
             .then((res) => {
               self.soundPresets = res.data.sound;
               self.lightPresets = res.data.light;
+              self.effectOn = self.lightPresets.effect
+
             });
+
       }
     },
-    beforeMount() {
+     created() {
       this.getPresets();
     },
     beforeRouteLeave(to, from, next) {
       // disable chasing and breathing effects
       this.notCustomizing();
+      if (!(this.effect)) {
+        this.effect = "breathe";
+      }
+      console.log("beforeRouteLeave", this.effect, this.taskID);
       this.stopEffectTask(() => {
         next();
       })
