@@ -84,8 +84,9 @@
     },
     watch: {
       effectInPreset() {
+        let self = this;
         this.effectTimeout = setTimeout(()=>{
-          this.toggleEffect();
+          self.toggleEffect();
         }, 3000);
       }
     },
