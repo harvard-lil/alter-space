@@ -1,7 +1,7 @@
 presets = {
     "relax": {
         "colors": ["#1E18FF", "#80DCFF", "#02B3FF"],
-        "effect": "breathe",
+        "effect": "",
         "brightness": 100
     },
     "read": {
@@ -26,7 +26,7 @@ presets = {
     },
     "wyrd": {
         "colors": ["#7FFF00", "#FE004D", "#02b3ff"],
-        "effect": "chase",
+        "effect": "",
         "brightness": 100
     }
 }
