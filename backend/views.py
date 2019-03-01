@@ -156,9 +156,13 @@ def set_light():
     light_id = request.form.get('id')
     colors = json.loads(request.form.get('colors'))['color_data']
     dim_value = request.form.get('bright', 100)
-
+    first_call = request.form.get('firstcall', False)
+    duration = 1000 if first_call == 'true' else 2000
     try:
-        tasks.light_task.apply_async(kwargs={'light_id': light_id, 'colors': colors, 'dim_value': dim_value})
+        tasks.light_task.apply_async(kwargs={'light_id': light_id,
+                                             'colors': colors,
+                                             'dim_value': dim_value,
+                                             'duration': duration})
         throttle()
         return "ok"
     except Exception as e:

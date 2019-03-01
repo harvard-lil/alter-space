@@ -122,7 +122,6 @@
               self.soundPresets = res.data.sound;
               self.lightPresets = res.data.light;
               self.effectOn = self.lightPresets.effect
-
             });
 
       }
