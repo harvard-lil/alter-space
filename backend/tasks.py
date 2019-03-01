@@ -48,7 +48,7 @@ def dim_task(self, light_id, dim_value):
 
 def revoke_chain(last_result):
     logger.info('[CALLER] Revoking: %s' % last_result.task_id)
-    last_result.revoke(terminate=True, signal='SIGKILL')
+    last_result.revoke(terminate=True, signal='SIGTERM')
     if last_result.parent is not None:
         revoke_chain(last_result.parent)
 
