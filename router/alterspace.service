@@ -5,7 +5,7 @@ After=hostapd.service isc-dhcpd-server.service alterspace-celery.service
 # Wants=network-online.target
 
 [Service]
-ExecStart=/usr/bin/python3 -m flask run -p 5000
+ExecStart=/usr/bin/python3 -m flask run --host=0.0.0.0 -p 5000
 WorkingDirectory=/home/pi/alter-space/
 # Environment variables to set. Takes the form of:
 Environment=FLASK_APP=run.py

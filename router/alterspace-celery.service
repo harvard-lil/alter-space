@@ -4,7 +4,7 @@ After=hostapd.service isc-dhcpd-server.service
 
 [Service]
 
-ExecStart=/home/pi/.local/bin/celery -A backend.tasks worker --pidfile /var/run/alterspace/celery.pid
+ExecStart=/home/pi/.local/bin/celery -A backend.tasks worker
 WorkingDirectory=/home/pi/alter-space/
 # KillMode=process
 # Type=forking
