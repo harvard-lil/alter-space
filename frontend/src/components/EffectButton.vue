@@ -22,6 +22,7 @@
              stroke="0"></svgicon>
 
     <label v-if="effectStatus">stop</label>
+    <label v-else-if="$route.params.name === 'relax'">slow breath</label>
     <label v-else>{{effectType}}</label>
   </div>
 

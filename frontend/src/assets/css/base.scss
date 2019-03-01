@@ -26,7 +26,8 @@ body {
 }
 
 #app {
-  height: 100vh;
+  min-height: 100%;
+  background-color: $color-white;
 }
 
 #app.about {
@@ -90,6 +91,39 @@ ul {
 .home {
   @extend .container-preset;
   background: url("../img/home-background.png") no-repeat;
+  background-size: cover;
+  .welcome-text {
+    font-weight: 300;
+  }
+}
+
+.app-activity-read {
+  background: url("../img/read-background.png") repeat-y;
+  background-size: cover;
+}
+
+.app-activity-relax {
+  background: url("../img/relax-background.png") repeat-y;
+  background-size: cover;
+}
+
+.app-activity-create {
+  background: url("../img/create-background.png") repeat-y;
+  background-size: cover;
+}
+
+.app-activity-meditate {
+  background: url("../img/meditate-background.png") repeat-y;
+  background-size: cover;
+}
+
+.app-activity-wyrd {
+  background: url("../img/wyrd-background.png") repeat-y;
+  background-size: cover;
+}
+
+.app-activity-focus {
+  background: url("../img/focus-background.png") repeat-y;
   background-size: cover;
 }
 
@@ -177,6 +211,7 @@ input[type="range"] {
 }
 
 .sound-levers {
+  margin-bottom: 200px;
   .lever-title {
     text-align: right;
     right: 20px;
@@ -202,6 +237,7 @@ input[type="range"] {
 .cell-table {
   width: 100%;
   border: 15px solid $color-navy;
+  background-color: $color-white;
   td {
     padding: 30px 20px 0 20px;
     text-align: center;

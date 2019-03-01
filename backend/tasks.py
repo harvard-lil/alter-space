@@ -35,9 +35,9 @@ def breathe_task(self, light_id, breathe_type):
 
 
 @celery.task(bind=True)
-def light_task(self, light_id, colors, dim_value):
+def light_task(self, light_id, colors, dim_value, duration=3000):
     logger.info("light_task %s" % light_id)
-    lights.set_colors(light_id, colors, dim_value)
+    lights.set_colors(light_id, colors, dim_value, duration=duration)
 
 
 @celery.task(bind=True)

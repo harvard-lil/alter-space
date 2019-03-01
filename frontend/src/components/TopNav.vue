@@ -2,7 +2,7 @@
   <ul class="nav"
       :class="['activity-'+$route.params.name, {about: $route.name === 'about'}]">
     <li class="nav-item col-2">
-      <div class="button-label-container">
+      <div class="button-label-container" v-if="$route.name !== 'home'">
         <router-link to="/"
         class="nav-button-group">
           <svgicon icon="home"

@@ -112,7 +112,8 @@
         disableBrightness: false,
         disableColors: false,
         disableEffect: false,
-        effectInPreset: ""
+        effectInPreset: "",
+        firstCall: true,
       }
     },
     watch: {
@@ -162,11 +163,13 @@
         bodyFormData.set('colors', JSON.stringify(d));
         bodyFormData.set('id', this.light);
         bodyFormData.set('bright', this.brightness.toString());
+        bodyFormData.set('firstcall', this.firstCall);
         //disabling all buttons until results are backs
         this.disableEffect = true;
         this.disableColors = true;
         this.disableBrightness = true;
         let self = this;
+
         axios({
           method: "post",
           url: lightUrl,
@@ -175,6 +178,7 @@
           self.disableEffect = false;
           self.disableColors = false;
           self.disableBrightness = false;
+          self.firstCall = false;
         })
       },
       chooseNewColor(hexVal) {

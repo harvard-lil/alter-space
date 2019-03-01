@@ -159,7 +159,7 @@ def breathe(light_id, count=0, breathe_type=None):
             logger.error("Breathe: Caught exception %s" % err)
 
 
-def set_colors(light_id, colors, dim_value=100, count=0):
+def set_colors(light_id, colors, dim_value=100, count=0, duration=3000):
     logger.info("set colors called")
     strip = get_or_create_light(light_id)
     new_zones = []
@@ -170,7 +170,7 @@ def set_colors(light_id, colors, dim_value=100, count=0):
         h, s, v, k = RGBtoHSBK(rgb)
         new_zones.append((h, s, dim_level, k))
     try:
-        strip.set_zone_colors(new_zones, 3000, False)
+        strip.set_zone_colors(new_zones, duration, False)
     except WorkflowException as err:
         if count < retry_count:
             sleep(0.5 * (count + 1))
