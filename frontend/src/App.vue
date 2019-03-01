@@ -12,9 +12,9 @@
       <template v-if="$route.name === 'home'">
         <div class="row">
           <div class="col-8 header col-centered text-center">
-            <h5>
+            <h4 class="welcome-text">
               Welcome to
-            </h5>
+            </h4>
             <h3 class="crazy-font">
               ALTeRsPaCe
             </h3>
