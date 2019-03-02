@@ -1,9 +1,9 @@
 [Unit]
 # Start this systemd unit after we have set up our wireless access point (hostapd) and dhcpd server (isc-dhcpd-server)
-After=hostapd.service isc-dhcpd-server.service
+After=alterspace.service
 
 [Service]
-
+ExecStartPre=/bin/sleep 15
 ExecStart=/home/pi/.local/bin/celery -A backend.tasks worker
 WorkingDirectory=/home/pi/alter-space/
 # KillMode=process
