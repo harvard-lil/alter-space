@@ -89,7 +89,7 @@
   const lightUrl = process.env.VUE_APP_BACKEND_URL + "lights" + "/set";
 
   // steps between color 1 and color 2
-  const steps = 12;
+  const steps = 28;
 
   export default {
     name: "LightLevers",
