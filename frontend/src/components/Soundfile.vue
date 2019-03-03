@@ -12,7 +12,7 @@
            :disabled="selectedSound === false"
            min="1"
            max="100"
-           value="50"
+           value="40"
            autocomplete="off"
            v-model.lazy.number="volume"/>
     <!-- audio files are hidden from DOM / view -->
