@@ -425,9 +425,11 @@ button, .btn, .btn-default {
 .btn-reset {
   @extend .btn;
   position: absolute;
-  right: 30px;
-  color: $color-white;
-  background-color: $color-navy;
+  top: 200px;
+  right: 71px;
+  color: $color-navy;
+  background-color: $color-white;
+  font-weight: 400;
   &:hover, &:active, &:focus {
     background-color: $color-read;
   }
@@ -477,6 +479,7 @@ button, .btn, .btn-default {
 /* Activity settings */
 .activity-container {
   min-width: 100%;
+  margin-top: 140px;
 }
 
 .btn-activity {
