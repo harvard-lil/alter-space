@@ -40,11 +40,11 @@
             <label class="text-center">colors</label>
           </div>
         </div>
-        <effect-button
-                :disable="disableEffect"
-                :effectInPreset="effectOn">
-        </effect-button>
-        <div class="td col-6">
+        <!--<effect-button-->
+                <!--:disable="disableEffect"-->
+                <!--:effectInPreset="effectOn">-->
+        <!--</effect-button>-->
+        <div class="td col-8">
           <brightness-slider :disable="disableBrightness"></brightness-slider>
           <label>brightness</label>
         </div>
@@ -83,7 +83,7 @@
   import EventBus from '../event-bus';
 
   import BrightnessSlider from './BrightnessSlider';
-  import EffectButton from "./EffectButton";
+  // import EffectButton from "./EffectButton";
 
   const colorsUrl = process.env.VUE_APP_BACKEND_URL + "lights" + "/colors";
   const lightUrl = process.env.VUE_APP_BACKEND_URL + "lights" + "/set";
@@ -94,7 +94,7 @@
   export default {
     name: "LightLevers",
     components: {
-      EffectButton,
+      // EffectButton,
       BrightnessSlider
     },
     props: ["lightPresets", "collapseLightOptions", "effectOn"],
