@@ -12,7 +12,7 @@
            :disabled="selectedSound === false"
            min="1"
            max="100"
-           value="50"
+           value="40"
            autocomplete="off"
            v-model.lazy.number="volume"/>
     <!-- audio files are hidden from DOM / view -->
@@ -65,7 +65,11 @@
           //get old local volume here
           self.previousVolume = self.audioFile.volume * 100;
           //set volume proportionally to global volume
-          self.audioFile.volume = (newVol / oldVol) * self.audioFile.volume;
+          let newAudioVol = (newVol / oldVol) * self.audioFile.volume;
+          if (newAudioVol > 1) {
+            newAudioVol = 1
+          }
+          self.audioFile.volume = newAudioVol;
           this.volume = self.audioFile.volume * 100;
         }
       });
