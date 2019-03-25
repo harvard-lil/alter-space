@@ -1,4 +1,15 @@
-tested on python 3.5
+#Alterspace
+![Photo by Hannah Schoenbaum](photo.png)
+
+Alterspace is a new kind of reading room: a simple set of controls lets patrons decide on the color and behavior of lights and sounds in the space, adapting conditions for brainstorming, meditation, or quiet study. 
+
+More information about the project is available here: https://alterspace.github.io/
+
+This project is a collaboration between Harvard's [Library Innovation Lab](https://lil.law.harvard.edu) and [metaLAB](https://metalab.github.io).
+
+## Instructions
+This project was tested on python 3.5
+
 
 ### Install
 ```
