@@ -16,7 +16,7 @@ This project was tested on python 3.5
 $ pip install pyenv
 $ pyenv install 3.5.4 
 $ pyenv virtualenv 3.5.4 alterspace
-$ pyenv activate alterspaces
+$ pyenv activate alterspace
 ```
 
 ```
