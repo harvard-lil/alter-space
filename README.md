@@ -1,7 +1,9 @@
 #Alterspace
-![Photo by Hannah Schoenbaum](photo.png)
 
 Alterspace is a new kind of reading room: a simple set of controls lets patrons decide on the color and behavior of lights and sounds in the space, adapting conditions for brainstorming, meditation, or quiet study. 
+
+![Photo by Hannah Schoenbaum](photo.png)
+Photo by Hannah Schoenbaum
 
 More information about the project is available here: https://alterspace.github.io/
 
