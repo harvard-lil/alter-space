@@ -1,4 +1,4 @@
-#Alterspace
+# Alterspace
 
 Alterspace is a new kind of reading room: a simple set of controls lets patrons decide on the color and behavior of lights and sounds in the space, adapting conditions for brainstorming, meditation, or quiet study. 
 
