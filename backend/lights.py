@@ -1,7 +1,6 @@
 import os
 import shutil
 from time import sleep
-from random import randint
 import logging
 
 import pickle
@@ -10,6 +9,7 @@ from lifxlan import LifxLAN
 from lifxlan.errors import WorkflowException
 from lifxlan.utils import RGBtoHSBK
 
+from tests import fixtures
 from config import config
 
 logger = logging.getLogger()
@@ -24,11 +24,15 @@ retry_count = 5
 def setup_light_store():
     # Clear store before setting lights again
     logger.info("Setting up light store")
+    if not os.path.exists(light_store):
+        os.mkdir(light_store)
 
+
+def clear_light_store():
     if os.path.exists(light_store):
         logger.info("Removing and creating light store dir")
         shutil.rmtree(light_store)
-    os.mkdir(light_store)
+    setup_light_store()
 
 
 def turn_light_on(light_obj):
@@ -45,66 +49,85 @@ def store_lights(lights, lightdir=light_store):
     return lights
 
 
-def store_light(light_obj, lightdir=light_store):
-    light_identifier = light_obj.mac_addr.replace(":", "")
-    light_path = os.path.join(lightdir, light_identifier)
+def store_light(label, light_obj, lightdir=light_store):
+    light_path = os.path.join(lightdir, label)
 
     with open(light_path, "wb") as f:
         pickle.dump(light_obj, f)
     return light_obj
 
 
-def get_or_create_light(light_id):
-    if not light_id:
-        raise Exception("No light found", light_id)
-    # convert light id to actual hardware id
-    light_id = config.LIGHTS[light_id]
-    if ":" in light_id:
-        # id is a mac address
-        light_id = light_id.replace(":", "")
-
-    light_path = os.path.join(light_store, light_id)
-    if not os.path.exists(light_path):
-        logger.info("Creating light %s" % light_id)
-        light_obj = get_light(light_id)
-        # turn light on
-        store_light(light_obj)
-        turn_light_on(light_obj)
-        return light_obj
-    else:
+def get_stored_lights():
+    all_stored_lights = []
+    all_labels = os.listdir(light_store)
+    for label in all_labels:
+        light_path = os.path.join(light_store, label)
         with open(light_path, "rb") as f:
             light_obj = pickle.load(f)
+            all_stored_lights.append((label, light_obj.get_mac_addr()))
+    return all_stored_lights
+
+
+def get_or_create_light(label, mac_address):
+    if not label:
+        raise Exception("No light found", label)
+
+    light_path = os.path.join(light_store, label)
+    if os.path.exists(light_path):
+        with open(light_path, "rb") as f:
+            light_obj = pickle.load(f)
+    else:
+        logger.info("Creating light %s" % label)
+        light_obj = get_light(mac_address)
+        # turn light on
+        store_light(label, light_obj)
+
+    # if we're using real lights, really turn them on:
+    if not config.USE_LIGHT_FIXTURES:
         turn_light_on(light_obj)
-        return light_obj
+    return light_obj
 
 
-def get_light(light_id, count=0):
+def get_light(mac_address, count=0):
+    """
+    Takes in a mac address and returns a lifxlan lights object.
+    If `USE_LIGHT_FIXTURES` is on, it uses fixture lights defined in tests/fixtures.py
+    """
     all_lights = []
     getting_lights_count = 0
-    while not (len(all_lights) and getting_lights_count < retry_count):
-        logger.info("Getting all lights")
-        sleep(0.5 * getting_lights_count)
-        all_lights = lan.get_lights()
-        logger.info("All lights: %s" % all_lights)
-        getting_lights_count += 1
+    if config.USE_LIGHT_FIXTURES:
+        all_lights = fixtures.lifx_lights()
+        print(all_lights)
+    else:
+        while not (len(all_lights) and getting_lights_count < retry_count):
+            logger.info("Getting all lights")
+            all_lights = lan.get_lights()
+            logger.info("All lights: %s" % all_lights)
+            sleep(0.5 * getting_lights_count)
+            getting_lights_count += 1
 
-    mac_addr = ""
-    for key, part in enumerate(light_id):
-        if (key + 2) % 2 == 0 and key != 0:
-            mac_addr += ":"
-        mac_addr += part
+    # if mac address was entered without `:`, add them in
+    if ":" not in mac_address:
+        mac_addr = ""
+        for key, part in enumerate(mac_address):
+            if (key + 2) % 2 == 0 and key != 0:
+                mac_addr += ":"
+            mac_addr += part
+        mac_address = mac_addr
+
     for light in all_lights:
-        if mac_addr in light.device_characteristics_str(""):
-            logger.info("Light was found: %s" % mac_addr)
+        if mac_address in light.get_mac_addr():
+            logger.info("Light was found: %s" % mac_address)
             return light
+
+    # wifi connection is bad? light wasn't found, try again
     if count < retry_count:
-        # wifi connection is bad? light wasn't found, try again
         logger.info("Light was not found. Retrying.")
         sleep(0.5 * (count + 1))
-        get_light(light_id, count=count + 1)
+        get_light(mac_address, count=count + 1)
     else:
-        logger.error("No light found at id %s" % light_id)
-        raise Exception("No light found at id %s" % light_id)
+        logger.error("No light found at id %s" % mac_address)
+        raise Exception("No light found at id %s" % mac_address)
 
 
 def chase(light_id, count=0):
@@ -118,7 +141,7 @@ def chase(light_id, count=0):
     except WorkflowException as err:
         if count < retry_count:
             sleep(0.5 * (count + 1))
-            chase(light_id, count=count+1)
+            chase(light_id, count=count + 1)
         else:
             logger.error("Chase: Caught exception %s" % err)
 
@@ -154,7 +177,7 @@ def breathe(light_id, count=0, breathe_type=None):
     except WorkflowException as err:
         if count < retry_count:
             sleep(0.5 * (count + 1))
-            breathe(light_id, count=count+1)
+            breathe(light_id, count=count + 1)
         else:
             logger.error("Breathe: Caught exception %s" % err)
 
@@ -174,7 +197,7 @@ def set_colors(light_id, colors, dim_value=100, count=0, duration=3000):
     except WorkflowException as err:
         if count < retry_count:
             sleep(0.5 * (count + 1))
-            set_colors(light_id, colors, dim_value=dim_value, count=count+1)
+            set_colors(light_id, colors, dim_value=dim_value, count=count + 1)
         else:
             logger.error("set_colors: Caught exception %s" % err)
 
@@ -191,7 +214,7 @@ def dim(light_id, dim_level, count=0):
     except WorkflowException as err:
         if count < retry_count:
             sleep(0.5 * (count + 1))
-            dim(light_id, dim_level, count=count+1)
+            dim(light_id, dim_level, count=count + 1)
         else:
             logger.error("dim: Caught exception %s" % err)
 

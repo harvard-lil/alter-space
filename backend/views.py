@@ -6,12 +6,13 @@ import requests
 from flask import jsonify, Blueprint, request, render_template, make_response, url_for, send_file
 from config import config, light_presets, sound_presets
 
-from backend import tasks
+from backend import tasks, lights
 
 from helpers import get_sound_paths
 
 logger = logging.getLogger()
 
+light_store = os.path.join(config.DIR, 'backend/lightstore')
 backend_app = Blueprint('backend', __name__)
 tsk = Blueprint('backend.tasks', __name__)
 
@@ -151,6 +152,15 @@ def get_color_presets():
     return jsonify(colors)
 
 
+@backend_app.route("/lights", methods=["GET"])
+def get_lights():
+    """
+    Returns tuples [(light_label, mac_address)]
+    """
+    stored_lights = lights.get_stored_lights()
+    return json.dumps(stored_lights)
+
+
 @backend_app.route("/lights/set", methods=['POST'])
 def set_light():
     light_id = request.form.get('id')
@@ -167,6 +177,17 @@ def set_light():
         return "ok"
     except Exception as e:
         raise Exception(e, "Something went wrong!")
+
+
+@backend_app.route("/lights/create", methods=['POST'])
+def create_lights():
+    lights_to_create = json.loads(request.form.get("lights"))
+    lights.clear_light_store()
+    for light in lights_to_create:
+        light_label, light_mac_address = light
+        lights.get_or_create_light(light_label, light_mac_address)
+
+    return "ok"
 
 
 @backend_app.route("/lights/dim", methods=['POST'])
