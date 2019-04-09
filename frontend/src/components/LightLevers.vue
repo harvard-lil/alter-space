@@ -29,7 +29,6 @@
                     @click="showList(label)"
                     :class="{active: colorPresets[label] === colorPresets[currentLightLabel] && showingList && currentLightLabel === label}"
                     :style="{'backgroundColor': colorPresets[label]}">
-              {{ label }}
             </button>
             <ul class="gradient-example list-inline">
               <li class="gradient-pixel list-inline-item"
@@ -40,10 +39,11 @@
 
             <label class="text-center">colors</label>
           </div>
+          <!-- Light list end -->
         </div>
         <!--<effect-button-->
-                <!--:disable="disableEffect"-->
-                <!--:effectInPreset="effectOn">-->
+        <!--:disable="disableEffect"-->
+        <!--:effectInPreset="effectOn">-->
         <!--</effect-button>-->
         <div class="td col-8">
           <brightness-slider :disable="disableBrightness"></brightness-slider>
@@ -121,7 +121,13 @@
     },
     watch: {
       lightPresets() {
-        this.colorPresets = this.lightPresets.colors;
+        if (this.colorPresets.length === 0) {
+          this.colorPresets = this.lightPresets.colors;
+          for (let i = 0; i <= this.lightLabels.length; i++) {
+            this.currentLightLabel = this.lightLabels[i];
+            this.setLight();
+          }
+        }
         // this.createGradient();
       },
       collapseLightOptions() {

@@ -8,7 +8,7 @@
     <div class="col-12 alert-danger">{{error2}}</div>
     <br/>
 
-    <table class="col-12">
+    <table class="col-12 light-list">
       <tr v-for="val in maxLights" class="list-inline-item" v-bind:key="val">
         <td>
           <label>Label #{{val}}: </label><input/>
@@ -100,7 +100,8 @@
             url: storeLightsUrl,
             data: bodyFormData
           }).then(() => {
-            localStorage.setItem("lights", self.lights);
+            localStorage.clear();
+            localStorage.setItem("lights", JSON.stringify(self.lights));
             self.successMessage = "Success! " + self.lights.length + " light(s) created.";
           });
         }
