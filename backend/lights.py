@@ -43,12 +43,6 @@ def turn_light_on(light_obj):
     return light_obj.get_power()
 
 
-def store_lights(lights, lightdir=light_store):
-    for light in lights:
-        store_light(light, lightdir=lightdir)
-    return lights
-
-
 def store_light(label, light_obj, lightdir=light_store):
     light_path = os.path.join(lightdir, label)
 
