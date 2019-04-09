@@ -204,6 +204,10 @@ input[type="range"] {
 }
 
 /* tables: light levers, sound levers */
+.light-list {
+  z-index: 999;
+}
+
 .lever-title {
   color: $color-white;
   position: absolute;
