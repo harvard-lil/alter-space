@@ -163,14 +163,14 @@ def get_lights():
 
 @backend_app.route("/lights/set", methods=['POST'])
 def set_light():
-    light_id = request.form.get('id')
-    colors = json.loads(request.form.get('colors'))['color_data']
+    label = request.form.get('label')
+    color = request.form.get('color')
     dim_value = request.form.get('bright', 100)
     first_call = request.form.get('firstcall', False)
     duration = 1000 if first_call == 'true' else 2000
     try:
-        tasks.light_task.apply_async(kwargs={'light_id': light_id,
-                                             'colors': colors,
+        tasks.light_task.apply_async(kwargs={'label': label,
+                                             'color': color,
                                              'dim_value': dim_value,
                                              'duration': duration})
         throttle()

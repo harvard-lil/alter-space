@@ -62,7 +62,7 @@ def get_stored_lights():
     return all_stored_lights
 
 
-def get_or_create_light(label, mac_address):
+def get_or_create_light(label, mac_address=None):
     if not label:
         raise Exception("No light found", label)
 
@@ -70,15 +70,17 @@ def get_or_create_light(label, mac_address):
     if os.path.exists(light_path):
         with open(light_path, "rb") as f:
             light_obj = pickle.load(f)
+            light_obj.set_label(label)
     else:
         logger.info("Creating light %s" % label)
         light_obj = get_light(mac_address)
+        light_obj.set_label(label)
         # turn light on
         store_light(label, light_obj)
 
     # if we're using real lights, really turn them on:
-    if not config.USE_LIGHT_FIXTURES:
-        turn_light_on(light_obj)
+    # if not config.USE_LIGHT_FIXTURES:
+    #     turn_light_on(light_obj)
     return light_obj
 
 
@@ -174,6 +176,16 @@ def breathe(light_id, count=0, breathe_type=None):
             breathe(light_id, count=count + 1)
         else:
             logger.error("Breathe: Caught exception %s" % err)
+
+
+def set_color(label, color, dim_value=100, count=0, duration=3000):
+    logger.info("set_color called")
+    light = get_or_create_light(label)
+    dim_level = get_dim_value(dim_value)
+
+    rgb = hex2rgb(color)
+    h, s, v, k = RGBtoHSBK(rgb)
+    light.set_color([h, s, dim_level, k])
 
 
 def set_colors(light_id, colors, dim_value=100, count=0, duration=3000):

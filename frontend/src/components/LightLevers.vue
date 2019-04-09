@@ -17,18 +17,19 @@
          }]">
       <div class="tr">
         <div class="td col-4">
+          <!-- Light list start -->
           <div class="btn-group-color"
                role="group"
                aria-label="color button group">
 
             <button type="button"
                     class="btn-round btn-color"
-                    v-for="(color, idx) in colorPresets"
-                    v-bind:key="idx"
+                    v-for="label in lightLabels"
                     :disabled="disableColors"
-                    @click="showList(idx)"
-                    :class="{active: color === colorPresets[currentColorIdx] && showingList && currentColorIdx === idx}"
-                    :style="{'backgroundColor': color}">
+                    @click="showList(label)"
+                    :class="{active: colorPresets[label] === colorPresets[currentLightLabel] && showingList && currentLightLabel === label}"
+                    :style="{'backgroundColor': colorPresets[label]}">
+              {{ label }}
             </button>
             <ul class="gradient-example list-inline">
               <li class="gradient-pixel list-inline-item"
@@ -59,7 +60,7 @@
            aria-label="color button group">
         <svgicon icon="arrow-up"
                  class="arrow-up colors"
-                 :class="['color-'+currentColorIdx, $route.params.name]">
+                 :class="['color-'+currentLightLabel, $route.params.name]">
         </svgicon>
         <button type="button"
                 class="btn-round-small btn-color-option"
@@ -83,10 +84,10 @@
   import EventBus from '../event-bus';
 
   import BrightnessSlider from './BrightnessSlider';
-  // import EffectButton from "./EffectButton";
 
   const colorsUrl = process.env.VUE_APP_BACKEND_URL + "lights" + "/colors";
-  const lightUrl = process.env.VUE_APP_BACKEND_URL + "lights" + "/set";
+  const getLightsUrl = process.env.VUE_APP_BACKEND_URL + "lights";
+  const setLightUrl = process.env.VUE_APP_BACKEND_URL + "lights" + "/set";
 
   // steps between color 1 and color 2
   const steps = 28;
@@ -104,8 +105,10 @@
         colorPresets: [],
         colors: [],
         showingList: false,
-        currentColorIdx: "",
+        currentLightLabel: "",
         light: "",
+        lights: [],
+        lightLabels: [],
         colorGradient: [],
         brightness: 100,
         effectPlaying: false,
@@ -119,7 +122,7 @@
     watch: {
       lightPresets() {
         this.colorPresets = this.lightPresets.colors;
-        this.createGradient();
+        // this.createGradient();
       },
       collapseLightOptions() {
         if (this.collapseLightOptions) {
@@ -137,15 +140,16 @@
       }
     },
     methods: {
-      showList(idx) {
+      showList(label) {
         if (!(this.showingList)) {
           this.showingList = true;
-        } else if (this.currentColorIdx === idx || this.currentColorIdx === "") {
+        } else if (this.currentLightLabel === label || this.currentLightLabel === "") {
           this.showingList = !this.showingList;
         }
-        this.currentColorIdx = idx;
+        this.currentLightLabel = label;
         this.$parent.showingLightOptions = this.showingList;
       },
+
 
       createGradient() {
         let color0 = this.hex2rgb(this.colorPresets[0]);
@@ -156,6 +160,25 @@
         let colorGradient2 = this.interpolateColors(color1, color2, steps);
         this.colorGradient = colorGradient1.concat(colorGradient2);
         this.createAndSendStates();
+      },
+      setLight() {
+        let bodyFormData = new FormData();
+        // let d = {color_data: this.colorGradient};
+        bodyFormData.set('label', this.currentLightLabel);
+        bodyFormData.set('color', this.colorPresets[this.currentLightLabel]);
+        bodyFormData.set('bright', this.brightness.toString());
+        bodyFormData.set('firstcall', this.firstCall);
+
+        axios({
+          method: "post",
+          url: setLightUrl,
+          data: bodyFormData,
+        }).then(() => {
+          self.disableEffect = false;
+          self.disableColors = false;
+          self.disableBrightness = false;
+          self.firstCall = false;
+        })
       },
       createAndSendStates() {
         let bodyFormData = new FormData();
@@ -172,7 +195,7 @@
 
         axios({
           method: "post",
-          url: lightUrl,
+          url: setLightUrl,
           data: bodyFormData,
         }).then(() => {
           self.disableEffect = false;
@@ -182,11 +205,16 @@
         })
       },
       chooseNewColor(hexVal) {
-        this.colorPresets.splice([this.currentColorIdx], 1, hexVal);
-        this.createGradient();
+        this.colorPresets[this.currentLightLabel] = hexVal;
+        this.setLight()
+        // this.createGradient();
       },
-      setLight() {
-        this.light = localStorage.getItem('light');
+      getLSLights() {
+        this.lights = JSON.parse(localStorage.getItem('lights'));
+        // create an array of just labels for ease of use
+        for (let light of this.lights) {
+          this.lightLabels.push(light[0]);
+        }
       },
 
       // From https://codepen.io/njmcode/pen/axoyD?editors=0010
@@ -227,9 +255,13 @@
 
     },
     beforeMount() {
+      let self = this;
+      axios.get(getLightsUrl).then((res) => {
+        self.lights = res.data;
+      });
       /* get available colors */
       axios.get(colorsUrl).then((res) => {
-        this.colors = res.data;
+        self.colors = res.data;
       });
     },
     mounted() {
@@ -239,7 +271,7 @@
       });
     },
     created() {
-      this.setLight();
+      this.getLSLights();
     },
   }
 
