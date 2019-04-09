@@ -57,8 +57,8 @@
       }
     },
     mounted() {
-      this.light = localStorage.getItem("light");
-      if (!(this.light)) {
+      this.lights = localStorage.getItem("lights");
+      if (!(this.lights)) {
         this.$router.replace('/light');
       }
     }

@@ -621,6 +621,7 @@ button, .btn, .btn-default {
   background-color: $color-blue;
   color: $color-white;
   font-weight: $font-weight-bold;
+  padding: 30px;
   &:hover, &:focus, &:active {
     background-color: $color-read;
   }

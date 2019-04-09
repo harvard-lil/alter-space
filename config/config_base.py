@@ -1,5 +1,8 @@
 import os
 
+DEBUG = True
+USE_LIGHT_FIXTURES = False
+
 # logging levels: 10 = debug, 20 = info, 30 = warning, 40 = error
 LOG_LEVEL = 10
 LOG_FILENAME = "alterspace.log"
