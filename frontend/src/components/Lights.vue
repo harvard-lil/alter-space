@@ -2,8 +2,25 @@
   <div class="col-centered col-6">
     <h4> Choose lights</h4>
     <div class="description">
-      Enter a label like "Table Lamp" and a MAC address like "12:45:56:99:9a:bc"
+
+      <p>Enter a label like "Table Lamp" and a MAC address like "12:45:56:99:9a:bc"</p>
+      <p>Labels must be unique.</p>
+
     </div>
+    <div v-if="lightsFound.length > 0">
+      <h6>All discoverable lights:</h6>
+      <ul>
+        <li v-for="light in lightsFound">
+          <label><b>{{fixLabel(light[0])}}</b></label>
+          &nbsp;&nbsp;&nbsp;{{light[1]}}
+        </li>
+      </ul>
+    </div>
+
+    <div>
+
+    </div>
+
     <div class="col-12 alert-danger">{{error1}}</div>
     <div class="col-12 alert-danger">{{error2}}</div>
     <br/>

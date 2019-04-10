@@ -156,13 +156,36 @@ def get_color_presets():
 def get_lights():
     """
     Returns tuples [(light_label, mac_address)]
+    If no lights are stored, find lights using discovery in lifxlan
     """
     stored_lights = lights.get_stored_lights()
     return json.dumps(stored_lights)
 
 
+@backend_app.route("/lights/discover", methods=["GET"])
+def discover_lights():
+    discovered_lights = lights.discover_lights()
+    unstored_lights = [[l.get_label(), l.get_mac_addr()] for l in discovered_lights]
+    return json.dumps(unstored_lights)
+
+
+@backend_app.route("/lights/create", methods=['POST'])
+def create_lights():
+    lights_to_create = json.loads(request.form.get("lights"))
+    lights.clear_light_store()
+    try:
+        for idx,light in enumerate(lights_to_create):
+            light_label, light_mac_address = light
+            light_label = str(idx) + "_" + light_label
+            lights.get_or_create_light(light_label, light_mac_address.strip())
+        return "ok"
+    except Exception as e:
+        return make_response(jsonify(e.args), 400)
+
+
 @backend_app.route("/lights/set", methods=['POST'])
 def set_light():
+    """set colors to light"""
     label = request.form.get('label')
     color = request.form.get('color')
     dim_value = request.form.get('bright', 100)
@@ -177,17 +200,6 @@ def set_light():
         return "ok"
     except Exception as e:
         raise Exception(e, "Something went wrong!")
-
-
-@backend_app.route("/lights/create", methods=['POST'])
-def create_lights():
-    lights_to_create = json.loads(request.form.get("lights"))
-    lights.clear_light_store()
-    for light in lights_to_create:
-        light_label, light_mac_address = light
-        lights.get_or_create_light(light_label, light_mac_address)
-
-    return "ok"
 
 
 @backend_app.route("/lights/dim", methods=['POST'])

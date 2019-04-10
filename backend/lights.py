@@ -21,6 +21,16 @@ lan = LifxLAN()
 retry_count = 5
 
 
+def discover_lights():
+    lights = lan.get_lights()
+    count = 0
+    while count < retry_count and len(lights) == 0:
+        lights = lan.get_lights()
+        count += 1
+        sleep(0.5)
+    return lights
+
+
 def setup_light_store():
     # Clear store before setting lights again
     logger.info("Setting up light store")
@@ -97,7 +107,7 @@ def get_light(mac_address, count=0):
     else:
         while not (len(all_lights) and getting_lights_count < retry_count):
             logger.info("Getting all lights")
-            all_lights = lan.get_lights()
+            all_lights = discover_lights()
             logger.info("All lights: %s" % all_lights)
             sleep(0.5 * getting_lights_count)
             getting_lights_count += 1
