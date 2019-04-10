@@ -22,14 +22,17 @@
                role="group"
                aria-label="color button group">
 
-            <button type="button"
-                    class="btn-round btn-color"
-                    v-for="label in lightLabels"
-                    :disabled="disableColors"
-                    @click="showList(label)"
-                    :class="{active: colorPresets[getIdxFromLightLabel(label)] === colorPresets[getIdxFromLightLabel(currentLightLabel)] && showingList && currentLightLabel === label}"
-                    :style="{'backgroundColor': colorPresets[getIdxFromLightLabel(label)]}">
-            </button>
+            <svgicon icon="lightbulb"
+                     class="btn-round btn-color"
+                     v-for="label in lightLabels"
+                     width="50"
+                     height="50"
+                     :disabled="disableColors"
+                     stroke="0"
+                     @click="showList(label)"
+                     :class="{active: colorPresets[getIdxFromLightLabel(label)] === colorPresets[getIdxFromLightLabel(currentLightLabel)] && showingList && currentLightLabel === label}"
+                     :style="{'fill': colorPresets[getIdxFromLightLabel(label)]}">
+            </svgicon>
             <ul class="gradient-example list-inline">
               <li class="gradient-pixel list-inline-item"
                   v-for="(pixel, idx) in colorGradient"
@@ -211,7 +214,9 @@
       },
       chooseNewColor(hexVal) {
         let idx = this.getIdxFromLightLabel(this.currentLightLabel);
-        this.colorPresets[idx] = hexVal;
+        // using splice instead of something more simple because of vuejs's array change detection:
+        // https://vuejs.org/v2/guide/list.html#Array-Change-Detection
+        this.colorPresets.splice(idx, 1, hexVal);
         this.setLight()
         // this.createGradient();
       },
