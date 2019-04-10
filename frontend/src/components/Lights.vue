@@ -25,26 +25,46 @@
     <div class="col-12 alert-danger">{{error2}}</div>
     <br/>
 
-    <table class="col-12 light-list">
+    <div>
+      <p>Feel free to change the labels. They will update on submit.</p>
+    </div>
+
+    <table class="table col-12 light-list">
       <tr v-for="val in maxLights" class="list-inline-item" v-bind:key="val">
         <td>
           <label>Label #{{val}}: </label><input/>
         </td>
         <td>
-          <label>Mac address: </label><input/>
+          <label>MAC: </label><input/>
+        </td>
+        <td>
+          <svgicon icon="lightbulb"
+                   v-if="$route.params.name !== 'wyrd'"
+                   width="30"
+                   height="30"
+                   :original="true"
+                   class="btn-round btn-breathe"
+                   stroke="0">
+          </svgicon>
         </td>
       </tr>
     </table>
-    <input type="submit" @click="setLights()" value="Submit">
-    <div class="col-12 alert-success">{{successMessage}}</div>
+    <div class="col-12 alert-success" v-if="successMessage">{{successMessage}}<br/><br/></div>
+    <br/>
+    <button type="submit"
+            class="btn-primary" @click="setLights()" :disabled="disabled">Update
+    </button>
   </div>
+
 </template>
 
 <script>
   import axios from "axios";
+  import './icons/lightbulb';
 
   const storeLightsUrl = process.env.VUE_APP_BACKEND_URL + "lights/create";
   const getLightsUrl = process.env.VUE_APP_BACKEND_URL + "lights";
+  const discoverLightsUrl = process.env.VUE_APP_BACKEND_URL + "lights/discover";
   const maxLights = process.env.VUE_APP_MAX_LIGHTS;
   export default {
     name: "Lights",
@@ -55,23 +75,34 @@
         error1: "",
         error2: "",
         successMessage: "",
+        disabled: false,
+        lightsFound: [],
       }
     },
     methods: {
-
+      discoverLights() {
+        let self = this;
+        axios.get(discoverLightsUrl)
+            .then((res) => {
+              self.lightsFound = res.data;
+            })
+      },
       getLights() {
         let self = this;
-        let inputs = this.$el.querySelectorAll("td");
+        let inputs = this.$el.querySelectorAll("input");
         let localStorageLights = [];
         axios.get(getLightsUrl)
             .then((res) => {
+              let label = "";
               let lightNum = 0;
               for (let i = 0; i < res.data.length * 2; i++) {
                 if (i % 2 === 0) {
                   lightNum = i / 2;
-                  inputs[i].getElementsByTagName('input')[0].value = res.data[lightNum][0];
+                  label = self.fixLabel(res.data[lightNum][0]);
+                  console.log("getting label:", label);
+                  inputs[i].value = label;
                 } else {
-                  inputs[i].getElementsByTagName('input')[0].value = res.data[lightNum][1];
+                  inputs[i].value = res.data[lightNum][1];
                   localStorageLights.push([res.data[lightNum][0], res.data[lightNum][1]])
                 }
               }
@@ -80,28 +111,26 @@
 
       },
       setLights() {
-        let allLights = this.$el.querySelectorAll("td");
+        let allLights = this.$el.querySelectorAll("input");
         let key = "";
         let val = "";
         let light = [];
         this.error1 = "";
         this.error2 = "";
+        this.disabled = true;
         for (let i = 0; i < allLights.length; i++) {
           if (i % 2 === 0) {
             light = [];
-            key = allLights[i].getElementsByTagName('input')[0].value;
+            key = allLights[i].value;
             light.push(key)
           } else {
-            val = allLights[i].getElementsByTagName('input')[0].value;
+            val = allLights[i].value;
             if (val.length && key.length) {
               light.push(val);
               this.lights.push(light);
             } else if (val.length && !(key.length)) {
               this.error1 = "All lights need a label";
-              return
-            }
-            if (!(val.length) && key.length) {
-              this.error2 = "Please enter the MAC address for each light."
+              this.disabled = false;
               return
             }
           }
@@ -118,15 +147,27 @@
             data: bodyFormData
           }).then(() => {
             localStorage.clear();
+            console.log("getting lights:", self.lights);
             localStorage.setItem("lights", JSON.stringify(self.lights));
             self.successMessage = "Success! " + self.lights.length + " light(s) created.";
+            this.disabled = false;
+          }).catch((res) => {
+            this.error1 = res;
+            this.disabled = false;
           });
         }
       },
+      fixLabel(label) {
+        let parts = label.split("_");
+        parts.splice(0, 1);
+        return parts.join("_");
+
+      }
     },
 
     mounted() {
       this.getLights();
+      this.discoverLights();
     }
   }
 </script>

@@ -27,8 +27,8 @@
                     v-for="label in lightLabels"
                     :disabled="disableColors"
                     @click="showList(label)"
-                    :class="{active: colorPresets[label] === colorPresets[currentLightLabel] && showingList && currentLightLabel === label}"
-                    :style="{'backgroundColor': colorPresets[label]}">
+                    :class="{active: colorPresets[getIdxFromLightLabel(label)] === colorPresets[getIdxFromLightLabel(currentLightLabel)] && showingList && currentLightLabel === label}"
+                    :style="{'backgroundColor': colorPresets[getIdxFromLightLabel(label)]}">
             </button>
             <ul class="gradient-example list-inline">
               <li class="gradient-pixel list-inline-item"
@@ -155,8 +155,6 @@
         this.currentLightLabel = label;
         this.$parent.showingLightOptions = this.showingList;
       },
-
-
       createGradient() {
         let color0 = this.hex2rgb(this.colorPresets[0]);
         let color1 = this.hex2rgb(this.colorPresets[1]);
@@ -171,7 +169,8 @@
         let bodyFormData = new FormData();
         // let d = {color_data: this.colorGradient};
         bodyFormData.set('label', this.currentLightLabel);
-        bodyFormData.set('color', this.colorPresets[this.currentLightLabel]);
+        let idx = this.getIdxFromLightLabel(this.currentLightLabel);
+        bodyFormData.set('color', this.colorPresets[idx]);
         bodyFormData.set('bright', this.brightness.toString());
         bodyFormData.set('firstcall', this.firstCall);
 
@@ -211,7 +210,8 @@
         })
       },
       chooseNewColor(hexVal) {
-        this.colorPresets[this.currentLightLabel] = hexVal;
+        let idx = this.getIdxFromLightLabel(this.currentLightLabel);
+        this.colorPresets[idx] = hexVal;
         this.setLight()
         // this.createGradient();
       },
@@ -259,6 +259,12 @@
         return interpolatedColorArray;
       },
 
+      getIdxFromLightLabel(lightLabel) {
+        if (!(lightLabel)) {
+          return 0
+        }
+        return Number(lightLabel.split("_")[0])
+      },
     },
     beforeMount() {
       let self = this;
