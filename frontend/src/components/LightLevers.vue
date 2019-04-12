@@ -233,7 +233,8 @@
         // create an array of just labels for ease of use
         //TODO: Figure out if this is dangerous. Are lights *always* going to be ordered this way?
         for (let i=0; i<this.lights.length; i++) {
-          this.lightLabels.push(i.toString() + "_" + this.lights[i][0]);
+          // this.lightLabels.push(i.toString() + "_" + this.lights[i][0]);
+          this.lightLabels.push(this.lights[i][0]);
         }
       },
 
@@ -280,7 +281,7 @@
         return Number(lightLabel.split("_")[0])
       },
       getLightbulbIcon(label) {
-        if (label.indexOf("(Z)")) {
+        if (label.indexOf("(Z)") > -1) {
           return "lightgradient";
         } else {
           return "lightbulb";
