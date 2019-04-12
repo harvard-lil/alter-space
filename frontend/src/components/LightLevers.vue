@@ -21,35 +21,40 @@
           <div class="btn-group-color"
                role="group"
                aria-label="color button group">
+            <ul class="light-group list-inline">
+              <li class="list-inline-item"  v-for="label in lightLabels">
+                <svgicon :icon="getLightbulbIcon(label)"
+                         class="btn-round btn-color"
+                         v-bind:key="label"
+                         width="50"
+                         height="50"
+                         :disabled="disableColors"
+                         stroke="0"
+                         @click="showList(label)"
+                         :class="{active: colorPresets[getIdxFromLightLabel(label)] === colorPresets[getIdxFromLightLabel(currentLightLabel)] && showingList && currentLightLabel === label}"
+                         :style="{'fill': colorPresets[getIdxFromLightLabel(label)]}">
+                </svgicon>
 
-            <svgicon icon="lightbulb"
-                     class="btn-round btn-color"
-                     v-for="label in lightLabels"
-                     width="50"
-                     height="50"
-                     :disabled="disableColors"
-                     stroke="0"
-                     @click="showList(label)"
-                     :class="{active: colorPresets[getIdxFromLightLabel(label)] === colorPresets[getIdxFromLightLabel(currentLightLabel)] && showingList && currentLightLabel === label}"
-                     :style="{'fill': colorPresets[getIdxFromLightLabel(label)]}">
-            </svgicon>
-            <ul class="gradient-example list-inline">
+                <label class="switch">
+                  <input type="checkbox" @click="togglePower(label)" checked>
+                  <span class="slider round"></span>
+                </label>
+              </li>
+            </ul>
+            <!--<ul class="gradient-example list-inline">
               <li class="gradient-pixel list-inline-item"
                   v-for="(pixel, idx) in colorGradient"
                   v-bind:key="idx"
                   :style="{'backgroundColor': pixel}"></li>
-            </ul>
+            </ul>-->
 
-            <label class="text-center">colors</label>
+            <label class="text-center">colors </label>
           </div>
           <!-- Light list end -->
         </div>
-        <!--<effect-button-->
-        <!--:disable="disableEffect"-->
-        <!--:effectInPreset="effectOn">-->
-        <!--</effect-button>-->
         <div class="td col-8">
-          <brightness-slider :disable="disableBrightness"></brightness-slider>
+          <brightness-slider :disable="disableBrightness">
+          </brightness-slider>
           <label>brightness</label>
         </div>
       </div>
@@ -63,8 +68,9 @@
            aria-label="color button group">
         <svgicon icon="arrow-up"
                  class="arrow-up colors"
-                 :class="['color-'+currentLightLabel, $route.params.name]">
+                 :class="['color-'+getIdxFromLightLabel(currentLightLabel), $route.params.name]">
         </svgicon>
+
         <button type="button"
                 class="btn-round-small btn-color-option"
                 v-for="(hexVal, idx) in colors"
@@ -83,7 +89,8 @@
   import './icons/breathe';
   import './icons/triangle-light';
   import './icons/arrow-up';
-
+  import './icons/lightbulb';
+  import './icons/lightgradient';
   import EventBus from '../event-bus';
 
   import BrightnessSlider from './BrightnessSlider';
@@ -120,6 +127,7 @@
         disableEffect: false,
         effectInPreset: "",
         firstCall: true,
+        power: true,
       }
     },
     watch: {
@@ -223,8 +231,9 @@
       getLSLights() {
         this.lights = JSON.parse(localStorage.getItem('lights'));
         // create an array of just labels for ease of use
-        for (let light of this.lights) {
-          this.lightLabels.push(light[0]);
+        //TODO: Figure out if this is dangerous. Are lights *always* going to be ordered this way?
+        for (let i=0; i<this.lights.length; i++) {
+          this.lightLabels.push(i.toString() + "_" + this.lights[i][0]);
         }
       },
 
@@ -269,6 +278,35 @@
           return 0
         }
         return Number(lightLabel.split("_")[0])
+      },
+      getLightbulbIcon(label) {
+        if (label.indexOf("(Z)")) {
+          return "lightgradient";
+        } else {
+          return "lightbulb";
+        }
+      },
+      togglePower(label) {
+
+        let powerUrl = getLightsUrl + "/power";
+        let bodyFormData = new FormData();
+        bodyFormData.set('label', this.currentLightLabel);
+        //disabling all buttons until results are backs
+        this.disableEffect = true;
+        this.disableColors = true;
+        this.disableBrightness = true;
+        let self = this;
+
+        axios({
+          method: "post",
+          url: powerUrl,
+          data: bodyFormData,
+        }).then((res) => {
+          self.disableEffect = false;
+          self.disableColors = false;
+          self.disableBrightness = false;
+          self.power = !self.power
+        })
       },
     },
     beforeMount() {

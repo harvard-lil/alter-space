@@ -204,11 +204,23 @@ def set_light():
 
 @backend_app.route("/lights/dim", methods=['POST'])
 def set_dim():
-    light_id = request.form.get('id')
+    label = request.form.get('label', None)
     dim_level = request.form.get('bright', 100)
     try:
-        tasks.dim_task.apply_async(kwargs={'light_id': light_id, 'dim_value': dim_level})
+        tasks.dim_task.apply_async(kwargs={'label': label, 'dim_value': dim_level})
         throttle()
+
         return "ok"
     except Exception as e:
         raise Exception(e, "Something went wrong!")
+
+
+@backend_app.route("/lights/power", methods=["POST"])
+def toggle_power():
+    label = request.form.get("label", None)
+    try:
+        tasks.toggle_power_task.apply_async(kwargs={"label":label})
+        throttle()
+        return "ok"
+    except Exception as e:
+        raise Exception(e.args, "Something went wrong!")

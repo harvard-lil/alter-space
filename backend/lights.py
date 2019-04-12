@@ -45,11 +45,19 @@ def clear_light_store():
     setup_light_store()
 
 
-def turn_light_on(light_obj):
+def get_power(label):
+    light_obj = get_or_create_light(label)
+    return light_obj.get_power()
+
+
+def toggle_power(label):
+    light_obj = get_or_create_light(label)
     power = light_obj.get_power()
     logger.info("turning light on")
     if not power:
         light_obj.set_power(True)
+    else:
+        light_obj.set_power(False)
     return light_obj.get_power()
 
 
@@ -75,7 +83,7 @@ def get_stored_lights():
 def get_or_create_light(label, mac_address=None):
     if not label:
         raise Exception("No light found", label)
-
+    print("getting light with label", label)
     light_path = os.path.join(light_store, label)
     if os.path.exists(light_path):
         with open(light_path, "rb") as f:
@@ -188,14 +196,16 @@ def breathe(light_id, count=0, breathe_type=None):
             logger.error("Breathe: Caught exception %s" % err)
 
 
-def set_color(label, color, dim_value=100, count=0, duration=3000):
+def set_color(label, color=None, dim_value=100, count=0, duration=3000):
     logger.info("set_color called")
     light = get_or_create_light(label)
     dim_level = get_dim_value(dim_value)
-
-    rgb = hex2rgb(color)
-    h, s, v, k = RGBtoHSBK(rgb)
-    light.set_color([h, s, dim_level, k])
+    if not color:
+        [h, s, v, k] = light.get_color()
+    else:
+        rgb = hex2rgb(color)
+        h, s, v, k = RGBtoHSBK(rgb)
+    light.set_color([h, s, dim_level, k], duration)
 
 
 def set_colors(light_id, colors, dim_value=100, count=0, duration=3000):
@@ -218,19 +228,27 @@ def set_colors(light_id, colors, dim_value=100, count=0, duration=3000):
             logger.error("set_colors: Caught exception %s" % err)
 
 
-def dim(light_id, dim_level, count=0):
+def dim(label, dim_value, count=0):
+    """
+    Set dim_value for light label
+    If label is missing, set dim_value for all lights
+    """
     try:
-        strip = get_or_create_light(light_id)
-        all_zones = strip.get_color_zones()
-        dim_zones = []
-        dim_level = get_dim_value(dim_level)
-        for [h, s, v, k] in all_zones:
-            dim_zones.append((h, s, dim_level, k))
-        strip.set_zone_colors(dim_zones, 3000, False)
+        if not label:
+            lights = get_stored_lights()
+            for (label, mac_addr) in lights:
+                set_color(label, color=None, dim_value=dim_value)
+        else:
+            strip = get_or_create_light(label)
+            all_zones = strip.get_color_zones()
+            dim_zones = []
+            for [h, s, v, k] in all_zones:
+                dim_zones.append((h, s, dim_value, k))
+            strip.set_zone_colors(dim_zones, 3000, False)
     except WorkflowException as err:
         if count < retry_count:
             sleep(0.5 * (count + 1))
-            dim(light_id, dim_level, count=count + 1)
+            dim(label, dim_value, count=count + 1)
         else:
             logger.error("dim: Caught exception %s" % err)
 

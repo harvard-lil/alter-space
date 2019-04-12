@@ -41,9 +41,15 @@ def light_task(self, label, color, dim_value, duration=3000):
 
 
 @celery.task(bind=True)
-def dim_task(self, light_id, dim_value):
-    logger.info("dim_task %s dim_value: %s" % (light_id, dim_value))
-    lights.dim(light_id, dim_value)
+def dim_task(self, label, dim_value):
+    logger.info("dim_task %s dim_value: %s" % (label, dim_value))
+    lights.dim(label, dim_value)
+
+
+@celery.task(bind=True)
+def toggle_power_task(self, label):
+    logger.info("dim_task %s" % label)
+    lights.toggle_power(label)
 
 
 def revoke_chain(last_result):

@@ -17,9 +17,6 @@
       </ul>
     </div>
 
-    <div>
-
-    </div>
 
     <div class="col-12 alert-danger">{{error1}}</div>
     <div class="col-12 alert-danger">{{error2}}</div>
@@ -66,6 +63,7 @@
   const getLightsUrl = process.env.VUE_APP_BACKEND_URL + "lights";
   const discoverLightsUrl = process.env.VUE_APP_BACKEND_URL + "lights/discover";
   const maxLights = process.env.VUE_APP_MAX_LIGHTS;
+
   export default {
     name: "Lights",
     data() {

@@ -59,7 +59,7 @@
     mounted() {
       this.lights = localStorage.getItem("lights");
       if (!(this.lights)) {
-        this.$router.replace('/light');
+        this.$router.replace('/lights');
       }
     }
   }
