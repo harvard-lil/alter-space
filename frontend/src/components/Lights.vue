@@ -116,11 +116,13 @@
         this.error1 = "";
         this.error2 = "";
         this.disabled = true;
+        let count = 0;
         for (let i = 0; i < allLights.length; i++) {
           if (i % 2 === 0) {
             light = [];
-            key = allLights[i].value;
+            key = count.toString() + "_" + allLights[i].value;
             light.push(key)
+            count += 1;
           } else {
             val = allLights[i].value;
             if (val.length && key.length) {

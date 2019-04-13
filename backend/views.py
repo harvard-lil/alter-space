@@ -174,9 +174,8 @@ def create_lights():
     lights_to_create = json.loads(request.form.get("lights"))
     lights.clear_light_store()
     try:
-        for idx,light in enumerate(lights_to_create):
+        for light in lights_to_create:
             light_label, light_mac_address = light
-            light_label = str(idx) + "_" + light_label
             lights.get_or_create_light(light_label, light_mac_address.strip())
         return "ok"
     except Exception as e:
@@ -187,6 +186,8 @@ def create_lights():
 def set_light():
     """set colors to light"""
     label = request.form.get('label')
+    if not label:
+        return "ok"
     color = request.form.get('color')
     dim_value = request.form.get('bright', 100)
     first_call = request.form.get('firstcall', False)

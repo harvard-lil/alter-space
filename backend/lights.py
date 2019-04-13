@@ -5,7 +5,7 @@ import logging
 
 import pickle
 
-from lifxlan import LifxLAN
+from lifxlan import LifxLAN, multizonelight
 from lifxlan.errors import WorkflowException
 from lifxlan.utils import RGBtoHSBK
 
@@ -92,6 +92,11 @@ def get_or_create_light(label, mac_address=None):
     else:
         logger.info("Creating light %s" % label)
         light_obj = get_light(mac_address)
+        # if light is type MultiZoneLight, add (Z) in label
+        if type(light_obj) == multizonelight.MultiZoneLight:
+            label_parts = label.split("_")
+            label_parts[0] = label_parts[0] + "_" + "(Z)"
+            label = "_".join(label_parts)
         light_obj.set_label(label)
         # turn light on
         store_light(label, light_obj)
@@ -121,16 +126,15 @@ def get_light(mac_address, count=0):
             getting_lights_count += 1
 
     # if mac address was entered without `:`, add them in
-    if ":" not in mac_address:
+    if mac_address and ":" not in mac_address:
         mac_addr = ""
         for key, part in enumerate(mac_address):
             if (key + 2) % 2 == 0 and key != 0:
                 mac_addr += ":"
             mac_addr += part
         mac_address = mac_addr
-
     for light in all_lights:
-        if mac_address in light.get_mac_addr():
+        if mac_address == light.get_mac_addr():
             logger.info("Light was found: %s" % mac_address)
             return light
 

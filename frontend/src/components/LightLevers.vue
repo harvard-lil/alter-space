@@ -178,7 +178,11 @@
       },
       setLight() {
         let bodyFormData = new FormData();
-        // let d = {color_data: this.colorGradient};
+        if (!(this.currentLightLabel)) {
+          console.log("no light defined, returning");
+          return
+        }
+
         bodyFormData.set('label', this.currentLightLabel);
         let idx = this.getIdxFromLightLabel(this.currentLightLabel);
         bodyFormData.set('color', this.colorPresets[idx]);
@@ -230,9 +234,10 @@
       },
       getLSLights() {
         this.lights = JSON.parse(localStorage.getItem('lights'));
+        console.log('getting lights:::::', this.lights)
         // create an array of just labels for ease of use
         //TODO: Figure out if this is dangerous. Are lights *always* going to be ordered this way?
-        for (let i=0; i<this.lights.length; i++) {
+        for (let i = 0; i < this.lights.length; i++) {
           // this.lightLabels.push(i.toString() + "_" + this.lights[i][0]);
           this.lightLabels.push(this.lights[i][0]);
         }
@@ -289,6 +294,7 @@
       },
       togglePower(label) {
 
+        this.currentLightLabel = label;
         let powerUrl = getLightsUrl + "/power";
         let bodyFormData = new FormData();
         bodyFormData.set('label', this.currentLightLabel);
