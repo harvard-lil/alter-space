@@ -18,12 +18,12 @@ export default new Router({
       component: Sounds
     },
     {
-      path: '/light',
+      path: '/lights',
       name: 'LightGet',
       component: Lights
     },
     {
-      path: '/light/:id',
+      path: '/lights/:id',
       name: 'LightSet',
       component: Lights
     },

@@ -20,7 +20,7 @@
   height: 50px;
   width: 50px;
   &.active {
-    border: 1px solid $color-navy;
+    background-color: $color-black;
   }
 }
 

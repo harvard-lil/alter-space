@@ -17,10 +17,10 @@
   const dimUrl = process.env.VUE_APP_BACKEND_URL + "lights" + "/dim"
   export default {
     name: "brightness-slider",
-    props: ["disable"],
+    props: ["disable", "light"],
     data() {
       return {
-        bright: 100
+        bright: 50
       }
     },
     watch: {
@@ -30,8 +30,11 @@
     },
     methods: {
       updateBrightness() {
+
         let bodyFormData = new FormData();
-        bodyFormData.set('id', this.$parent.light);
+        if (this.light) {
+          bodyFormData.set('label', this.light);
+        }
         bodyFormData.set('bright', this.bright.toString());
         EventBus.$emit('update-brightness', this.bright);
         this.$parent.disableColors = true;
@@ -53,7 +56,7 @@
       EventBus.$on('reset-brightness', function() {
         self.updateBrightness();
       })
-    }
+    },
 
   }
 </script>

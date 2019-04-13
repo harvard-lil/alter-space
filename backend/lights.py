@@ -5,7 +5,7 @@ import logging
 
 import pickle
 
-from lifxlan import LifxLAN
+from lifxlan import LifxLAN, multizonelight
 from lifxlan.errors import WorkflowException
 from lifxlan.utils import RGBtoHSBK
 
@@ -19,6 +19,16 @@ light_store = os.path.join(config.DIR, 'backend/lightstore')
 lan = LifxLAN()
 
 retry_count = 5
+
+
+def discover_lights():
+    lights = lan.get_lights()
+    count = 0
+    while count < retry_count and len(lights) == 0:
+        lights = lan.get_lights()
+        count += 1
+        sleep(0.5)
+    return lights
 
 
 def setup_light_store():
@@ -35,11 +45,19 @@ def clear_light_store():
     setup_light_store()
 
 
-def turn_light_on(light_obj):
+def get_power(label):
+    light_obj = get_or_create_light(label)
+    return light_obj.get_power()
+
+
+def toggle_power(label):
+    light_obj = get_or_create_light(label)
     power = light_obj.get_power()
     logger.info("turning light on")
     if not power:
         light_obj.set_power(True)
+    else:
+        light_obj.set_power(False)
     return light_obj.get_power()
 
 
@@ -62,23 +80,30 @@ def get_stored_lights():
     return all_stored_lights
 
 
-def get_or_create_light(label, mac_address):
+def get_or_create_light(label, mac_address=None):
     if not label:
         raise Exception("No light found", label)
-
+    print("getting light with label", label)
     light_path = os.path.join(light_store, label)
     if os.path.exists(light_path):
         with open(light_path, "rb") as f:
             light_obj = pickle.load(f)
+            light_obj.set_label(label)
     else:
         logger.info("Creating light %s" % label)
         light_obj = get_light(mac_address)
+        # if light is type MultiZoneLight, add (Z) in label
+        if type(light_obj) == multizonelight.MultiZoneLight:
+            label_parts = label.split("_")
+            label_parts[0] = label_parts[0] + "_" + "(Z)"
+            label = "_".join(label_parts)
+        light_obj.set_label(label)
         # turn light on
         store_light(label, light_obj)
 
     # if we're using real lights, really turn them on:
-    if not config.USE_LIGHT_FIXTURES:
-        turn_light_on(light_obj)
+    # if not config.USE_LIGHT_FIXTURES:
+    #     turn_light_on(light_obj)
     return light_obj
 
 
@@ -95,22 +120,21 @@ def get_light(mac_address, count=0):
     else:
         while not (len(all_lights) and getting_lights_count < retry_count):
             logger.info("Getting all lights")
-            all_lights = lan.get_lights()
+            all_lights = discover_lights()
             logger.info("All lights: %s" % all_lights)
             sleep(0.5 * getting_lights_count)
             getting_lights_count += 1
 
     # if mac address was entered without `:`, add them in
-    if ":" not in mac_address:
+    if mac_address and ":" not in mac_address:
         mac_addr = ""
         for key, part in enumerate(mac_address):
             if (key + 2) % 2 == 0 and key != 0:
                 mac_addr += ":"
             mac_addr += part
         mac_address = mac_addr
-
     for light in all_lights:
-        if mac_address in light.get_mac_addr():
+        if mac_address == light.get_mac_addr():
             logger.info("Light was found: %s" % mac_address)
             return light
 
@@ -176,6 +200,18 @@ def breathe(light_id, count=0, breathe_type=None):
             logger.error("Breathe: Caught exception %s" % err)
 
 
+def set_color(label, color=None, dim_value=100, count=0, duration=3000):
+    logger.info("set_color called")
+    light = get_or_create_light(label)
+    dim_level = get_dim_value(dim_value)
+    if not color:
+        [h, s, v, k] = light.get_color()
+    else:
+        rgb = hex2rgb(color)
+        h, s, v, k = RGBtoHSBK(rgb)
+    light.set_color([h, s, dim_level, k], duration)
+
+
 def set_colors(light_id, colors, dim_value=100, count=0, duration=3000):
     logger.info("set colors called")
     strip = get_or_create_light(light_id)
@@ -196,19 +232,27 @@ def set_colors(light_id, colors, dim_value=100, count=0, duration=3000):
             logger.error("set_colors: Caught exception %s" % err)
 
 
-def dim(light_id, dim_level, count=0):
+def dim(label, dim_value, count=0):
+    """
+    Set dim_value for light label
+    If label is missing, set dim_value for all lights
+    """
     try:
-        strip = get_or_create_light(light_id)
-        all_zones = strip.get_color_zones()
-        dim_zones = []
-        dim_level = get_dim_value(dim_level)
-        for [h, s, v, k] in all_zones:
-            dim_zones.append((h, s, dim_level, k))
-        strip.set_zone_colors(dim_zones, 3000, False)
+        if not label:
+            lights = get_stored_lights()
+            for (label, mac_addr) in lights:
+                set_color(label, color=None, dim_value=dim_value)
+        else:
+            strip = get_or_create_light(label)
+            all_zones = strip.get_color_zones()
+            dim_zones = []
+            for [h, s, v, k] in all_zones:
+                dim_zones.append((h, s, dim_value, k))
+            strip.set_zone_colors(dim_zones, 3000, False)
     except WorkflowException as err:
         if count < retry_count:
             sleep(0.5 * (count + 1))
-            dim(light_id, dim_level, count=count + 1)
+            dim(label, dim_value, count=count + 1)
         else:
             logger.error("dim: Caught exception %s" % err)
 
