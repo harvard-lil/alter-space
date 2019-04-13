@@ -39,5 +39,6 @@ colors = [
     "#818CFF", "#1E18FF", "#7FB3FF", "#9190DA", "#7E00FE",
     "#CB00FF", "#FF6666", "#F15A24", "#FBAE17", "#EF7726",
     "#FE00E6", "#FE004D", "#FF81CE", "#FD80A6", "#EFAAA2",
-    "#F896A6", "#FFC0CB", "#80007F",
+    "#F896A6", "#FFC0CB", "#80007F", "#FFFFFF", "#FCFFB6",
+    "#FFF1E0", "#FFFAF0",
 ]
