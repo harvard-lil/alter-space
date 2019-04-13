@@ -183,6 +183,7 @@
           return
         }
 
+        console.log("in setLight", this.currentLightLabel, this.lightLabels)
         bodyFormData.set('label', this.currentLightLabel);
         let idx = this.getIdxFromLightLabel(this.currentLightLabel);
         bodyFormData.set('color', this.colorPresets[idx]);
@@ -331,6 +332,8 @@
       EventBus.$on('update-brightness', (brightness) => {
         self.brightness = brightness;
       });
+      EventBus.$emit('reset-brightness')
+
     },
     created() {
       this.getLSLights();

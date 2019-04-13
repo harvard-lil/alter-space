@@ -20,7 +20,7 @@
     props: ["disable", "light"],
     data() {
       return {
-        bright: 100
+        bright: 50
       }
     },
     watch: {
@@ -56,7 +56,7 @@
       EventBus.$on('reset-brightness', function() {
         self.updateBrightness();
       })
-    }
+    },
 
   }
 </script>
