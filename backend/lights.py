@@ -243,12 +243,14 @@ def dim(label, dim_value, count=0):
             for (label, mac_addr) in lights:
                 set_color(label, color=None, dim_value=dim_value)
         else:
-            strip = get_or_create_light(label)
-            all_zones = strip.get_color_zones()
-            dim_zones = []
-            for [h, s, v, k] in all_zones:
-                dim_zones.append((h, s, dim_value, k))
-            strip.set_zone_colors(dim_zones, 3000, False)
+            # bulb = get_or_create_light(label)
+            # if "(Z)"
+            set_color(label, color=None, dim_value=dim_value)
+            # all_zones = strip.get_color_zones()
+            # dim_zones = []
+            # for [h, s, v, k] in all_zones:
+            #     dim_zones.append((h, s, dim_value, k))
+            # strip.set_zone_colors(dim_zones, 3000, False)
     except WorkflowException as err:
         if count < retry_count:
             sleep(0.5 * (count + 1))
