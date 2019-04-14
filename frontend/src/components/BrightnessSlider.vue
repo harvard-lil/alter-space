@@ -20,7 +20,7 @@
     props: ["disable", "light"],
     data() {
       return {
-        bright: 50
+        bright: 100
       }
     },
     watch: {

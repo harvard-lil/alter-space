@@ -332,7 +332,6 @@
       EventBus.$on('update-brightness', (brightness) => {
         self.brightness = brightness;
       });
-      EventBus.$emit('reset-brightness')
 
     },
     created() {
