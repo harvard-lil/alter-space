@@ -1,16 +1,28 @@
 #Alterspace
 
-Alterspace is a new kind of reading room: a simple set of controls lets patrons decide on the color and behavior of lights and sounds in the space, adapting conditions for brainstorming, meditation, or quiet study. 
+Alterspace is a new kind of reading room: a simple set of controls lets patrons decide on the color and behavior of lights and sounds in the space, adapting conditions for brainstorming, meditation, or quiet study. 
+
 
 ![Photo by Hannah Schoenbaum](photo.png)
 Photo by Hannah Schoenbaum
 
+
+
 More information about the project is available here: https://alterspace.github.io/
+and here: https://lil.law.harvard.edu/projects/alterspace/
 
 This project is a collaboration between Harvard's [Library Innovation Lab](https://lil.law.harvard.edu) and [metaLAB](https://metalab.github.io).
 
+### Before you start, see [List of tools necessary](guides/tools.md)
+
+### Table of contents:
+- [code installation instructions][Instructions]
+
+
 ## Instructions
 This project was tested on python 3.5
+See [package.json](frontend/package.json) for JS requirements
+and [requirements.txt](requirements.txt) for python requirements
 
 
 ### Install
@@ -21,6 +33,8 @@ $ pyenv virtualenv 3.5.4 alterspace
 $ pyenv activate alterspace
 ```
 
+#### Install python dependencies 
+
 ```
 $ cp config/config.example.py config/config.py
 $ pip install -r requirements.txt
@@ -28,7 +42,7 @@ $ cd frontend && npm install
 
 ```
 
-### Run
+### Run flask server
 
 ```
 $ fab run
@@ -37,20 +51,33 @@ or, to run on a different port:
 ```
 $ fab run:8000
 ```
+
+### Tasks
+We use Celery to handle all of our light-related tasks, since some tasks might take longer than others and we don't want that to clobber anything else we might want to be doing.
+Therefore, we need to start the Celery service in a different terminal session: 
+```
+$ fab celery
+```
+
 In development, we need to serve both the flask app and vue frontend.  
 
 ### Vue/Static assets
 To serve files:
 ```
-$ fab npm 
+$ cd frontend
+$ npm run serve
 ```
-This command cds into the /frontend dir and runs `npm run build`, which causes the javascript to be loaded live from http://127.0.0.1:8080/ and recompiled on save.
+This command runs a live reload server at from http://127.0.0.1:8080/
 
 
 Remember to build files before adding them to the source code:
 ```
-$ fab build
+$ cd frontend
+$ npm run build
 ```
+
+All built front-end files will be in alter-space/dist folder.
+
 Now you should be able to visit http://127.0.0.1:5000/ and see everything working as intended.
 
 Note: some static assets live in the /public folder. On build, these get copied over to the /dist folder
@@ -59,7 +86,6 @@ instead of compiled using the webpack configuration.
 ### Styles
 Most styles live in SCSS format in alter-space/frontend/src/assets/css
 Some small overrides can live in a <style scoped> fashion in the .vue files
-
 
 
 ### Working with SVGs
@@ -81,8 +107,3 @@ In your vue component's template, place the svg
 ```html
 <svgicon icon="your-icon" width="60" height="60" :original="true" class="btn-default" stroke="0"></svgicon>
 ```
-
-### Setting your lights IDs
-Since you might use this app in several locations with different light setups, you can key in your specific light IDs by visiting a URL (a more permanent solution to follow).
-Simply go to http://localhost:8080/#/light/your-light-id to set the light id.
-Check http://localhost:8080/#/light to verify that the correct ID has been set.
