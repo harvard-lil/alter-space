@@ -2,7 +2,7 @@
 
   <input type="range"
          class="bright-range"
-         min="0"
+         min="50"
          max="100"
          value="100"
          autocomplete="off"

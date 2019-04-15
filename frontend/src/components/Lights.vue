@@ -97,7 +97,6 @@
                 if (i % 2 === 0) {
                   lightNum = i / 2;
                   label = self.fixLabel(res.data[lightNum][0]);
-                  console.log("getting label:", label);
                   inputs[i].value = label;
                 } else {
                   inputs[i].value = res.data[lightNum][1];
