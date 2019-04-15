@@ -1,12 +1,13 @@
 # from backend.views import backend_app
 from flask import url_for
 
+
 def test_homepage(client):
     response = client.get(url_for('backend.index'))
     assert response.status_code == 200
 
 
-def test_sounds(client):
+def x_test_sounds(client):
     response = client.get(url_for('backend.sounds'))
     assert response.status_code == 200
     assert type(response.json) is dict
