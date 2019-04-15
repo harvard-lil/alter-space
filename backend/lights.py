@@ -93,10 +93,10 @@ def get_or_create_light(label, mac_address=None):
         logger.info("Creating light %s" % label)
         light_obj = get_light(mac_address)
         # if light is type MultiZoneLight, add (Z) in label
-        if type(light_obj) == multizonelight.MultiZoneLight:
-            label_parts = label.split("_")
-            label_parts[0] = label_parts[0] + "_" + "(Z)"
-            label = "_".join(label_parts)
+        # if type(light_obj) == multizonelight.MultiZoneLight:
+        #     label_parts = label.split("_")
+        #     label_parts[0] = label_parts[0] + "_" + "(Z)"
+        #     label = "_".join(label_parts)
         light_obj.set_label(label)
         # turn light on
         store_light(label, light_obj)
