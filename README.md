@@ -14,7 +14,8 @@ This project is a collaboration between Harvard's [Library Innovation Lab](https
 
 ### Before you start, see 
 - [List of tools necessary](guides/tools.md)
-- [Music guide](guides/sounds.md)
+- [Sound guide](guides/sounds.md)
+- [Light guide](guides/lights.md)
 
 ### Table of contents:
 - [code installation instructions][Instructions]
