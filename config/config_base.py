@@ -27,8 +27,4 @@ CELERY_BROKER_URL = 'redis://',
 CELERY_RESULT_BACKEND = 'redis://'
 CELERY_TASK_ALWAYS_EAGER = False
 
-SOUND_USE_LOCAL = False
-if SOUND_USE_LOCAL:
-    SOUND_URL = "http://127.0.0.1:5000/sounds"
-else:
-    SOUND_URL = "http://library.law.harvard.edu/projects/files/sounds/"
+SOUND_USE_LOCAL = True

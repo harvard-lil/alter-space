@@ -1,6 +1,8 @@
 flask
 flask_cors
 
+Jinja2>=2.10.1
+
 Fabric3  # project automation
 pip-tools
 

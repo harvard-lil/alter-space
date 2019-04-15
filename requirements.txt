@@ -24,7 +24,7 @@ flask==1.0.2
 gunicorn==19.9.0
 idna==2.8                 # via cryptography, requests
 itsdangerous==1.1.0       # via flask
-jinja2==2.10              # via flask
+jinja2==2.10.1
 kombu==4.3.0              # via celery
 lifxlan==1.2.5
 markupsafe==1.1.0         # via jinja2
