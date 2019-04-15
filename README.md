@@ -7,13 +7,14 @@ Alterspace is a new kind of reading room: a simple set of controls 
 Photo by Hannah Schoenbaum
 
 
-
 More information about the project is available here: https://alterspace.github.io/
 and here: https://lil.law.harvard.edu/projects/alterspace/
 
 This project is a collaboration between Harvard's [Library Innovation Lab](https://lil.law.harvard.edu) and [metaLAB](https://metalab.github.io).
 
-### Before you start, see [List of tools necessary](guides/tools.md)
+### Before you start, see 
+- [List of tools necessary](guides/tools.md)
+- [Music guide](guides/sounds.md)
 
 ### Table of contents:
 - [code installation instructions][Instructions]
@@ -107,3 +108,4 @@ In your vue component's template, place the svg
 ```html
 <svgicon icon="your-icon" width="60" height="60" :original="true" class="btn-default" stroke="0"></svgicon>
 ```
+
