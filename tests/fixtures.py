@@ -1,11 +1,13 @@
 import os
+import shutil
 import pytest
-from config import config
-from lifxlan import MultiZoneLight
+from config import config_test as config
+
+from lifxlan import Light, MultiZoneLight
 
 
 def lifx_lights():
-    lights = [
+    single_zone_lights = [
         {
             "mac_addr": "12:34:56:78:9a:bc",
             "ip_addr": "192.168.0.2"
@@ -15,11 +17,22 @@ def lifx_lights():
             "ip_addr": "192.168.0.3"
         }
     ]
-    multizonelights = []
-    for light in lights:
-        multizonelights.append(MultiZoneLight(light["mac_addr"], light["ip_addr"]))
 
-    return multizonelights
+    multi_zone_lights = [
+        {
+            "mac_addr": "23:45:67:89:ab:cd",
+            "ip_addr": "192.168.0.4"
+        }
+    ]
+
+    light_objects = []
+    for light in single_zone_lights:
+        light_objects.append(Light(light["mac_addr"], light["ip_addr"]))
+
+    for light in multi_zone_lights:
+        light_objects.append(MultiZoneLight(light["mac_addr"], light["ip_addr"]))
+
+    return light_objects
 
 
 @pytest.fixture(scope='function')

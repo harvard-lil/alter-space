@@ -5,7 +5,7 @@ import logging
 
 import pickle
 
-from lifxlan import LifxLAN, multizonelight
+from lifxlan import LifxLAN, MultiZoneLight
 from lifxlan.errors import WorkflowException
 from lifxlan.utils import RGBtoHSBK
 
@@ -61,7 +61,15 @@ def toggle_power(label):
     return light_obj.get_power()
 
 
-def store_light(label, light_obj, lightdir=light_store):
+def store_light(label, light_obj, lightdir=config.LIGHT_STORE_DIR):
+    """
+    If light is a multizone light (like a light strip or beam), append "_multizone_"
+    to the label. This will be used by the frontend to show a different UI that allows
+    multiple color choices
+    """
+    if isinstance(light_obj, MultiZoneLight):
+        if "_multizone_" not in label:
+            label = "_multizone_%s" % label
     light_path = os.path.join(lightdir, label)
 
     with open(light_path, "wb") as f:
