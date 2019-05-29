@@ -50,14 +50,18 @@ def get_power(label):
     return light_obj.get_power()
 
 
-def toggle_power(label):
+def toggle_power(label, to_state=None):
     light_obj = get_or_create_light(label)
     power = light_obj.get_power()
     logger.info("turning light on")
-    if not power:
-        light_obj.set_power(True)
+    if to_state is not None:
+        # if to_state is set, turn lights on or off accordingly
+        light_obj.set_power(to_state)
     else:
-        light_obj.set_power(False)
+        if not power:
+            light_obj.set_power(True)
+        else:
+            light_obj.set_power(False)
     return light_obj.get_power()
 
 

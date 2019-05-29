@@ -1,31 +1,40 @@
 presets = {
     "relax": {
-        "colors": ["#1E18FF", "#80DCFF", "#02B3FF"],
+        "colors": ["#02B3FF", "#1E18FF", "#80DCFF", "#FFFAF0"],
+        "multicolors": [
+            ["#6CDF97", "#9190DA", "#2AA5A2"],
+            ["#C0FF80", "#508E36", "#2AA5A2"],
+            ["#1E18FF", "#FF81CE", "#80007F"]
+
+        ],
         "effect": "",
         "brightness": 100
     },
     "read": {
-        "colors": ["#9190DA", "#F896A6", "#FFC0CB"],
+        "colors": ["#FFC0CB", "#9190DA", "#F896A6", "#FFF1E0"],
         "effect": "",
-        "brightness": 100
+        "brightness": 100,
+        "multicolors": [
+            ["#FFC0CB", "#9190DA", "#F896A6"],
+        ],
     },
     "meditate": {
-        "colors": ["#508E36", "#2AA5A2", "#C0FF80"],
+        "colors": ["#C0FF80", "#508E36", "#2AA5A2", "#508E36"],
         "effect": "",
         "brightness": 100
     },
     "focus": {
-        "colors": ["#EFAAA2", "#FFCD81", "#EEC900"],
+        "colors": ["#FFC0CB", "#EFAAA2", "#FFCD81", "#FFFFFF"],
         "effect": "",
         "brightness": 100
     },
     "create": {
-        "colors": ["#FE004D", "#80007F", "#1E18FF"],
+        "colors": ["#1E18FF", "#FF81CE", "#80007F", "#B1FF9C"],
         "effect": "",
         "brightness": 100
     },
     "wyrd": {
-        "colors": ["#7FFF00", "#FE004D", "#02b3ff"],
+        "colors": ["#02b3ff", "#6CDF97", "#FE004D", "#FE00E6"],
         "effect": "",
         "brightness": 100
     }
