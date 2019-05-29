@@ -1,7 +1,7 @@
 import os
 import shutil
 import pytest
-from config import config_test as config
+from config import config
 
 from lifxlan import Light, MultiZoneLight
 
