@@ -21,7 +21,7 @@
           <div class="btn-group-color"
                role="group"
                aria-label="color button group">
-            <ul class="light-group list-inline">
+            <ul class="light-group list-inline light-list">
               <li class="list-inline-item" v-bind:key="label" v-for="label in lightLabels">
                 <!--if lightbulb or single zone light-->
                 <svgicon icon="lightbulb"
@@ -44,7 +44,7 @@
               </li>
             </ul>
             <!--if light is multizone-->
-            <ul class="light-group list-inline">
+            <ul class="light-group list-inline light-list">
               <li class="list-inline-item" v-bind:key="label" v-for="label in multizoneLightLabels">
                 <svgicon icon="lightgradient"
                          class="btn-round btn-color"
@@ -55,8 +55,7 @@
                          stroke="0"
                          @click="showList(label)"
                          :class="{active: colorPresets[getIdxFromLightLabel(label)] === colorPresets[getIdxFromLightLabel(currentLightLabel)] && showingList && currentLightLabel === label,
-                         lightgradient: true}"
-                         :style="{'fill': colorPresets[getIdxFromLightLabel(label)]}">
+                         lightgradient: true}">
                 </svgicon>
                 <button class="btn-round-tiny btn-power"
                         :class="{active: lightStates[label] }"
@@ -89,14 +88,13 @@
            role="group"
            aria-label="color button group">
         <template v-if="isMultizoneLight(currentLightLabel)">
-          <div class="helper-text">This light has mulitple color zones. Choose up to {{ maxMultizoneValues }}.</div>
-          <div class=""></div>
+          <div class="helper-text">This light has multiple color zones. Choose up to {{ maxMultizoneValues }}.</div>
           <button type="button"
-                  class="btn-round-small btn-color-option"
                   v-for="(hexVal, idx) in colors"
                   v-bind:key="idx"
                   @click="chooseMultizoneColor(hexVal)"
-                  :style="{'backgroundColor': hexVal, active: multizoneValues[currentLightLabel].colors.indexOf(hexVal) > -1}">
+                  :class="{active: multizoneValues[currentLightLabel].colors.indexOf(hexVal) > -1, 'btn-round-small': true, 'btn-color-option': true}"
+                  :style="{'backgroundColor': hexVal}">
           </button>
         </template>
         <template v-else>
@@ -283,7 +281,6 @@
         // https://vuejs.org/v2/guide/list.html#Array-Change-Detection
         this.colorPresets.splice(idx, 1, hexVal);
         this.setLight()
-        // this.createGradient();
       },
 
       chooseMultizoneColor(hexVal) {
@@ -295,19 +292,15 @@
           };
         }
 
-        let currentMultizoneValues = this.multizoneValues[this.currentLightLabel].colors;
-
         // if we've reached our max colors (as defined by this.maxMultizoneValues), push the first one (oldest choice) out
-        if (currentMultizoneValues.length >= this.maxMultizoneValues) {
-          currentMultizoneValues.shift();
-          this.multizoneValues[this.currentLightLabel].colors.splice(0, 1, hexVal)
+        if (this.multizoneValues[this.currentLightLabel].colors.length >= this.maxMultizoneValues) {
+          this.multizoneValues[this.currentLightLabel].colors.shift();
+          this.multizoneValues[this.currentLightLabel].colors.push(hexVal);
         }
-
-        currentMultizoneValues.push(hexVal);
         this.createGradient();
         this.setMultizoneLights();
-
       },
+      
       getLSLights() {
         this.lights = JSON.parse(localStorage.getItem('lights'));
         // create an array of just labels for ease of use

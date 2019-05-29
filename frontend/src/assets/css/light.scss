@@ -5,15 +5,29 @@
   &.meditate, &.focus {
     background-color: $color-white;
     color: $color-navy;
-    border-top: 1px solid $color-navy
+    border-top: 1px solid $color-navy;
+    .btn-color-option.active {
+      border: 2px solid $color-navy;
+    }
   }
   &.create, &.relax, &.wyrd, &.read {
     background-color: $color-navy;
     color: $color-white;
+    .btn-color-option.active {
+      border: 2px solid $color-white;
+    }
   }
   &.disabled {
     opacity: 0.5;
     cursor: not-allowed;
+  }
+
+  .btn-color-option {
+    height: 29px;
+    width: 29px;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
   }
 
 }
@@ -24,6 +38,24 @@
   width: 40px;
   &.active {
     background-color: $color-black;
+  }
+  // for multizone lights
+  .top-section {
+    fill: $color-meditate;
+  }
+  .middle-section {
+    fill: $color-wyrd;
+  }
+  .bottom-section {
+    fill: $color-create;
+  }
+}
+
+.light-list {
+  display: inline-block;
+  li {
+    margin-right: 0.1rem;
+    margin-left: 0.1rem;
   }
 }
 
@@ -36,14 +68,6 @@
   width: 3px;
   height: 8px;
   margin: 0 !important;
-}
-
-.btn-color-option {
-  height: 29px;
-  width: 29px;
-  -moz-box-shadow: none;
-  -webkit-box-shadow: none;
-  box-shadow: none;
 }
 
 .btn-breathe, .btn-chase {
