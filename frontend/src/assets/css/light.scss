@@ -2,13 +2,14 @@
 .btn-group-color-options {
   padding: 10px;
   text-align: center;
-  color: $color-create;
   &.meditate, &.focus {
     background-color: $color-white;
+    color: $color-navy;
     border-top: 1px solid $color-navy
   }
   &.create, &.relax, &.wyrd, &.read {
     background-color: $color-navy;
+    color: $color-white;
   }
   &.disabled {
     opacity: 0.5;

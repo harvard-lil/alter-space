@@ -169,8 +169,6 @@
         disableEffect: false,
         effectInPreset: "",
         firstCall: true,
-        power: true,
-        showStripPicker: false,
       }
     },
     watch: {
@@ -413,7 +411,6 @@
           self.disableEffect = false;
           self.disableColors = false;
           self.disableBrightness = false;
-          self.power = !self.power
         })
       },
     },

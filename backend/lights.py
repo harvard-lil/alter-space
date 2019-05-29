@@ -67,15 +67,14 @@ def toggle_power(label, to_state=None):
 
 def store_light(label, light_obj, lightdir=config.LIGHT_STORE_DIR):
     """
-    If light is a multizone light (like a light strip or beam), append "_multizone_"
+    If light is a multicolor light (like a light strip or beam), append config.MULTICOLOR_INDICATOR
     to the label. This will be used by the frontend to show a different UI that allows
     multiple color choices
     """
     if isinstance(light_obj, MultiZoneLight):
-        if "_multizone_" not in label:
-            label = "_multizone_%s" % label
+        if config.MULTICOLOR_INDICATOR not in label:
+            label = "%s%s" % (config.MULTICOLOR_INDICATOR, label)
     light_path = os.path.join(lightdir, label)
-
     with open(light_path, "wb") as f:
         pickle.dump(light_obj, f)
     return light_obj
@@ -221,15 +220,22 @@ def set_color(label, color=None, dim_value=100, count=0, duration=3000):
     light.set_color([h, s, dim_level, k], duration)
 
 
-def set_colors(light_id, colors, dim_value=100, count=0, duration=3000):
-    logger.info("set colors called")
+def set_colors(light_id, colors=None, dim_value=100, count=0, duration=3000):
     strip = get_or_create_light(light_id)
     new_zones = []
     dim_level = get_dim_value(dim_value)
+    using_existing_colors = False
+    if not colors:
+        colors = strip.get_color_zones()
+        using_existing_colors = True
 
     for idx, color in enumerate(colors):
-        rgb = hex2rgb(color)
-        h, s, v, k = RGBtoHSBK(rgb)
+        # if not relying on existing colors, colors need to be converted
+        if not using_existing_colors:
+            rgb = hex2rgb(color)
+            h, s, v, k = RGBtoHSBK(rgb)
+        else:
+            h, s, v, k = color
         new_zones.append((h, s, dim_level, k))
     try:
         strip.set_zone_colors(new_zones, duration, False)
@@ -250,16 +256,15 @@ def dim(label, dim_value, count=0):
         if not label:
             lights = get_stored_lights()
             for (label, mac_addr) in lights:
-                set_color(label, color=None, dim_value=dim_value)
+                if config.MULTICOLOR_INDICATOR in label:
+                    set_colors(label, colors=None, dim_value=dim_value)
+                else:
+                    set_color(label, color=None, dim_value=dim_value)
         else:
-            # bulb = get_or_create_light(label)
-            # if "(Z)"
-            set_color(label, color=None, dim_value=dim_value)
-            # all_zones = strip.get_color_zones()
-            # dim_zones = []
-            # for [h, s, v, k] in all_zones:
-            #     dim_zones.append((h, s, dim_value, k))
-            # strip.set_zone_colors(dim_zones, 3000, False)
+            if config.MULTICOLOR_INDICATOR in label:
+                set_colors(label, colors=None, dim_value=dim_value)
+            else:
+                set_color(label, color=None, dim_value=dim_value)
     except WorkflowException as err:
         if count < retry_count:
             sleep(0.5 * (count + 1))

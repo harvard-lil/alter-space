@@ -417,6 +417,21 @@ button, .btn, .btn-default {
   width: 30px;
 }
 
+.btn-round-tiny {
+  @extend .btn-round;
+  height: 10px;
+  width: 10px;
+}
+
+.btn-power {
+  display: block;
+  background-color: dimgray;
+  margin: 0 auto;
+  &.active {
+    background-color: greenyellow;
+  }
+}
+
 .btn-x {
   @extend .btn;
   background: transparent url("../img/x.svg") no-repeat;
@@ -465,13 +480,16 @@ button, .btn, .btn-default {
 .arrow-up.colors {
   margin-top: -21px;
   &.color-0 {
-    margin-left: 38px;
+    margin-left: 25px;
   }
   &.color-1 {
-    margin-left: 93px;
+    margin-left: 75px;
   }
   &.color-2 {
-    margin-left: 150px;
+    margin-left: 130px;
+  }
+  &.color-3 {
+    margin-left: 180px;
   }
   &.create, &.relax, &.wyrd, &.read {
     path {
