@@ -79,39 +79,36 @@ def store_light(label, light_obj, lightdir=config.LIGHT_STORE_DIR):
 
 def get_stored_lights():
     all_stored_lights = []
-    all_labels = os.listdir(light_store)
+    all_labels = os.listdir(config.LIGHT_STORE_DIR)
     for label in all_labels:
-        light_path = os.path.join(light_store, label)
+        light_path = os.path.join(config.LIGHT_STORE_DIR, label)
         with open(light_path, "rb") as f:
             light_obj = pickle.load(f)
             all_stored_lights.append((label, light_obj.get_mac_addr()))
+    all_stored_lights.sort()
     return all_stored_lights
 
 
 def get_or_create_light(label, mac_address=None):
     if not label:
         raise Exception("No light found", label)
-    print("getting light with label", label)
-    light_path = os.path.join(light_store, label)
+    light_path = os.path.join(config.LIGHT_STORE_DIR, label)
     if os.path.exists(light_path):
         with open(light_path, "rb") as f:
             light_obj = pickle.load(f)
-            light_obj.set_label(label)
+            try:
+                old_label = light_obj.get_label()
+                if old_label != label:
+                    light_obj.set_label(label)
+            except WorkflowException:
+                logger.info("failed getting label for %s" % label)
+                pass
     else:
         logger.info("Creating light %s" % label)
         light_obj = get_light(mac_address)
-        # if light is type MultiZoneLight, add (Z) in label
-        # if type(light_obj) == multizonelight.MultiZoneLight:
-        #     label_parts = label.split("_")
-        #     label_parts[0] = label_parts[0] + "_" + "(Z)"
-        #     label = "_".join(label_parts)
         light_obj.set_label(label)
-        # turn light on
         store_light(label, light_obj)
 
-    # if we're using real lights, really turn them on:
-    # if not config.USE_LIGHT_FIXTURES:
-    #     turn_light_on(light_obj)
     return light_obj
 
 
