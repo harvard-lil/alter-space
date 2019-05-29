@@ -29,5 +29,7 @@ CELERY_TASK_ALWAYS_EAGER = False
 
 SOUND_USE_LOCAL = True
 
+LIGHT_STORE_DIR = os.path.join(DIR, 'backend/lightstore')
+
 # a string to append to any light that has multiple colors, like a light strip or beam
 MULTICOLOR_INDICATOR = "_multizone_"

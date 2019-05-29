@@ -14,8 +14,6 @@ from config import config
 
 logger = logging.getLogger()
 
-light_store = os.path.join(config.DIR, 'backend/lightstore')
-
 lan = LifxLAN()
 
 retry_count = 5
@@ -33,15 +31,15 @@ def discover_lights():
 
 def setup_light_store():
     # Clear store before setting lights again
-    logger.info("Setting up light store")
-    if not os.path.exists(light_store):
-        os.mkdir(light_store)
+    if not os.path.exists(config.LIGHT_STORE_DIR):
+        logger.info("Setting up light store")
+        os.mkdir(config.LIGHT_STORE_DIR)
 
 
 def clear_light_store():
-    if os.path.exists(light_store):
+    if os.path.exists(config.LIGHT_STORE_DIR):
         logger.info("Removing and creating light store dir")
-        shutil.rmtree(light_store)
+        shutil.rmtree(config.LIGHT_STORE_DIR)
     setup_light_store()
 
 

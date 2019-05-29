@@ -42,12 +42,20 @@ def get_lights():
 
 @pytest.fixture(scope='function')
 def setup_light_store():
-    lightstore_dir = os.path.join(config.DIR, 'tests/lightstore')
+    lightstore_dir = config.LIGHT_STORE_DIR
+    print("using lightstore", lightstore_dir)
     if not os.path.exists(lightstore_dir):
         os.mkdir(lightstore_dir)
+        assert os.path.exists(lightstore_dir)
     return lightstore_dir
 
 
 @pytest.fixture
 def light_store(setup_light_store):
     return os.path.join(config.DIR, 'tests/lightstore')
+
+
+@pytest.fixture(autouse=True)
+def remove_light_store(light_store):
+    yield
+    shutil.rmtree(light_store)
