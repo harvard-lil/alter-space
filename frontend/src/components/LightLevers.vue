@@ -62,13 +62,6 @@
                         @click="togglePower(label)"></button>
               </li>
             </ul>
-            <!--<ul class="gradient-example list-inline">
-              <li class="gradient-pixel list-inline-item"
-                  v-for="(pixel, idx) in colorGradient"
-                  v-bind:key="idx"
-                  :style="{'backgroundColor': pixel}"></li>
-            </ul>-->
-
             <label class="text-center">colors </label>
           </div>
           <!-- Light list end -->
@@ -89,6 +82,13 @@
            aria-label="color button group">
         <template v-if="isMultizoneLight(currentLightLabel)">
           <div class="helper-text">This light has multiple color zones. Choose up to {{ maxMultizoneValues }}.</div>
+          <ul class="gradient-example list-inline">
+            <li class="gradient-pixel list-inline-item"
+                v-for="(pixel, idx) in multizoneValues[currentLightLabel].gradient"
+                v-bind:key="idx"
+                :style="{'backgroundColor': pixel}"></li>
+          </ul>
+
           <button type="button"
                   v-for="(hexVal, idx) in colors"
                   v-bind:key="idx"
@@ -130,13 +130,11 @@
 
   import BrightnessSlider from './BrightnessSlider';
 
-  const colorsUrl = process.env.VUE_APP_BACKEND_URL + "lights" + "/colors";
   const getLightsUrl = process.env.VUE_APP_BACKEND_URL + "lights";
-  const setLightUrl = process.env.VUE_APP_BACKEND_URL + "lights" + "/set";
-
   // steps between color 1 and color 2
-  const steps = 8;
-
+  const steps = 29;
+  const colorsUrl = getLightsUrl + "/colors";
+  const setLightUrl = getLightsUrl + "/set";
   export default {
     name: "LightLevers",
     components: {
@@ -218,11 +216,11 @@
         this.multizoneValues[this.currentLightLabel].gradient = [];
         for (let i = 0; i < colors.length; i++) {
           this.multizoneValues[this.currentLightLabel].gradient.push(colors[i]);
-        }
-        for (let d = 0; d < colors.length - 1; d++) {
-          colorSteps = this.interpolateColors(colors[d], colors[d + 1], steps);
-          colorSteps.shift();
-          this.multizoneValues[this.currentLightLabel].gradient.push(colorSteps);
+          if (i < colors.length - 1) {
+            colorSteps = this.interpolateColors(colors[i], colors[i + 1], steps);
+            colorSteps.shift();
+            this.multizoneValues[this.currentLightLabel].gradient.push(colorSteps);
+          }
         }
         this.multizoneValues[this.currentLightLabel].gradient = this.multizoneValues[this.currentLightLabel].gradient.flat();
       },
@@ -300,7 +298,7 @@
         this.createGradient();
         this.setMultizoneLights();
       },
-      
+
       getLSLights() {
         this.lights = JSON.parse(localStorage.getItem('lights'));
         // create an array of just labels for ease of use
@@ -377,6 +375,9 @@
       },
 
       isMultizoneLight(label) {
+        if (!label) {
+          return false
+        }
         return label.indexOf('_multizone_') > -1;
       },
 
