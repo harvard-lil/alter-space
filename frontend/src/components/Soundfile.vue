@@ -83,7 +83,8 @@
     },
     methods: {
       soundIsInChosenField() {
-        return Object.keys(this.soundPresets).indexOf(this.audio) > -1;
+        if (this.soundPresets) 
+          return Object.keys(this.soundPresets).indexOf(this.audio) > -1;
       },
       addSound() {
         this.selectedSound = true;

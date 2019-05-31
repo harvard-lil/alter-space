@@ -9,7 +9,6 @@
     "generate-icons": "vsvg -s ./svg-icons -t ./src/components/icons"
   },
   "dependencies": {
-    "axios": "^0.18.0",
     "bootstrap": ">=4.3.1",
     "jquery": "^3.4.1",
     "normalize.css": "^8.0.1",

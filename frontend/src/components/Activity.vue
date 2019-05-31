@@ -41,7 +41,6 @@
 </template>
 
 <script>
-  import axios from 'axios';
   import EventBus from '../event-bus';
   import SoundLevers from "./SoundLevers";
   import LightLevers from "./LightLevers";
@@ -86,7 +85,7 @@
         EventBus.$emit('customizing', false);
       },
       resetActivity() {
-        this.stopEffectTask(()=>{
+        this.stopEffectTask(() => {
           window.location.reload();
         });
       },
@@ -100,12 +99,16 @@
           bodyFormData.set('effect', self.effect);
           bodyFormData.set('task_id', self.taskID);
 
-          axios({
-            method: "post",
-            url: url,
-            data: bodyFormData
+          fetch(url, {
+            method: "POST",
+            body: bodyFormData
           }).then((res) => {
-            self.taskID = res.data.task_id;
+            if (!res.ok) {
+              throw res;
+            }
+            return res.json();
+          }).then((res) => {
+            self.taskID = res.task_id;
             self.$parent.$parent.taskID = self.taskID;
             self.$parent.effectPlaying = self.breathe;
             cb();
@@ -117,16 +120,23 @@
       getPresets() {
         let url = activityUrl + this.$route.params.name;
         let self = this;
-        axios.get(url)
+        fetch(url)
             .then((res) => {
-              self.soundPresets = res.data.sound;
-              self.lightPresets = res.data.light;
+              if (!res.ok) {
+                throw res;
+              }
+              return res.json();
+            })
+            .then((res) => {
+              console.log("getting presets", res.sound)
+              self.soundPresets = res.sound;
+              self.lightPresets = res.light;
               self.effectOn = self.lightPresets.effect
             });
 
       }
     },
-     created() {
+    beforeMount() {
       this.getPresets();
     },
     beforeRouteLeave(to, from, next) {

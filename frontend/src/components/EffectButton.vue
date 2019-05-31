@@ -29,7 +29,6 @@
 </template>
 
 <script>
-  import axios from 'axios';
   import EventBus from '../event-bus'
   import "./icons/breathe";
   import "./icons/chase";
@@ -63,12 +62,17 @@
 
         let url = self.$route.params.name === 'wyrd' ? effectUrl + "/chase" : effectUrl + "/breathe";
 
-        axios({
-          method: "post",
-          url: url,
-          data: bodyFormData
+        fetch(url, {
+          method: "POST",
+          body: bodyFormData
         }).then((res) => {
-          self.taskID = res.data.task_id;
+          if (!res.ok) {
+            throw res;
+          }
+          return res.json();
+
+        }).then((res) => {
+          self.taskID = res.task_id;
           self.$parent.$parent.taskID = self.taskID;
           self.$parent.effectPlaying = self.effectStatus;
           self.$parent.$parent.effect = self.effectType;
@@ -86,7 +90,7 @@
     watch: {
       effectInPreset() {
         let self = this;
-        this.effectTimeout = setTimeout(()=>{
+        this.effectTimeout = setTimeout(() => {
           self.toggleEffect();
         }, 3000);
       }

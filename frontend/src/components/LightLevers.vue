@@ -119,8 +119,6 @@
 </template>
 
 <script>
-  import axios from 'axios';
-
   import './icons/breathe';
   import './icons/triangle-light';
   import './icons/arrow-up';
@@ -237,10 +235,14 @@
         bodyFormData.set('bright', this.brightness.toString());
         bodyFormData.set('firstcall', this.firstCall);
 
-        axios({
-          method: "post",
-          url: setLightUrl,
-          data: bodyFormData,
+        fetch(setLightUrl, {
+          method: "POST",
+          body: bodyFormData,
+        }).then((resp) => {
+          if (!resp.ok) {
+            throw resp;
+          }
+          return resp;
         }).then(() => {
           self.disableEffect = false;
           self.disableColors = false;
@@ -262,10 +264,14 @@
         this.disableBrightness = true;
         let self = this;
 
-        axios({
-          method: "post",
-          url: setLightUrl,
-          data: bodyFormData,
+        fetch(setLightUrl, {
+          method: "POST",
+          body: bodyFormData,
+        }).then((resp) => {
+          if (!resp.ok) {
+            throw resp;
+          }
+          return resp;
         }).then(() => {
           self.disableEffect = false;
           self.disableColors = false;
@@ -353,7 +359,7 @@
           result[i] = Math.round(result[i] + factor * (color2[i] - color1[i]));
         }
         let newcolor = this.rgb2hex(result);
-        console.log("%c color " + newcolor, "color: " + newcolor);
+        // console.log("%c color " + newcolor, "color: " + newcolor);
         return newcolor;
       },
 
@@ -397,11 +403,15 @@
         this.disableBrightness = true;
         let self = this;
 
-        axios({
-          method: "post",
-          url: powerUrl,
-          data: bodyFormData,
-        }).then((res) => {
+        fetch(powerUrl, {
+          method: "POST",
+          body: bodyFormData
+        }).then((resp) => {
+          if (!resp.ok) {
+            throw resp;
+          }
+          return resp;
+        }).then((resp) => {
           self.disableEffect = false;
           self.disableColors = false;
           self.disableBrightness = false;
@@ -410,13 +420,28 @@
     },
     beforeMount() {
       let self = this;
-      axios.get(getLightsUrl).then((res) => {
-        self.lights = res.data;
-      });
+      fetch(getLightsUrl)
+          .then((resp) => {
+            if (!resp.ok) {
+              throw resp
+            }
+            return resp.json();
+          })
+          .then((res) => {
+            self.lights = res;
+          });
+
       /* get available colors */
-      axios.get(colorsUrl).then((res) => {
-        self.colors = res.data;
-      });
+      fetch(colorsUrl)
+          .then((resp) => {
+            if (!resp.ok) {
+              throw resp
+            }
+            return resp.json();
+          })
+          .then((res) => {
+            self.colors = res;
+          });
     },
     mounted() {
       let self = this;

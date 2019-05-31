@@ -31,12 +31,11 @@
 
 
 <script>
-
-  import axios from "axios";
   import topnav from './components/TopNav';
   import Activities from './components/Activities';
   import "./components/icons/home";
   import "./components/icons/info";
+
   const getLightsUrl = process.env.VUE_APP_BACKEND_URL + "lights";
 
   export default {
@@ -61,12 +60,18 @@
     mounted() {
       this.lights = localStorage.getItem("lights");
       if (!(this.lights)) {
-        axios.get(getLightsUrl)
+        fetch(getLightsUrl)
+            .then((res) => {
+              if (!res.ok) {
+                throw res;
+              }
+              return res.json();
+            })
             .then((res) => {
               let light = [];
               let localStorageLights = [];
-              for (let i = 0; i < res.data.length; i++) {
-                light = [res.data[i][0], res.data[i][1]];
+              for (let i = 0; i < res.length; i++) {
+                light = [res[i][0], res[i][1]];
                 localStorageLights.push(light);
               }
               localStorage.setItem("lights", JSON.stringify(localStorageLights));
