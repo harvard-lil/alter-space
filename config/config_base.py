@@ -27,7 +27,7 @@ CELERY_BROKER_URL = 'redis://',
 CELERY_RESULT_BACKEND = 'redis://'
 CELERY_TASK_ALWAYS_EAGER = False
 
-SOUND_USE_LOCAL = True
+SOUND_USE_LOCAL = False
 
 LIGHT_STORE_DIR = os.path.join(DIR, 'backend/lightstore')
 
