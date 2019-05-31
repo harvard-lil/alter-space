@@ -1,34 +1,53 @@
 import os
 import pickle
-import shutil
 from unittest import mock
 
-from tests.fixtures import *
-from lifxlan import LifxLAN, MultiZoneLight
+from lifxlan import LifxLAN, Light, MultiZoneLight
 from backend import lights
+from config import config
 
 lan = LifxLAN()
 m = mock.Mock()
 
 
-def clean_up_light_store(light_store):
-    shutil.rmtree(light_store)
-
-
 def test_store_light(get_lights, setup_light_store):
-    light_store = setup_light_store
+    ls = setup_light_store
+    # storing singlezone light
     table_lamp = get_lights[0]
     label = "Table Lamp"
-    lights.store_light(label, table_lamp, lightdir=light_store)
-    lightdir_contents = os.listdir(light_store)
+    lights.store_light(label, table_lamp, lightdir=ls)
+    lightdir_contents = os.listdir(ls)
     assert len(lightdir_contents) == 1
 
-    light_path = os.path.join(light_store, label)
+    light_path = os.path.join(ls, label)
+    with open(light_path, "rb") as f:
+        light_obj = pickle.load(f)
+        assert isinstance(light_obj, Light)
+
+    # storing multizone light
+    light_strip = get_lights[2]
+    label = "Light Strip"
+    lights.store_light(label, light_strip, lightdir=ls)
+    lightdir_contents = os.listdir(ls)
+    assert len(lightdir_contents) == 2
+
+    light_path = os.path.join(ls, "%s%s" % (config.MULTICOLOR_INDICATOR, label))
     with open(light_path, "rb") as f:
         light_obj = pickle.load(f)
         assert isinstance(light_obj, MultiZoneLight)
 
-    clean_up_light_store(light_store)
+
+def test_get_stored_lights(get_lights, setup_light_store):
+    all_lights = lights.get_stored_lights()
+    assert len(all_lights) == 0
+    ls = setup_light_store
+    table_lamp = get_lights[0]
+    label = "Table Lamp"
+    lights.store_light(label, table_lamp, lightdir=ls)
+    lightdir_contents = os.listdir(ls)
+    assert len(lightdir_contents) == 1
+    all_lights = lights.get_stored_lights()
+    assert len(all_lights) == 1
 
 
 # @mock.patch('lan.get_lights', return_value=get_lights)
