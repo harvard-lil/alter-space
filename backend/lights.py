@@ -5,7 +5,7 @@ import logging
 
 import pickle
 
-from lifxlan import LifxLAN, multizonelight
+from lifxlan import LifxLAN, MultiZoneLight
 from lifxlan.errors import WorkflowException
 from lifxlan.utils import RGBtoHSBK
 
@@ -13,8 +13,6 @@ from tests import fixtures
 from config import config
 
 logger = logging.getLogger()
-
-light_store = os.path.join(config.DIR, 'backend/lightstore')
 
 lan = LifxLAN()
 
@@ -33,15 +31,15 @@ def discover_lights():
 
 def setup_light_store():
     # Clear store before setting lights again
-    logger.info("Setting up light store")
-    if not os.path.exists(light_store):
-        os.mkdir(light_store)
+    if not os.path.exists(config.LIGHT_STORE_DIR):
+        logger.info("Setting up light store")
+        os.mkdir(config.LIGHT_STORE_DIR)
 
 
 def clear_light_store():
-    if os.path.exists(light_store):
+    if os.path.exists(config.LIGHT_STORE_DIR):
         logger.info("Removing and creating light store dir")
-        shutil.rmtree(light_store)
+        shutil.rmtree(config.LIGHT_STORE_DIR)
     setup_light_store()
 
 
@@ -50,20 +48,31 @@ def get_power(label):
     return light_obj.get_power()
 
 
-def toggle_power(label):
+def toggle_power(label, to_state=None):
     light_obj = get_or_create_light(label)
     power = light_obj.get_power()
     logger.info("turning light on")
-    if not power:
-        light_obj.set_power(True)
+    if to_state is not None:
+        # if to_state is set, turn lights on or off accordingly
+        light_obj.set_power(to_state)
     else:
-        light_obj.set_power(False)
+        if not power:
+            light_obj.set_power(True)
+        else:
+            light_obj.set_power(False)
     return light_obj.get_power()
 
 
-def store_light(label, light_obj, lightdir=light_store):
+def store_light(label, light_obj, lightdir=config.LIGHT_STORE_DIR):
+    """
+    If light is a multicolor light (like a light strip or beam), append config.MULTICOLOR_INDICATOR
+    to the label. This will be used by the frontend to show a different UI that allows
+    multiple color choices
+    """
+    if isinstance(light_obj, MultiZoneLight):
+        if config.MULTICOLOR_INDICATOR not in label:
+            label = "%s%s" % (config.MULTICOLOR_INDICATOR, label)
     light_path = os.path.join(lightdir, label)
-
     with open(light_path, "wb") as f:
         pickle.dump(light_obj, f)
     return light_obj
@@ -71,39 +80,36 @@ def store_light(label, light_obj, lightdir=light_store):
 
 def get_stored_lights():
     all_stored_lights = []
-    all_labels = os.listdir(light_store)
+    all_labels = os.listdir(config.LIGHT_STORE_DIR)
     for label in all_labels:
-        light_path = os.path.join(light_store, label)
+        light_path = os.path.join(config.LIGHT_STORE_DIR, label)
         with open(light_path, "rb") as f:
             light_obj = pickle.load(f)
             all_stored_lights.append((label, light_obj.get_mac_addr()))
+    all_stored_lights.sort()
     return all_stored_lights
 
 
 def get_or_create_light(label, mac_address=None):
     if not label:
         raise Exception("No light found", label)
-    print("getting light with label", label)
-    light_path = os.path.join(light_store, label)
+    light_path = os.path.join(config.LIGHT_STORE_DIR, label)
     if os.path.exists(light_path):
         with open(light_path, "rb") as f:
             light_obj = pickle.load(f)
-            light_obj.set_label(label)
+            try:
+                old_label = light_obj.get_label()
+                if old_label != label:
+                    light_obj.set_label(label)
+            except WorkflowException:
+                logger.info("failed getting label for %s" % label)
+                pass
     else:
         logger.info("Creating light %s" % label)
         light_obj = get_light(mac_address)
-        # if light is type MultiZoneLight, add (Z) in label
-        # if type(light_obj) == multizonelight.MultiZoneLight:
-        #     label_parts = label.split("_")
-        #     label_parts[0] = label_parts[0] + "_" + "(Z)"
-        #     label = "_".join(label_parts)
         light_obj.set_label(label)
-        # turn light on
         store_light(label, light_obj)
 
-    # if we're using real lights, really turn them on:
-    # if not config.USE_LIGHT_FIXTURES:
-    #     turn_light_on(light_obj)
     return light_obj
 
 
@@ -212,15 +218,22 @@ def set_color(label, color=None, dim_value=100, count=0, duration=3000):
     light.set_color([h, s, dim_level, k], duration)
 
 
-def set_colors(light_id, colors, dim_value=100, count=0, duration=3000):
-    logger.info("set colors called")
+def set_colors(light_id, colors=None, dim_value=100, count=0, duration=3000):
     strip = get_or_create_light(light_id)
     new_zones = []
     dim_level = get_dim_value(dim_value)
+    using_existing_colors = False
+    if not colors:
+        colors = strip.get_color_zones()
+        using_existing_colors = True
 
     for idx, color in enumerate(colors):
-        rgb = hex2rgb(color)
-        h, s, v, k = RGBtoHSBK(rgb)
+        # if not relying on existing colors, colors need to be converted
+        if not using_existing_colors:
+            rgb = hex2rgb(color)
+            h, s, v, k = RGBtoHSBK(rgb)
+        else:
+            h, s, v, k = color
         new_zones.append((h, s, dim_level, k))
     try:
         strip.set_zone_colors(new_zones, duration, False)
@@ -241,16 +254,15 @@ def dim(label, dim_value, count=0):
         if not label:
             lights = get_stored_lights()
             for (label, mac_addr) in lights:
-                set_color(label, color=None, dim_value=dim_value)
+                if config.MULTICOLOR_INDICATOR in label:
+                    set_colors(label, colors=None, dim_value=dim_value)
+                else:
+                    set_color(label, color=None, dim_value=dim_value)
         else:
-            # bulb = get_or_create_light(label)
-            # if "(Z)"
-            set_color(label, color=None, dim_value=dim_value)
-            # all_zones = strip.get_color_zones()
-            # dim_zones = []
-            # for [h, s, v, k] in all_zones:
-            #     dim_zones.append((h, s, dim_value, k))
-            # strip.set_zone_colors(dim_zones, 3000, False)
+            if config.MULTICOLOR_INDICATOR in label:
+                set_colors(label, colors=None, dim_value=dim_value)
+            else:
+                set_color(label, color=None, dim_value=dim_value)
     except WorkflowException as err:
         if count < retry_count:
             sleep(0.5 * (count + 1))

@@ -12,10 +12,10 @@ DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 
 ALTERSPACE_IP = "127.0.0.1"
 
-ACTIVITIES = ["relax",
-              "read",
+ACTIVITIES = ["focus",
               "meditate",
-              "focus",
+              "read",
+              "relax",
               "create",
               "wyrd"]
 # LIGHTS
@@ -28,3 +28,9 @@ CELERY_RESULT_BACKEND = 'redis://'
 CELERY_TASK_ALWAYS_EAGER = False
 
 SOUND_USE_LOCAL = True
+
+LIGHT_STORE_DIR = os.path.join(DIR, 'backend/lightstore')
+
+# a string to append to any light that has multiple colors, like a light strip or beam
+MULTICOLOR_INDICATOR = "_multizone_"
+LIGHT_STEPS = 28

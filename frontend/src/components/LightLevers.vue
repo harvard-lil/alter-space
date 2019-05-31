@@ -21,33 +21,47 @@
           <div class="btn-group-color"
                role="group"
                aria-label="color button group">
-            <ul class="light-group list-inline">
-              <li class="list-inline-item"  v-for="label in lightLabels">
-                <svgicon :icon="getLightbulbIcon(label)"
+            <ul class="light-group list-inline light-list">
+              <li class="list-inline-item" v-bind:key="label" v-for="label in lightLabels">
+                <!--if lightbulb or single zone light-->
+                <svgicon icon="lightbulb"
                          class="btn-round btn-color"
                          v-bind:key="label"
-                         width="50"
-                         height="50"
+                         width="40"
+                         height="40"
                          :disabled="disableColors"
                          stroke="0"
                          @click="showList(label)"
-                         :class="{active: colorPresets[getIdxFromLightLabel(label)] === colorPresets[getIdxFromLightLabel(currentLightLabel)] && showingList && currentLightLabel === label}"
+                         :class="{active: colorPresets[getIdxFromLightLabel(label)] === colorPresets[getIdxFromLightLabel(currentLightLabel)] && showingList && currentLightLabel === label, lightbulb: true}"
                          :style="{'fill': colorPresets[getIdxFromLightLabel(label)]}">
+
                 </svgicon>
 
-                <label class="switch">
-                  <input type="checkbox" @click="togglePower(label)" checked>
-                  <span class="slider round"></span>
-                </label>
+
+                <button class="btn-round-tiny btn-power"
+                        :class="{active: lightStates[label] }"
+                        @click="togglePower(label)"></button>
               </li>
             </ul>
-            <!--<ul class="gradient-example list-inline">
-              <li class="gradient-pixel list-inline-item"
-                  v-for="(pixel, idx) in colorGradient"
-                  v-bind:key="idx"
-                  :style="{'backgroundColor': pixel}"></li>
-            </ul>-->
-
+            <!--if light is multizone-->
+            <ul class="light-group list-inline light-list">
+              <li class="list-inline-item" v-bind:key="label" v-for="label in multizoneLightLabels">
+                <svgicon icon="lightgradient"
+                         class="btn-round btn-color"
+                         v-bind:key="label"
+                         width="40"
+                         height="40"
+                         :disabled="disableColors"
+                         stroke="0"
+                         @click="showList(label)"
+                         :class="{active: colorPresets[getIdxFromLightLabel(label)] === colorPresets[getIdxFromLightLabel(currentLightLabel)] && showingList && currentLightLabel === label,
+                         lightgradient: true}">
+                </svgicon>
+                <button class="btn-round-tiny btn-power"
+                        :class="{active: lightStates[label] }"
+                        @click="togglePower(label)"></button>
+              </li>
+            </ul>
             <label class="text-center">colors </label>
           </div>
           <!-- Light list end -->
@@ -66,18 +80,39 @@
            :class="[$route.params.name, {disabled: disableColors}]"
            role="group"
            aria-label="color button group">
-        <svgicon icon="arrow-up"
-                 class="arrow-up colors"
-                 :class="['color-'+getIdxFromLightLabel(currentLightLabel), $route.params.name]">
-        </svgicon>
-
-        <button type="button"
-                class="btn-round-small btn-color-option"
-                v-for="(hexVal, idx) in colors"
+        <template v-if="isMultizoneLight(currentLightLabel)">
+          <div class="helper-text">This light has multiple color zones. Choose up to {{ maxMultizoneValues }}.</div>
+          <ul class="gradient-example list-inline">
+            <li class="gradient-pixel list-inline-item"
+                v-for="(pixel, idx) in multizoneValues[currentLightLabel].gradient"
                 v-bind:key="idx"
-                @click="chooseNewColor(hexVal)"
-                :style="{'backgroundColor': hexVal}">
-        </button>
+                :style="{'backgroundColor': pixel}"></li>
+          </ul>
+
+          <button type="button"
+                  v-for="(hexVal, idx) in colors"
+                  v-bind:key="idx"
+                  @click="chooseMultizoneColor(hexVal)"
+                  :class="{active: multizoneValues[currentLightLabel].colors.indexOf(hexVal) > -1, 'btn-round-small': true, 'btn-color-option': true}"
+                  :style="{'backgroundColor': hexVal}">
+          </button>
+        </template>
+        <template v-else>
+
+          <svgicon icon="arrow-up"
+                   class="arrow-up colors"
+                   :class="['color-'+getIdxFromLightLabel(currentLightLabel), $route.params.name]">
+          </svgicon>
+
+          <button type="button"
+                  class="btn-round-small btn-color-option"
+                  v-for="(hexVal, idx) in colors"
+                  v-bind:key="idx"
+                  :id="hexVal"
+                  @click="chooseNewColor(hexVal)"
+                  :style="{'backgroundColor': hexVal}">
+          </button>
+        </template>
       </div>
     </table>
   </div>
@@ -95,13 +130,11 @@
 
   import BrightnessSlider from './BrightnessSlider';
 
-  const colorsUrl = process.env.VUE_APP_BACKEND_URL + "lights" + "/colors";
   const getLightsUrl = process.env.VUE_APP_BACKEND_URL + "lights";
-  const setLightUrl = process.env.VUE_APP_BACKEND_URL + "lights" + "/set";
-
   // steps between color 1 and color 2
-  const steps = 28;
-
+  const steps = 29;
+  const colorsUrl = getLightsUrl + "/colors";
+  const setLightUrl = getLightsUrl + "/set";
   export default {
     name: "LightLevers",
     components: {
@@ -113,13 +146,18 @@
       return {
         showColorPicker: false,
         colorPresets: [],
+        multicolorPresets: [],
         colors: [],
         showingList: false,
         currentLightLabel: "",
         light: "",
         lights: [],
         lightLabels: [],
+        multizoneLightLabels: [],
+        lightStates: {},
         colorGradient: [],
+        multizoneValues: {}, // this object stores multiple color values for lights that are multizone
+        maxMultizoneValues: 3,
         brightness: 100,
         effectPlaying: false,
         disableBrightness: false,
@@ -127,19 +165,24 @@
         disableEffect: false,
         effectInPreset: "",
         firstCall: true,
-        power: true,
       }
     },
     watch: {
       lightPresets() {
         if (this.colorPresets.length === 0) {
           this.colorPresets = this.lightPresets.colors;
-          for (let i = 0; i <= this.lightLabels.length; i++) {
+          this.multicolorPresets = this.lightPresets.multicolors;
+          for (let i = 0; i < this.lightLabels.length; i++) {
             this.currentLightLabel = this.lightLabels[i];
             this.setLight();
           }
+          for (let m = 0; m < this.multizoneLightLabels.length; m++) {
+            this.currentLightLabel = this.multizoneLightLabels[m];
+            this.multizoneValues[this.currentLightLabel].colors = this.lightPresets.multicolors[m];
+            this.createGradient();
+            this.setMultizoneLights();
+          }
         }
-        // this.createGradient();
       },
       collapseLightOptions() {
         if (this.collapseLightOptions) {
@@ -166,15 +209,20 @@
         this.currentLightLabel = label;
         this.$parent.showingLightOptions = this.showingList;
       },
-      createGradient() {
-        let color0 = this.hex2rgb(this.colorPresets[0]);
-        let color1 = this.hex2rgb(this.colorPresets[1]);
-        let color2 = this.hex2rgb(this.colorPresets[2]);
 
-        let colorGradient1 = this.interpolateColors(color0, color1, steps);
-        let colorGradient2 = this.interpolateColors(color1, color2, steps);
-        this.colorGradient = colorGradient1.concat(colorGradient2);
-        this.createAndSendStates();
+      createGradient() {
+        let colors = this.multizoneValues[this.currentLightLabel].colors;
+        let colorSteps = [];
+        this.multizoneValues[this.currentLightLabel].gradient = [];
+        for (let i = 0; i < colors.length; i++) {
+          this.multizoneValues[this.currentLightLabel].gradient.push(colors[i]);
+          if (i < colors.length - 1) {
+            colorSteps = this.interpolateColors(colors[i], colors[i + 1], steps);
+            colorSteps.shift();
+            this.multizoneValues[this.currentLightLabel].gradient.push(colorSteps);
+          }
+        }
+        this.multizoneValues[this.currentLightLabel].gradient = this.multizoneValues[this.currentLightLabel].gradient.flat();
       },
       setLight() {
         let bodyFormData = new FormData();
@@ -200,13 +248,14 @@
           self.firstCall = false;
         })
       },
-      createAndSendStates() {
+      setMultizoneLights() {
         let bodyFormData = new FormData();
-        let d = {color_data: this.colorGradient};
-        bodyFormData.set('colors', JSON.stringify(d));
+        let d = {color_data: this.multizoneValues[this.currentLightLabel].gradient};
         bodyFormData.set('id', this.light);
         bodyFormData.set('bright', this.brightness.toString());
+        bodyFormData.set('label', this.currentLightLabel);
         bodyFormData.set('firstcall', this.firstCall);
+        bodyFormData.set('multicolors', JSON.stringify(d));
         //disabling all buttons until results are backs
         this.disableEffect = true;
         this.disableColors = true;
@@ -230,19 +279,57 @@
         // https://vuejs.org/v2/guide/list.html#Array-Change-Detection
         this.colorPresets.splice(idx, 1, hexVal);
         this.setLight()
-        // this.createGradient();
-      },
-      getLSLights() {
-        this.lights = JSON.parse(localStorage.getItem('lights'));
-        console.log('getting lights:::::', this.lights)
-        // create an array of just labels for ease of use
-        //TODO: Figure out if this is dangerous. Are lights *always* going to be ordered this way?
-        for (let i = 0; i < this.lights.length; i++) {
-          // this.lightLabels.push(i.toString() + "_" + this.lights[i][0]);
-          this.lightLabels.push(this.lights[i][0]);
-        }
       },
 
+      chooseMultizoneColor(hexVal) {
+        // if the current light is not yet stored in our multizone values object, create it
+        if (Object.keys(this.multizoneValues).indexOf(this.currentLightLabel) < 0) {
+          this.multizoneValues[this.currentLightLabel] = {
+            colors: [],
+            gradient: []
+          };
+        }
+
+        // if we've reached our max colors (as defined by this.maxMultizoneValues), push the first one (oldest choice) out
+        if (this.multizoneValues[this.currentLightLabel].colors.length >= this.maxMultizoneValues) {
+          this.multizoneValues[this.currentLightLabel].colors.shift();
+          this.multizoneValues[this.currentLightLabel].colors.push(hexVal);
+        }
+        this.createGradient();
+        this.setMultizoneLights();
+      },
+
+      getLSLights() {
+        this.lights = JSON.parse(localStorage.getItem('lights'));
+        // create an array of just labels for ease of use
+        // TODO: Figure out if this is dangerous. Are lights *always* going to be ordered this way?
+        for (let i = 0; i < this.lights.length; i++) {
+          // this.lightLabels.push(i.toString() + "_" + this.lights[i][0]);
+          let label = this.lights[i][0];
+
+          // if multizone, set up the object
+          if (this.isMultizoneLight(label)) {
+            this.multizoneValues[label] = {
+              colors: [],
+              gradient: []
+            };
+            this.multizoneLightLabels.push(label);
+          } else {
+            this.lightLabels.push(label);
+          }
+        }
+      },
+      setLightStates() {
+        for (let i = 0; i < this.lightLabels.length; i++) {
+          this.lightStates[this.lightLabels[i]] = true;
+          this.togglePower(this.lightLabels[i], true)
+        }
+        for (let i = 0; i < this.multizoneLightLabels.length; i++) {
+          this.lightStates[this.multizoneLightLabels[i]] = true;
+          this.togglePower(this.lightLabels[i], true);
+        }
+
+      },
       // From https://codepen.io/njmcode/pen/axoyD?editors=0010
       rgb2hex(rgb) {
         return "#" + ((1 << 24) + (rgb[0] << 16) + (rgb[1] << 8) + rgb[2]).toString(16).slice(1);
@@ -265,10 +352,14 @@
         for (let i = 0; i < 3; i++) {
           result[i] = Math.round(result[i] + factor * (color2[i] - color1[i]));
         }
-        return this.rgb2hex(result);
+        let newcolor = this.rgb2hex(result);
+        console.log("%c color " + newcolor, "color: " + newcolor);
+        return newcolor;
       },
 
       interpolateColors(color1, color2, steps) {
+        color1 = this.hex2rgb(color1);
+        color2 = this.hex2rgb(color2);
         let stepFactor = 1 / (steps - 1),
             interpolatedColorArray = [];
 
@@ -280,24 +371,26 @@
       },
 
       getIdxFromLightLabel(lightLabel) {
-        if (!(lightLabel)) {
-          return 0
-        }
-        return Number(lightLabel.split("_")[0])
+        return this.lightLabels.indexOf(lightLabel);
       },
-      getLightbulbIcon(label) {
-        if (label.indexOf("(Z)") > -1) {
-          return "lightgradient";
-        } else {
-          return "lightbulb";
-        }
-      },
-      togglePower(label) {
 
+      isMultizoneLight(label) {
+        if (!label) {
+          return false
+        }
+        return label.indexOf('_multizone_') > -1;
+      },
+
+      togglePower(label, powerState) {
+        let currentState = this.lightStates[label];
+        let toState = powerState ? powerState : !(currentState);
+        this.lightStates[label] = toState;
         this.currentLightLabel = label;
+
         let powerUrl = getLightsUrl + "/power";
         let bodyFormData = new FormData();
         bodyFormData.set('label', this.currentLightLabel);
+        bodyFormData.set('to_status', toState);
         //disabling all buttons until results are backs
         this.disableEffect = true;
         this.disableColors = true;
@@ -312,7 +405,6 @@
           self.disableEffect = false;
           self.disableColors = false;
           self.disableBrightness = false;
-          self.power = !self.power
         })
       },
     },
@@ -335,6 +427,7 @@
     },
     created() {
       this.getLSLights();
+      this.setLightStates();
     },
   }
 

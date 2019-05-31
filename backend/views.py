@@ -12,7 +12,6 @@ from helpers import get_sound_paths
 
 logger = logging.getLogger()
 
-light_store = os.path.join(config.DIR, 'backend/lightstore')
 backend_app = Blueprint('backend', __name__)
 tsk = Blueprint('backend.tasks', __name__)
 
@@ -173,12 +172,15 @@ def discover_lights():
 def create_lights():
     lights_to_create = json.loads(request.form.get("lights"))
     lights.clear_light_store()
+
     try:
         for light in lights_to_create:
             light_label, light_mac_address = light
+            print("attempting to create light: ", light_label, light_mac_address)
             lights.get_or_create_light(light_label, light_mac_address.strip())
         return "ok"
     except Exception as e:
+        print("Caught exception:", e.args)
         return make_response(jsonify(e.args), 400)
 
 
@@ -188,19 +190,33 @@ def set_light():
     label = request.form.get('label')
     if not label:
         return "ok"
-    color = request.form.get('color')
+    color = request.form.get('color', None)
     dim_value = request.form.get('bright', 100)
     first_call = request.form.get('firstcall', False)
     duration = 1000 if first_call == 'true' else 2000
-    try:
-        tasks.light_task.apply_async(kwargs={'label': label,
-                                             'color': color,
-                                             'dim_value': dim_value,
-                                             'duration': duration})
-        throttle()
-        return "ok"
-    except Exception as e:
-        raise Exception(e, "Something went wrong!")
+    if color:
+        try:
+            tasks.light_task.apply_async(kwargs={'label': label,
+                                                 'color': color,
+                                                 'dim_value': dim_value,
+                                                 'duration': duration})
+            throttle()
+            return "ok"
+        except Exception as e:
+            raise Exception(e, "Something went wrong in setting a single light!")
+    else:
+        colors = request.form.get('multicolors', None)
+        try:
+            color_data = json.loads(colors)['color_data']
+
+            tasks.multilights_task.apply_async(kwargs={'label': label,
+                                                       'colors': color_data,
+                                                       'dim_value': dim_value,
+                                                       'duration': duration})
+            throttle()
+            return "ok"
+        except Exception as e:
+            raise Exception(e, "Something went wrong in setting a multizone light!")
 
 
 @backend_app.route("/lights/dim", methods=['POST'])
@@ -219,8 +235,11 @@ def set_dim():
 @backend_app.route("/lights/power", methods=["POST"])
 def toggle_power():
     label = request.form.get("label", None)
+    to_status = request.form.get("to_status", None)
+    if to_status:
+        to_status = False if to_status == 'false' else True
     try:
-        tasks.toggle_power_task.apply_async(kwargs={"label":label})
+        tasks.toggle_power_task.apply_async(kwargs={"label": label, 'to_status': to_status})
         throttle()
         return "ok"
     except Exception as e:

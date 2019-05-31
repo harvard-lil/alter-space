@@ -12,6 +12,9 @@ before_install:
 - nvm install stable
 
 install:
+  # node reqs
+- nvm install 8.9.4
+- npm install
 - pip install -r requirements.txt
 - cd frontend && npm install
 - npm run build

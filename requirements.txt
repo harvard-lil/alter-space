@@ -4,6 +4,7 @@
 #
 #    pip-compile --output-file requirements.txt requirements.in
 #
+-e git+git://github.com/anastasia/lifxlan#egg=lifxlan
 amqp==2.4.1               # via kombu
 asn1crypto==0.24.0        # via cryptography
 atomicwrites==1.2.1       # via pytest
@@ -11,7 +12,7 @@ attrs==18.2.0             # via pytest
 bcrypt==3.1.6             # via paramiko
 beautifulsoup4==4.7.1
 billiard==3.5.0.5         # via celery
-bitstring==3.1.5          # via lifxlan
+bitstring==3.1.5
 celery==4.2.1
 certifi==2018.11.29       # via requests
 cffi==1.11.5              # via bcrypt, cryptography, pynacl
@@ -26,10 +27,9 @@ idna==2.8                 # via cryptography, requests
 itsdangerous==1.1.0       # via flask
 jinja2==2.10.1
 kombu==4.3.0              # via celery
-lifxlan==1.2.5
 markupsafe==1.1.0         # via jinja2
 more-itertools==5.0.0     # via pytest
-netifaces==0.10.9         # via lifxlan
+netifaces==0.10.9
 paramiko==2.4.2           # via fabric3
 pathlib2==2.3.3           # via pytest
 pip-tools==3.2.0

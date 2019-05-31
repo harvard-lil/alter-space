@@ -17,8 +17,16 @@ This project is a collaboration between Harvard's [Library Innovation Lab](https
 - [Sound guide](guides/sounds.md)
 - [Light guide](guides/lights.md)
 
+
 ### Table of contents:
-- [code installation instructions][Instructions]
+- [frameworks](Frameworks)
+- [code installation instructions](Instructions)
+
+
+### Frameworks
+This project is built using 
+- [vue.js](http://vuejs.org/) on the frontend
+- [flask](http://flask.pocoo.org/) on the backend
 
 
 ## Instructions
@@ -93,7 +101,7 @@ Some small overrides can live in a <style scoped> fashion in the .vue files
 ### Working with SVGs
 We use the lovely [vue-svgicon](https://github.com/MMF-FE/vue-svgicon#use-generated-icon) for dealing with svgs in Vue.
 To use, place all svg assets into frontend/svg-icons.
-Run the following command to compile (assets will be placed in frontend/components/icons):
+Run the following command to compile (assets will be placed in frontend/src/components/icons):
 ```
 $ cd ./frontend
 $ npm run generate-icons

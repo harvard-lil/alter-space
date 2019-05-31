@@ -10,8 +10,8 @@
     <div v-if="lightsFound.length > 0">
       <h6>All discoverable lights:</h6>
       <ul>
-        <li v-for="light in lightsFound">
-          <label><b>{{fixLabel(light[0])}}</b></label>
+        <li v-bind:key="light[1]" v-for="light in lightsFound">
+          <label><b>{{light[0]}}</b></label>
           &nbsp;&nbsp;&nbsp;{{light[1]}}
         </li>
       </ul>
@@ -96,7 +96,7 @@
               for (let i = 0; i < res.data.length * 2; i++) {
                 if (i % 2 === 0) {
                   lightNum = i / 2;
-                  label = self.fixLabel(res.data[lightNum][0]);
+                  label = res.data[lightNum][0];
                   inputs[i].value = label;
                 } else {
                   inputs[i].value = res.data[lightNum][1];
@@ -115,13 +115,12 @@
         this.error1 = "";
         this.error2 = "";
         this.disabled = true;
-        let count = 0;
+        // let count = 0;
         for (let i = 0; i < allLights.length; i++) {
           if (i % 2 === 0) {
             light = [];
-            key = count.toString() + "_" + allLights[i].value;
-            light.push(key)
-            count += 1;
+            key = allLights[i].value;
+            light.push(key);
           } else {
             val = allLights[i].value;
             if (val.length && key.length) {
@@ -144,9 +143,8 @@
             method: "post",
             url: storeLightsUrl,
             data: bodyFormData
-          }).then(() => {
+          }).then((res) => {
             localStorage.clear();
-            console.log("getting lights:", self.lights);
             localStorage.setItem("lights", JSON.stringify(self.lights));
             self.successMessage = "Success! " + self.lights.length + " light(s) created.";
             this.disabled = false;
@@ -156,12 +154,6 @@
           });
         }
       },
-      fixLabel(label) {
-        let parts = label.split("_");
-        parts.splice(0, 1);
-        return parts.join("_");
-
-      }
     },
 
     mounted() {

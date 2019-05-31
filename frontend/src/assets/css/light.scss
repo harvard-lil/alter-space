@@ -4,43 +4,68 @@
   text-align: center;
   &.meditate, &.focus {
     background-color: $color-white;
-    border-top: 1px solid $color-navy
+    color: $color-navy;
+    border-top: 1px solid $color-navy;
+    .btn-color-option.active {
+      border: 2px solid $color-navy;
+    }
   }
   &.create, &.relax, &.wyrd, &.read {
     background-color: $color-navy;
+    color: $color-white;
+    .btn-color-option.active {
+      border: 2px solid $color-white;
+    }
   }
   &.disabled {
     opacity: 0.5;
     cursor: not-allowed;
   }
+
+  .btn-color-option {
+    height: 29px;
+    width: 29px;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+  }
+
 }
 
 .btn-color {
   margin: 2px;
-  height: 50px;
-  width: 50px;
+  height: 40px;
+  width: 40px;
   &.active {
     background-color: $color-black;
+  }
+  // for multizone lights
+  .top-section {
+    fill: $color-meditate;
+  }
+  .middle-section {
+    fill: $color-wyrd;
+  }
+  .bottom-section {
+    fill: $color-create;
+  }
+}
+
+.light-list {
+  display: inline-block;
+  li {
+    margin-right: 0.1rem;
+    margin-left: 0.1rem;
   }
 }
 
 .gradient-example {
-  margin-bottom: -12px;
-  margin-top: -3px;
 }
 
 .gradient-pixel {
-  width: 3px;
+  width: 8px;
   height: 8px;
   margin: 0 !important;
-}
-
-.btn-color-option {
-  height: 29px;
-  width: 29px;
-  -moz-box-shadow: none;
-  -webkit-box-shadow: none;
-  box-shadow: none;
 }
 
 .btn-breathe, .btn-chase {
