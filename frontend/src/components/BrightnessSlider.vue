@@ -11,6 +11,9 @@
 </template>
 
 <script>
+  import axios from 'axios';
+
+
   import EventBus from '../event-bus';
 
   const dimUrl = process.env.VUE_APP_BACKEND_URL + "lights" + "/dim"
@@ -39,13 +42,8 @@
         this.$parent.disableColors = true;
         this.$parent.disableEffect = true;
         let self = this;
-        fetch(dimUrl, {
-          method: "POST",
-          body: bodyFormData,
-        }).then((res) => {
-          if (!res.ok) {
-            throw res;
-          }
+        axios.post(dimUrl, {
+          data: bodyFormData,
         }).then(() => {
           self.$parent.disableColors = false;
           self.$parent.disableEffect = false;

@@ -21,6 +21,8 @@
 </template>
 
 <script>
+
+  import axios from 'axios';
   const activitiesUrl = process.env.VUE_APP_BACKEND_URL + "activities";
 
   export default {
@@ -33,15 +35,9 @@
     },
     methods: {
       getActivities() {
-        fetch(activitiesUrl)
+        axios.get(activitiesUrl)
             .then((res) => {
-              if (!res.ok) {
-                throw res;
-              }
-              return res.json();
-            })
-            .then((res) => {
-              let activities = res;
+              let activities = res.data;
               let activtiesPerRow = 3;
               let loops = (activities.length / activtiesPerRow);
               let loop = 0;

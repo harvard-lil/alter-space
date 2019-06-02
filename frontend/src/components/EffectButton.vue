@@ -29,6 +29,8 @@
 </template>
 
 <script>
+  import axios from 'axios';
+
   import EventBus from '../event-bus'
   import "./icons/breathe";
   import "./icons/chase";
@@ -62,17 +64,10 @@
 
         let url = self.$route.params.name === 'wyrd' ? effectUrl + "/chase" : effectUrl + "/breathe";
 
-        fetch(url, {
-          method: "POST",
-          body: bodyFormData
+        axios.post(url, {
+          data: bodyFormData
         }).then((res) => {
-          if (!res.ok) {
-            throw res;
-          }
-          return res.json();
-
-        }).then((res) => {
-          self.taskID = res.task_id;
+          self.taskID = res.data.task_id;
           self.$parent.$parent.taskID = self.taskID;
           self.$parent.effectPlaying = self.effectStatus;
           self.$parent.$parent.effect = self.effectType;

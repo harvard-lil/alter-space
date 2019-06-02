@@ -57,6 +57,7 @@
 </template>
 
 <script>
+  import axios from 'axios';
   import './icons/lightbulb';
 
   const storeLightsUrl = process.env.VUE_APP_BACKEND_URL + "lights/create";
@@ -80,39 +81,26 @@
     methods: {
       discoverLights() {
         let self = this;
-        fetch(discoverLightsUrl)
+        axios.get(discoverLightsUrl)
             .then((res) => {
-              if (!res.ok) {
-                throw res;
-              }
-              return res.json();
-            })
-            .then((res) => {
-              self.lightsFound = res;
+              self.lightsFound = res.data;
             })
       },
       getLights() {
-        let self = this;
         let inputs = this.$el.querySelectorAll("input");
         let localStorageLights = [];
-        fetch(getLightsUrl)
-            .then((res) => {
-              if (!res.ok) {
-                throw res;
-              }
-              return res.json();
-            })
+        axios.get(getLightsUrl)
             .then((res) => {
               let label = "";
               let lightNum = 0;
-              for (let i = 0; i < res.length * 2; i++) {
+              for (let i = 0; i < res.data.length * 2; i++) {
                 if (i % 2 === 0) {
                   lightNum = i / 2;
-                  label = res[lightNum][0];
+                  label = res.data[lightNum][0];
                   inputs[i].value = label;
                 } else {
-                  inputs[i].value = res[lightNum][1];
-                  localStorageLights.push([res[lightNum][0], res[lightNum][1]])
+                  inputs[i].value = res.data[lightNum][1];
+                  localStorageLights.push([res.data[lightNum][0], res.data[lightNum][1]])
                 }
               }
               localStorage.setItem("lights", JSON.stringify(localStorageLights));
@@ -153,13 +141,11 @@
         if (self.lights.length > 0) {
           fetch(storeLightsUrl, {
             method: "POST",
-            body: bodyFormData
+            data: bodyFormData
           }).then((res) => {
             if (!res.ok) {
               throw res;
             }
-            return;
-
           }).then(() => {
             localStorage.clear();
             localStorage.setItem("lights", JSON.stringify(self.lights));

@@ -119,16 +119,21 @@
 </template>
 
 <script>
+  import axios from 'axios';
+
   import './icons/breathe';
   import './icons/triangle-light';
   import './icons/arrow-up';
   import './icons/lightbulb';
   import './icons/lightgradient';
+
   import EventBus from '../event-bus';
 
   import BrightnessSlider from './BrightnessSlider';
 
   const getLightsUrl = process.env.VUE_APP_BACKEND_URL + "lights";
+  const powerUrl = getLightsUrl + "/power";
+
   // steps between color 1 and color 2
   const steps = 29;
   const colorsUrl = getLightsUrl + "/colors";
@@ -235,14 +240,10 @@
         bodyFormData.set('bright', this.brightness.toString());
         bodyFormData.set('firstcall', this.firstCall);
 
-        fetch(setLightUrl, {
-          method: "POST",
-          body: bodyFormData,
-        }).then((resp) => {
-          if (!resp.ok) {
-            throw resp;
-          }
-          return resp;
+        axios({
+          method: "post",
+          url: setLightUrl,
+          data: bodyFormData,
         }).then(() => {
           self.disableEffect = false;
           self.disableColors = false;
@@ -264,14 +265,10 @@
         this.disableBrightness = true;
         let self = this;
 
-        fetch(setLightUrl, {
-          method: "POST",
-          body: bodyFormData,
-        }).then((resp) => {
-          if (!resp.ok) {
-            throw resp;
-          }
-          return resp;
+        axios({
+          method: "post",
+          url: setLightUrl,
+          data: bodyFormData,
         }).then(() => {
           self.disableEffect = false;
           self.disableColors = false;
@@ -393,7 +390,6 @@
         this.lightStates[label] = toState;
         this.currentLightLabel = label;
 
-        let powerUrl = getLightsUrl + "/power";
         let bodyFormData = new FormData();
         bodyFormData.set('label', this.currentLightLabel);
         bodyFormData.set('to_status', toState);
@@ -401,17 +397,14 @@
         this.disableEffect = true;
         this.disableColors = true;
         this.disableBrightness = true;
+
         let self = this;
 
-        fetch(powerUrl, {
-          method: "POST",
-          body: bodyFormData
-        }).then((resp) => {
-          if (!resp.ok) {
-            throw resp;
-          }
-          return resp;
-        }).then((resp) => {
+        axios({
+          method: "post",
+          url: powerUrl,
+          data: bodyFormData,
+        }).then((res) => {
           self.disableEffect = false;
           self.disableColors = false;
           self.disableBrightness = false;
@@ -420,28 +413,19 @@
     },
     beforeMount() {
       let self = this;
-      fetch(getLightsUrl)
-          .then((resp) => {
-            if (!resp.ok) {
-              throw resp
-            }
-            return resp.json();
-          })
+      axios.get(getLightsUrl)
           .then((res) => {
-            self.lights = res;
+            self.lights = res.data;
+          })
+          .then(() => {
+            /* get available colors */
+            axios.get(colorsUrl)
+                .then((res) => {
+                  self.colors = res.data;
+                });
+
           });
 
-      /* get available colors */
-      fetch(colorsUrl)
-          .then((resp) => {
-            if (!resp.ok) {
-              throw resp
-            }
-            return resp.json();
-          })
-          .then((res) => {
-            self.colors = res;
-          });
     },
     mounted() {
       let self = this;

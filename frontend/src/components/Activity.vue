@@ -41,10 +41,11 @@
 </template>
 
 <script>
+  import axios from 'axios';
+
   import EventBus from '../event-bus';
   import SoundLevers from "./SoundLevers";
   import LightLevers from "./LightLevers";
-
 
   const activityUrl = process.env.VUE_APP_BACKEND_URL + "activity/";
 
@@ -99,16 +100,10 @@
           bodyFormData.set('effect', self.effect);
           bodyFormData.set('task_id', self.taskID);
 
-          fetch(url, {
-            method: "POST",
-            body: bodyFormData
+          axios.post(url, {
+            data: bodyFormData
           }).then((res) => {
-            if (!res.ok) {
-              throw res;
-            }
-            return res.json();
-          }).then((res) => {
-            self.taskID = res.task_id;
+            self.taskID = res.data.task_id;
             self.$parent.$parent.taskID = self.taskID;
             self.$parent.effectPlaying = self.breathe;
             cb();
@@ -120,17 +115,11 @@
       getPresets() {
         let url = activityUrl + this.$route.params.name;
         let self = this;
-        fetch(url)
+        axios.get(url)
             .then((res) => {
-              if (!res.ok) {
-                throw res;
-              }
-              return res.json();
-            })
-            .then((res) => {
-              console.log("getting presets", res.sound)
-              self.soundPresets = res.sound;
-              self.lightPresets = res.light;
+              console.log("getting presets" + JSON.stringify(res.data));
+              self.soundPresets = res.data.sound;
+              self.lightPresets = res.data.light;
               self.effectOn = self.lightPresets.effect
             });
 
