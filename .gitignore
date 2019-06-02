@@ -2,12 +2,12 @@
 *.pyc
 .DS_Store
 node_modules/
-/dist/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 *.log
 
+lightstore
 sounds/*
 
 # Editor directories and files

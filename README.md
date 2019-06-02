@@ -20,13 +20,13 @@ This project is a collaboration between Harvard's [Library Innovation Lab](https
 
 ### Table of contents:
 - [frameworks](Frameworks)
-- [code installation instructions](Instructions)
-
+- [Code installation instructions for OS](#install)
+- [Code installation instructions for raspberry pis](#raspberry-pi-installation-instructions)
 
 ### Frameworks
 This project is built using 
 - [vue.js](http://vuejs.org/) on the frontend
-- [flask](http://flask.pocoo.org/) on the backend
+- [flask](http://flask.pocoo.org/) on the backend   
 
 
 ## Instructions
@@ -37,36 +37,38 @@ and [requirements.txt](requirements.txt) for python requirements
 
 ### Install
 ```
-$ pip install pyenv
-$ pyenv install 3.5.4 
-$ pyenv virtualenv 3.5.4 alterspace
-$ pyenv activate alterspace
+pip install pyenv
+pyenv install 3.5.4 
+pyenv virtualenv 3.5.4 alterspace
+pyenv activate alterspace
 ```
 
 #### Install python dependencies 
 
 ```
-$ cp config/config.example.py config/config.py
-$ pip install -r requirements.txt
-$ cd frontend && npm install
+cp config/config.example.py config/config.py
+pip install -r requirements.txt
+cd frontend
+npm install
 
 ```
 
 ### Run flask server
 
 ```
-$ fab run
+cd ..
+fab run
 ```
 or, to run on a different port:
 ```
-$ fab run:8000
+fab run:8000
 ```
 
 ### Tasks
 We use Celery to handle all of our light-related tasks, since some tasks might take longer than others and we don't want that to clobber anything else we might want to be doing.
 Therefore, we need to start the Celery service in a different terminal session: 
 ```
-$ fab celery
+fab celery
 ```
 
 In development, we need to serve both the flask app and vue frontend.  
@@ -74,8 +76,8 @@ In development, we need to serve both the flask app and vue frontend.
 ### Vue/Static assets
 To serve files:
 ```
-$ cd frontend
-$ npm run serve
+cd frontend
+npm run serve
 ```
 This command runs a live reload server at from http://127.0.0.1:8080/
 
@@ -118,3 +120,15 @@ In your vue component's template, place the svg
 <svgicon icon="your-icon" width="60" height="60" :original="true" class="btn-default" stroke="0"></svgicon>
 ```
 
+## Raspberry PI Installation Instructions
+- ssh into your pi: https://www.raspberrypi.org/documentation/remote-access/ssh/ (archived at https://perma.cc/RP4P-CYSR)
+- install redis: https://habilisbest.com/install-redis-on-your-raspberrypi (archived at https://perma.cc/L87X-6MUL)
+- set up git:
+
+```
+sudo apt install git
+git clone https://github.com/harvard-lil/alter-space
+cd alter-space
+cp config/config.example.py config/config.py
+pip install -r requirements.txt
+```
