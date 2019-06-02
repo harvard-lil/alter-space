@@ -47,9 +47,10 @@
       </tr>
     </table>
     <div class="col-12 alert-success" v-if="successMessage">{{successMessage}}<br/><br/></div>
-    <br/>
+    <br/><br/><br/>
     <button type="submit"
-            class="btn-primary" @click="setLights()" :disabled="disabled">Update
+            class="btn-primary" @click="setLights()" :disabled="disabled">
+      Update
     </button>
   </div>
 
