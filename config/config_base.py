@@ -18,9 +18,6 @@ ACTIVITIES = ["focus",
               "relax",
               "create",
               "wyrd"]
-# LIGHTS
-LIGHTS_TOKEN = "abc"
-LIGHTS_ID = "xyz"
 
 # SOUNDS
 CELERY_BROKER_URL = 'redis://',
@@ -29,6 +26,7 @@ CELERY_TASK_ALWAYS_EAGER = False
 
 SOUND_USE_LOCAL = False
 
+# LIGHTS
 LIGHT_STORE_DIR = os.path.join(DIR, 'backend/lightstore')
 
 # a string to append to any light that has multiple colors, like a light strip or beam
