@@ -223,12 +223,11 @@ def set_light():
 @backend_app.route("/lights/dim", methods=['POST'])
 def set_dim():
     data = get_data_from_request(request)
-    label = data["label"]
+    label = data["label"] if 'label' in data else None
     dim_level = data["bright"]
     try:
         tasks.dim_task.apply_async(kwargs={'label': label, 'dim_value': dim_level})
         throttle()
-
         return "ok"
     except Exception as e:
         raise Exception(e, "Something went wrong!")
