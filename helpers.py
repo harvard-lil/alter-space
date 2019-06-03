@@ -1,4 +1,5 @@
 import os
+import json
 import requests
 import urllib.parse
 from bs4 import BeautifulSoup
@@ -36,3 +37,13 @@ def get_sound_paths(sound_type='nature'):
                 name = urllib.parse.unquote(href)
                 sound_urls.append(name)
         return sound_urls
+
+
+def get_data_from_request(request):
+    """
+    Takes bits, returns object.
+    This method wouldn't be a necessity if we could use the JS FormData object to pass data around.
+    Unfortunately, FormData is not compatible with some old devices (https://developer.mozilla.org/en-US/docs/Web/API/FormData)
+    such as our 9.3.5 iPad. :-(
+    """
+    return json.loads(request.data.decode())
