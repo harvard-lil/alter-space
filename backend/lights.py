@@ -282,3 +282,15 @@ def get_dim_value(dim_value):
     dim_value = int(65535 * (int(dim_value) / 100))
     dim_value = 1000 if dim_value < 1000 else dim_value
     return dim_value
+
+
+def flicker(label, mac_addr):
+    try:
+        light = get_or_create_light(label, mac_addr)
+        [h, s, v, k] = light.get_color()
+        light.set_color([h, s, 20000, k], 500)
+        sleep(0.5)
+        light.set_color([h, s, 55535, k], 500)
+        sleep(0.5)
+    except Exception as e:
+        return "Exception caught %s" % e

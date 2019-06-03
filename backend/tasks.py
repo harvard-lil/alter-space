@@ -70,3 +70,8 @@ def stop_task(self, task_name, task_id):
     foo_task = current_app.tasks['backend.tasks.%s_task' % task_name]
     result = foo_task.AsyncResult(task_id)
     revoke_chain(result)
+
+
+@celery.task(bind=True)
+def flicker_task(self, label, mac_addr):
+    lights.flicker(label, mac_addr)

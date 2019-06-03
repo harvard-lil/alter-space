@@ -171,13 +171,13 @@ def discover_lights():
 @backend_app.route("/lights/create", methods=['POST'])
 def create_lights():
     data = get_data_from_request(request)
-    lights_to_create = data["lights"]
+    lights_to_create = json.loads(data["lights"])
     lights.clear_light_store()
 
     try:
         for light in lights_to_create:
-            light_label, light_mac_address = light
-            print("attempting to create light: ", light_label, light_mac_address)
+            light_label = light
+            light_mac_address = lights_to_create[light]
             lights.get_or_create_light(light_label, light_mac_address.strip())
         return "ok"
     except Exception as e:
@@ -244,3 +244,16 @@ def toggle_power():
         return "ok"
     except Exception as e:
         raise Exception(e.args, "Something went wrong!")
+
+@backend_app.route("/lights/flicker", methods=["POST"])
+def flicker():
+    data = get_data_from_request(request)
+    label = data["label"] if 'label' in data else None
+    mac_addr = data["mac_addr"] if 'mac_addr' in data else None
+    try:
+        tasks.flicker_task.apply_async(kwargs={"label": label, "mac_addr": mac_addr})
+        throttle()
+        return "ok"
+    except Exception as e:
+        raise Exception(e.args, "Something went wrong!")
+

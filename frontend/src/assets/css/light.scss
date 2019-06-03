@@ -80,3 +80,15 @@
     opacity: 0.5;
   }
 }
+
+.btn-create-lights {
+  z-index: 999;
+}
+.btn-light {
+  background-color: $color-blue;
+  color: $color-white;
+  &.progress {
+    background-color: $color-gray;
+    color: dimgray;
+  }
+}
