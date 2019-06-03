@@ -404,7 +404,7 @@
         this.disableEffect = true;
         this.disableColors = true;
         this.disableBrightness = true;
-
+        let self = this;
         axios({
           method: "post",
           url: powerUrl,
