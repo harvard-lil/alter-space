@@ -85,9 +85,31 @@
   z-index: 999;
 }
 .btn-light {
+  outline: none;
+  border: 0;
+  padding: 0.3em 0.5em;
   background-color: $color-blue;
   color: $color-white;
   &.progress {
+    background-color: $color-gray;
+    color: dimgray;
+  }
+}
+
+li.light-finding-list-item {
+  padding-bottom: 2em;
+  padding-top: 2em;
+  border-bottom: 1px solid lightgray;
+}
+
+.btn-flicker {
+  outline: none;
+  border: 0;
+  padding: 0.3em 0.5em;
+  margin-top: 1em;
+  z-index: 1;
+  background-color: greenyellow;
+  &.flickering {
     background-color: $color-gray;
     color: dimgray;
   }

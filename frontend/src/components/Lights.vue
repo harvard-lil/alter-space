@@ -8,21 +8,24 @@
     <div v-if="lightsFound.length > 0">
       <h6>All discoverable lights:</h6>
       <ul style="padding-left: 0;">
-        <li v-bind:key="light[1]" v-for="light in lightsFound">
+        <li class="light-finding-list-item" v-bind:key="light[1]" v-for="light in lightsFound">
           <span>
             <b>{{light[0]}}</b>
             {{light[1]}}
           </span>
-          <span>
-            <button v-if="light[0] in lights"
-                    :class="{progress: currentLight, 'btn-light': true}"
-                    @click="removeLight(light[0], light[1])">Remove Light</button>
-            <button v-else
-                    :class="{progress: currentLight, 'btn-light': true}"
-                    @click="addLight(light[0], light[1])">Add light</button>
-          </span>
-          &nbsp;
-          <span><button @click="flickerLight(light[0], light[1])">Toggle</button></span>
+          <button v-if="light[0] in lights"
+                  :class="{progress: currentMACAddress === light[1], 'btn-light btn-default': true}"
+                  @click="removeLight(light[0], light[1])">Remove Light
+          </button>
+          <button v-else
+                  :class="{progress: currentMACAddress === light[1], 'btn-light btn-default': true}"
+                  @click="addLight(light[0], light[1])">Add light
+          </button>
+          <br/>
+          <button @click="flickerLight(light[0], light[1])"
+                  :class="{flickering: currentMACAddress === light[1] && isFlickering, 'btn-default btn-flicker':true}">
+            Flicker
+          </button>
         </li>
       </ul>
     </div>
@@ -55,9 +58,11 @@
         error1: "",
         error2: "",
         successMessage: "",
-        currentLight: "",
+        currentLightLabel: "",
+        currentMACAddress: "",
         disabled: false,
         lightsFound: [],
+        isFlickering: false
       }
     },
     methods: {
@@ -93,13 +98,15 @@
       },
       removeLight(label, mac_addr) {
         delete this.lights[label];
-        this.currentLight = label;
+        this.currentLightLabel = label;
+        this.currentMACAddress = mac_addr;
         this.updateLights();
 
       },
       addLight(label, mac_addr) {
         this.lights[label] = mac_addr;
-        this.currentLight = label;
+        this.currentLightLabel = label;
+        this.currentMACAddress = mac_addr;
         this.updateLights();
       },
       updateLights() {
@@ -120,7 +127,8 @@
           localStorage.setItem("lights", JSON.stringify(localStorageLights));
           self.successMessage = "Success! " + localStorageLights.length + " light(s) created.";
           self.disabled = false;
-          self.currentLight = "";
+          self.currentLightLabel = "";
+          self.currentMACAddress = "";
         });
       },
 
@@ -129,12 +137,18 @@
           label: label,
           mac_addr: mac_addr
         };
+        this.currentLightLabel = label;
+        this.currentMACAddress = mac_addr;
+        this.isFlickering = true;
+        let self = this;
         axios({
           url: flickerLightUrl,
           method: "post",
           data: data
-        }).then((res) => {
-          self.error1 = res;
+        }).then(() => {
+          self.currentLightLabel = "";
+          self.currentMACAddress = "";
+          self.isFlickering = false;
         })
       }
     },
