@@ -2,17 +2,27 @@
   <div class="col-centered col-6">
     <h4> Choose lights</h4>
     <div class="description">
-
-      <p>Enter a label like "Table Lamp" and a MAC address like "12:45:56:99:9a:bc"</p>
-      <p>Labels must be unique.</p>
-
+      Make sure you're connected to the correct WiFi.
+      Lights might not show up immediately.
     </div>
     <div v-if="lightsFound.length > 0">
       <h6>All discoverable lights:</h6>
-      <ul>
+      <ul style="padding-left: 0;">
         <li v-bind:key="light[1]" v-for="light in lightsFound">
-          <label><b>{{light[0]}}</b></label>
-          &nbsp;&nbsp;&nbsp;{{light[1]}}
+          <span>
+            <b>{{light[0]}}</b>
+            {{light[1]}}
+          </span>
+          <span>
+            <button v-if="light[0] in lights"
+                    :class="{progress: currentLight, 'btn-light': true}"
+                    @click="removeLight(light[0], light[1])">Remove Light</button>
+            <button v-else
+                    :class="{progress: currentLight, 'btn-light': true}"
+                    @click="addLight(light[0], light[1])">Add light</button>
+          </span>
+          &nbsp;
+          <span><button @click="flickerLight(light[0], light[1])">Toggle</button></span>
         </li>
       </ul>
     </div>
@@ -21,49 +31,19 @@
     <div class="col-12 alert-danger">{{error1}}</div>
     <div class="col-12 alert-danger">{{error2}}</div>
     <br/>
-
-    <div>
-      <p>Feel free to change the labels. They will update on submit.</p>
-    </div>
-
-    <table class="table col-12 light-list">
-      <tr v-for="val in maxLights" class="list-inline-item" v-bind:key="val">
-        <td>
-          <label>Label #{{val}}: </label><input/>
-        </td>
-        <td>
-          <label>MAC: </label><input/>
-        </td>
-        <td>
-          <svgicon icon="lightbulb"
-                   v-if="$route.params.name !== 'wyrd'"
-                   width="30"
-                   height="30"
-                   :original="true"
-                   class="btn-round btn-breathe"
-                   stroke="0">
-          </svgicon>
-        </td>
-      </tr>
-    </table>
-    <div class="col-12 alert-success" v-if="successMessage">{{successMessage}}<br/><br/></div>
-    <br/><br/><br/>
-    <button type="submit"
-            class="btn-primary" @click="setLights()" :disabled="disabled">
-      Update
-    </button>
   </div>
 
 </template>
 
 <script>
   import axios from 'axios';
-  
+
   import './icons/lightbulb';
 
-  const storeLightsUrl = process.env.VUE_APP_BACKEND_URL + "lights/create";
   const getLightsUrl = process.env.VUE_APP_BACKEND_URL + "lights";
-  const discoverLightsUrl = process.env.VUE_APP_BACKEND_URL + "lights/discover";
+  const storeLightsUrl = getLightsUrl + "/create";
+  const discoverLightsUrl = getLightsUrl + "/discover";
+  const flickerLightUrl = getLightsUrl + "/flicker";
   const maxLights = process.env.VUE_APP_MAX_LIGHTS;
 
   export default {
@@ -71,10 +51,11 @@
     data() {
       return {
         maxLights: Number(maxLights),
-        lights: [],
+        lights: {},
         error1: "",
         error2: "",
         successMessage: "",
+        currentLight: "",
         disabled: false,
         lightsFound: [],
       }
@@ -87,9 +68,11 @@
               self.lightsFound = res.data;
             })
       },
+
       getLights() {
-        let inputs = this.$el.querySelectorAll("input");
+        /* gets lights that have been previously selected for use */
         let localStorageLights = [];
+        let self = this;
         axios.get(getLightsUrl)
             .then((res) => {
               let label = "";
@@ -98,65 +81,67 @@
                 if (i % 2 === 0) {
                   lightNum = i / 2;
                   label = res.data[lightNum][0];
-                  inputs[i].value = label;
+                  self.lights[label] = ""
                 } else {
-                  inputs[i].value = res.data[lightNum][1];
                   localStorageLights.push([res.data[lightNum][0], res.data[lightNum][1]])
+                  self.lights[label] = res.data[lightNum][1];
                 }
               }
               localStorage.setItem("lights", JSON.stringify(localStorageLights));
             })
 
       },
-      setLights() {
-        let allLights = this.$el.querySelectorAll("input");
-        let key = "";
-        let val = "";
-        let light = [];
-        this.error1 = "";
-        this.error2 = "";
-        this.disabled = true;
-        // let count = 0;
-        for (let i = 0; i < allLights.length; i++) {
-          if (i % 2 === 0) {
-            light = [];
-            key = allLights[i].value;
-            light.push(key);
-          } else {
-            val = allLights[i].value;
-            if (val.length && key.length) {
-              light.push(val);
-              this.lights.push(light);
-            } else if (val.length && !(key.length)) {
-              this.error1 = "All lights need a label";
-              this.disabled = false;
-              return
-            }
-          }
-        }
+      removeLight(label, mac_addr) {
+        delete this.lights[label];
+        this.currentLight = label;
+        this.updateLights();
 
-        let bodyFormData = new FormData();
-        bodyFormData.set('lights', JSON.stringify(this.lights));
-        let self = this;
-
-        if (self.lights.length > 0) {
-          axios({
-            url: storeLightsUrl,
-            method: "post",
-            data: bodyFormData
-          }).then(() => {
-            localStorage.clear();
-            localStorage.setItem("lights", JSON.stringify(self.lights));
-            self.successMessage = "Success! " + self.lights.length + " light(s) created.";
-            this.disabled = false;
-          });
-        }
       },
+      addLight(label, mac_addr) {
+        this.lights[label] = mac_addr;
+        this.currentLight = label;
+        this.updateLights();
+      },
+      updateLights() {
+        let data = {
+          lights: JSON.stringify(this.lights)
+        };
+        let self = this;
+        axios({
+          url: storeLightsUrl,
+          method: "post",
+          data: data
+        }).then(() => {
+          localStorage.clear();
+          let localStorageLights = [];
+          for (let light in self.lights) {
+            localStorageLights.push([light, self.lights[light]]);
+          }
+          localStorage.setItem("lights", JSON.stringify(localStorageLights));
+          self.successMessage = "Success! " + localStorageLights.length + " light(s) created.";
+          self.disabled = false;
+          self.currentLight = "";
+        });
+      },
+
+      flickerLight(label, mac_addr) {
+        let data = {
+          label: label,
+          mac_addr: mac_addr
+        };
+        axios({
+          url: flickerLightUrl,
+          method: "post",
+          data: data
+        }).then((res) => {
+          self.error1 = res;
+        })
+      }
     },
 
     mounted() {
-      this.getLights();
       this.discoverLights();
+      this.getLights();
     }
   }
 </script>
