@@ -4,7 +4,7 @@ After=alterspace.service
 
 [Service]
 ExecStartPre=/bin/sleep 15
-ExecStart=/home/pi/.local/bin/celery -A backend.tasks worker
+ExecStart=/home/pi/.local/bin/celery -A backend.tasks worker --logfile=celery.logs
 WorkingDirectory=/home/pi/alter-space/
 # KillMode=process
 # Type=forking
