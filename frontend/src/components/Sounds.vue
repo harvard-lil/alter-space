@@ -13,6 +13,8 @@
 </template>
 
 <script>
+  import axios from 'axios';
+
   import soundfile from './Soundfile';
 
   const audioBaseUrl = process.env.VUE_APP_BACKEND_URL + "sounds";
@@ -33,15 +35,10 @@
     beforeMount() {
       let self = this;
       let url = audioBaseUrl + "/" + this.soundType;
-      fetch(url)
+      axios.get(url)
           .then((res) => {
-            if (!res.ok) {
-              throw res;
-            }
-            return res.json();
-          }).then((res) => {
-        self.allSoundsOfType = res;
-      })
+            self.allSoundsOfType = res.data;
+          })
     },
   }
 </script>

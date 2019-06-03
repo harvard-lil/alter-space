@@ -11,6 +11,9 @@
 </template>
 
 <script>
+  import axios from 'axios';
+
+
   import EventBus from '../event-bus';
 
   const dimUrl = process.env.VUE_APP_BACKEND_URL + "lights" + "/dim"
@@ -29,23 +32,20 @@
     },
     methods: {
       updateBrightness() {
-
-        let bodyFormData = new FormData();
-        if (this.light) {
-          bodyFormData.set('label', this.light);
-        }
-        bodyFormData.set('bright', this.bright.toString());
+        let data = {
+          bright: this.bright.toString()
+        };
+        // if it's universal brightness, no light is set
+        if (this.light)
+          data.label = this.light;
         EventBus.$emit('update-brightness', this.bright);
         this.$parent.disableColors = true;
         this.$parent.disableEffect = true;
         let self = this;
-        fetch(dimUrl, {
-          method: "POST",
-          body: bodyFormData,
-        }).then((res) => {
-          if (!res.ok) {
-            throw res;
-          }
+        axios({
+          method: "post",
+          url: dimUrl,
+          data: data,
         }).then(() => {
           self.$parent.disableColors = false;
           self.$parent.disableEffect = false;

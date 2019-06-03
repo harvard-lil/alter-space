@@ -119,16 +119,21 @@
 </template>
 
 <script>
+  import axios from 'axios';
+
   import './icons/breathe';
   import './icons/triangle-light';
   import './icons/arrow-up';
   import './icons/lightbulb';
   import './icons/lightgradient';
+
   import EventBus from '../event-bus';
 
   import BrightnessSlider from './BrightnessSlider';
 
   const getLightsUrl = process.env.VUE_APP_BACKEND_URL + "lights";
+  const powerUrl = getLightsUrl + "/power";
+
   // steps between color 1 and color 2
   const steps = 29;
   const colorsUrl = getLightsUrl + "/colors";
@@ -145,6 +150,7 @@
         showColorPicker: false,
         colorPresets: [],
         multicolorPresets: [],
+        // all color options that show up in dropdown for each bulb
         colors: [],
         showingList: false,
         currentLightLabel: "",
@@ -154,7 +160,9 @@
         multizoneLightLabels: [],
         lightStates: {},
         colorGradient: [],
-        multizoneValues: {}, // this object stores multiple color values for lights that are multizone
+
+        // this object stores multiple color values for lights that are multizone
+        multizoneValues: {},
         maxMultizoneValues: 3,
         brightness: 100,
         effectPlaying: false,
@@ -220,29 +228,33 @@
             this.multizoneValues[this.currentLightLabel].gradient.push(colorSteps);
           }
         }
-        this.multizoneValues[this.currentLightLabel].gradient = this.multizoneValues[this.currentLightLabel].gradient.flat();
+        let gradients = this.multizoneValues[this.currentLightLabel].gradient;
+        let megaGradientArray = []
+        for (let i = 0; i < gradients.length; i++) {
+          megaGradientArray = megaGradientArray.concat(gradients[i]);
+        }
+        this.multizoneValues[this.currentLightLabel].gradient = megaGradientArray;
+
       },
       setLight() {
-        let bodyFormData = new FormData();
         if (!(this.currentLightLabel)) {
           console.log("no light defined, returning");
           return
         }
 
-        bodyFormData.set('label', this.currentLightLabel);
         let idx = this.getIdxFromLightLabel(this.currentLightLabel);
-        bodyFormData.set('color', this.colorPresets[idx]);
-        bodyFormData.set('bright', this.brightness.toString());
-        bodyFormData.set('firstcall', this.firstCall);
 
-        fetch(setLightUrl, {
-          method: "POST",
-          body: bodyFormData,
-        }).then((resp) => {
-          if (!resp.ok) {
-            throw resp;
-          }
-          return resp;
+        let data = {
+          bright: this.brightness.toString(),
+          label: this.currentLightLabel,
+          firstcall: this.firstCall,
+          color: this.colorPresets[idx]
+        };
+
+        axios({
+          method: "post",
+          url: setLightUrl,
+          data: data,
         }).then(() => {
           self.disableEffect = false;
           self.disableColors = false;
@@ -251,33 +263,28 @@
         })
       },
       setMultizoneLights() {
-        let bodyFormData = new FormData();
         let d = {color_data: this.multizoneValues[this.currentLightLabel].gradient};
-        bodyFormData.set('id', this.light);
-        bodyFormData.set('bright', this.brightness.toString());
-        bodyFormData.set('label', this.currentLightLabel);
-        bodyFormData.set('firstcall', this.firstCall);
-        bodyFormData.set('multicolors', JSON.stringify(d));
+        let data = {
+          bright: this.brightness.toString(),
+          label: this.currentLightLabel,
+          firstcall: this.firstCall,
+          multicolors: JSON.stringify(d)
+        };
         //disabling all buttons until results are backs
         this.disableEffect = true;
         this.disableColors = true;
         this.disableBrightness = true;
         let self = this;
-
-        fetch(setLightUrl, {
-          method: "POST",
-          body: bodyFormData,
-        }).then((resp) => {
-          if (!resp.ok) {
-            throw resp;
-          }
-          return resp;
+        axios({
+          method: "post",
+          url: setLightUrl,
+          data: data,
         }).then(() => {
           self.disableEffect = false;
           self.disableColors = false;
           self.disableBrightness = false;
           self.firstCall = false;
-        })
+        });
       },
       chooseNewColor(hexVal) {
         let idx = this.getIdxFromLightLabel(this.currentLightLabel);
@@ -332,7 +339,7 @@
         }
         for (let i = 0; i < this.multizoneLightLabels.length; i++) {
           this.lightStates[this.multizoneLightLabels[i]] = true;
-          this.togglePower(this.lightLabels[i], true);
+          this.togglePower(this.multizoneLightLabels[i], true);
         }
 
       },
@@ -393,25 +400,19 @@
         this.lightStates[label] = toState;
         this.currentLightLabel = label;
 
-        let powerUrl = getLightsUrl + "/power";
-        let bodyFormData = new FormData();
-        bodyFormData.set('label', this.currentLightLabel);
-        bodyFormData.set('to_status', toState);
         //disabling all buttons until results are backs
         this.disableEffect = true;
         this.disableColors = true;
         this.disableBrightness = true;
-        let self = this;
 
-        fetch(powerUrl, {
-          method: "POST",
-          body: bodyFormData
-        }).then((resp) => {
-          if (!resp.ok) {
-            throw resp;
-          }
-          return resp;
-        }).then((resp) => {
+        axios({
+          method: "post",
+          url: powerUrl,
+          data: {
+            label: this.currentLightLabel,
+            to_status: toState
+          },
+        }).then((res) => {
           self.disableEffect = false;
           self.disableColors = false;
           self.disableBrightness = false;
@@ -420,27 +421,17 @@
     },
     beforeMount() {
       let self = this;
-      fetch(getLightsUrl)
-          .then((resp) => {
-            if (!resp.ok) {
-              throw resp
-            }
-            return resp.json();
-          })
+
+      /* get light bulbs and beams connected that are on local network */
+      axios.get(getLightsUrl)
           .then((res) => {
-            self.lights = res;
+            self.lights = res.data;
           });
 
-      /* get available colors */
-      fetch(colorsUrl)
-          .then((resp) => {
-            if (!resp.ok) {
-              throw resp
-            }
-            return resp.json();
-          })
+      /* get available color choices for dropdown */
+      axios.get(colorsUrl)
           .then((res) => {
-            self.colors = res;
+            self.colors = res.data;
           });
     },
     mounted() {

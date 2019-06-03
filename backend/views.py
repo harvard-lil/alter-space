@@ -8,7 +8,7 @@ from config import config, light_presets, sound_presets
 
 from backend import tasks, lights
 
-from helpers import get_sound_paths
+from helpers import get_sound_paths, get_data_from_request
 
 logger = logging.getLogger()
 
@@ -170,7 +170,8 @@ def discover_lights():
 
 @backend_app.route("/lights/create", methods=['POST'])
 def create_lights():
-    lights_to_create = json.loads(request.form.get("lights"))
+    data = get_data_from_request(request)
+    lights_to_create = data["lights"]
     lights.clear_light_store()
 
     try:
@@ -187,12 +188,13 @@ def create_lights():
 @backend_app.route("/lights/set", methods=['POST'])
 def set_light():
     """set colors to light"""
-    label = request.form.get('label')
+    data = get_data_from_request(request)
+    label = data["label"] if 'label' in data else None
     if not label:
         return "ok"
-    color = request.form.get('color', None)
-    dim_value = request.form.get('bright', 100)
-    first_call = request.form.get('firstcall', False)
+    color = data['color'] if 'color' in data else None
+    dim_value = data['bright'] if 'bright' in data else 100
+    first_call = data['firstcall'] if 'firstcall' in data else False
     duration = 1000 if first_call == 'true' else 2000
     if color:
         try:
@@ -205,10 +207,9 @@ def set_light():
         except Exception as e:
             raise Exception(e, "Something went wrong in setting a single light!")
     else:
-        colors = request.form.get('multicolors', None)
+        colors = json.loads(data['multicolors']) if 'multicolors' in data else None
         try:
-            color_data = json.loads(colors)['color_data']
-
+            color_data = colors['color_data']
             tasks.multilights_task.apply_async(kwargs={'label': label,
                                                        'colors': color_data,
                                                        'dim_value': dim_value,
@@ -221,12 +222,12 @@ def set_light():
 
 @backend_app.route("/lights/dim", methods=['POST'])
 def set_dim():
-    label = request.form.get('label', None)
-    dim_level = request.form.get('bright', 100)
+    data = get_data_from_request(request)
+    label = data["label"] if 'label' in data else None
+    dim_level = data["bright"]
     try:
         tasks.dim_task.apply_async(kwargs={'label': label, 'dim_value': dim_level})
         throttle()
-
         return "ok"
     except Exception as e:
         raise Exception(e, "Something went wrong!")
@@ -234,10 +235,9 @@ def set_dim():
 
 @backend_app.route("/lights/power", methods=["POST"])
 def toggle_power():
-    label = request.form.get("label", None)
-    to_status = request.form.get("to_status", None)
-    if to_status:
-        to_status = False if to_status == 'false' else True
+    data = get_data_from_request(request)
+    label = data["label"]
+    to_status = False if "to_status" in data and data["to_status"] == 'false' else True
     try:
         tasks.toggle_power_task.apply_async(kwargs={"label": label, 'to_status': to_status})
         throttle()

@@ -41,10 +41,11 @@
 </template>
 
 <script>
+  import axios from 'axios';
+
   import EventBus from '../event-bus';
   import SoundLevers from "./SoundLevers";
   import LightLevers from "./LightLevers";
-
 
   const activityUrl = process.env.VUE_APP_BACKEND_URL + "activity/";
 
@@ -94,21 +95,17 @@
         if (self.taskID && self.effect) {
           let url = process.env.VUE_APP_BACKEND_URL + "lights/effects/" + this.effect;
           let light = localStorage.getItem('light');
-          let bodyFormData = new FormData();
-          bodyFormData.set('id', light);
-          bodyFormData.set('effect', self.effect);
-          bodyFormData.set('task_id', self.taskID);
-
-          fetch(url, {
-            method: "POST",
-            body: bodyFormData
+          let data = {
+            id: light,
+            effect: self.effect,
+            task_id: self.taskID
+          };
+          axios({
+            url: url,
+            method: "post",
+            data: data
           }).then((res) => {
-            if (!res.ok) {
-              throw res;
-            }
-            return res.json();
-          }).then((res) => {
-            self.taskID = res.task_id;
+            self.taskID = res.data.task_id;
             self.$parent.$parent.taskID = self.taskID;
             self.$parent.effectPlaying = self.breathe;
             cb();
@@ -120,17 +117,10 @@
       getPresets() {
         let url = activityUrl + this.$route.params.name;
         let self = this;
-        fetch(url)
+        axios.get(url)
             .then((res) => {
-              if (!res.ok) {
-                throw res;
-              }
-              return res.json();
-            })
-            .then((res) => {
-              console.log("getting presets", res.sound)
-              self.soundPresets = res.sound;
-              self.lightPresets = res.light;
+              self.soundPresets = res.data.sound;
+              self.lightPresets = res.data.light;
               self.effectOn = self.lightPresets.effect
             });
 
