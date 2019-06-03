@@ -24,7 +24,7 @@ if ls ./*alterspace.service &>/dev/null ; then
 else
     echo "Can't install service file. alterspace.service not in current directory."
     echo ""
-    echo "Please call ./install from router directory that contains alterspace.service"
+    echo "Please call ./install from services directory that contains alterspace.service"
     exit 1
 fi
 
