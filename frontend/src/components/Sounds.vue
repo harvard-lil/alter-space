@@ -18,7 +18,6 @@
   import soundfile from './Soundfile';
 
   const audioBaseUrl = process.env.VUE_APP_BACKEND_URL + "sounds";
-  console.log("audioBaseUrl " + audioBaseUrl);
 
   export default {
     name: "Sounds",

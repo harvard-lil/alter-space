@@ -95,13 +95,15 @@
         if (self.taskID && self.effect) {
           let url = process.env.VUE_APP_BACKEND_URL + "lights/effects/" + this.effect;
           let light = localStorage.getItem('light');
-          let bodyFormData = new FormData();
-          bodyFormData.set('id', light);
-          bodyFormData.set('effect', self.effect);
-          bodyFormData.set('task_id', self.taskID);
-
-          axios.post(url, {
-            data: bodyFormData
+          let data = {
+            id: light,
+            effect: self.effect,
+            task_id: self.taskID
+          };
+          axios({
+            url: url,
+            method: "post",
+            data: data
           }).then((res) => {
             self.taskID = res.data.task_id;
             self.$parent.$parent.taskID = self.taskID;
@@ -117,7 +119,6 @@
         let self = this;
         axios.get(url)
             .then((res) => {
-              console.log("getting presets" + JSON.stringify(res.data));
               self.soundPresets = res.data.sound;
               self.lightPresets = res.data.light;
               self.effectOn = self.lightPresets.effect

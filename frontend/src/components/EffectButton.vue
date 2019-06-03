@@ -52,20 +52,23 @@
       toggleEffect() {
         let self = this;
         self.effectStatus = !(self.effectStatus);
-        let bodyFormData = new FormData();
-        bodyFormData.set('light_id', self.$parent.light);
-        bodyFormData.set('effect', self.effectStatus);
+        let data = {
+          light_id: self.$parent.light,
+          effect: self.effectStatus
+        };
         if (self.effectType === 'breathe') {
-          bodyFormData.set('breathe_type', self.$route.params.name);
+          data.breathe_type = self.$route.params.name;
         }
         if (self.taskID) {
-          bodyFormData.set('task_id', self.taskID);
+          data.task_id = self.taskID;
         }
 
         let url = self.$route.params.name === 'wyrd' ? effectUrl + "/chase" : effectUrl + "/breathe";
 
-        axios.post(url, {
-          data: bodyFormData
+        axios({
+          method: "post",
+          url: url,
+          data: data
         }).then((res) => {
           self.taskID = res.data.task_id;
           self.$parent.$parent.taskID = self.taskID;

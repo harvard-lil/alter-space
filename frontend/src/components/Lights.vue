@@ -58,6 +58,7 @@
 
 <script>
   import axios from 'axios';
+  
   import './icons/lightbulb';
 
   const storeLightsUrl = process.env.VUE_APP_BACKEND_URL + "lights/create";
@@ -139,13 +140,10 @@
         let self = this;
 
         if (self.lights.length > 0) {
-          fetch(storeLightsUrl, {
-            method: "POST",
+          axios({
+            url: storeLightsUrl,
+            method: "post",
             data: bodyFormData
-          }).then((res) => {
-            if (!res.ok) {
-              throw res;
-            }
           }).then(() => {
             localStorage.clear();
             localStorage.setItem("lights", JSON.stringify(self.lights));
