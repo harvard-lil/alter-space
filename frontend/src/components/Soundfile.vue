@@ -131,7 +131,7 @@
     },
     beforeDestroy() {
       this.selectedSound = false;
-      this.pauseSound();
+      this.removeSound();
     }
   }
 </script>
