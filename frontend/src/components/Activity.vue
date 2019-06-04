@@ -5,12 +5,36 @@
         <h1>
           {{translation[$route.params.name]}}
         </h1>
+        <p>Enjoy our presets, or customize to fit your mood below.</p>
+        <ul class="list-inline">
+          <li class="list-inline-item">
+            <svgicon :icon="play ? 'pause-sounds' : 'play-sounds'"
+                     class="btn-round btn-preset"
+                     :class="play ? 'pause-sounds' : 'play-sounds'"
+                     width="60"
+                     height="60"
+                     stroke="0"
+                     @click="playMusic()">
 
-        <button class="btn btn-customize"
-                @click="toggleCustomizing()"
-                :class="$route.params.name">
-          Customize!
-        </button>
+            </svgicon>
+            <p v-if="play">play sounds</p>
+            <p v-else>pause sounds</p>
+          </li>
+          &nbsp;
+          <li class="list-inline-item">
+            <svgicon icon="customize-sliders"
+                     class="btn-round btn-preset"
+                     width="60"
+                     height="60"
+                     stroke="0"
+                     @click="toggleCustomizing()">
+
+            </svgicon>
+            <p>customize!</p>
+          </li>
+
+        </ul>
+
       </div>
     </div>
     <div class="activity-container" v-show="customizing">
@@ -43,6 +67,11 @@
 <script>
   import axios from 'axios';
 
+
+  import './icons/play-sounds';
+  import './icons/pause-sounds';
+  import './icons/customize-sliders';
+
   import EventBus from '../event-bus';
   import SoundLevers from "./SoundLevers";
   import LightLevers from "./LightLevers";
@@ -66,6 +95,7 @@
         effect: "",
         customizing: false, // if this is set to true we skip the presets page and go straight to the customizing page
         effectOn: "",
+        play: false,
         translation: {
           'relax': 'ReLaX',
           'read': 'READ',
@@ -113,6 +143,11 @@
         } else {
           cb();
         }
+      },
+      playMusic() {
+        let self = this;
+        self.play = !self.play;
+        // EventBus.$emit('play-music', self.play)
       },
       getPresets() {
         let url = activityUrl + this.$route.params.name;
