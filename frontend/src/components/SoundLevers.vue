@@ -138,7 +138,12 @@
         showingList: false,
         chosenSounds: [],
         nowPlayingList: [],
+        userAgent: "", // see getUserAgent for explanation
+        loadSoundEvent: "canplay"
       }
+    },
+    beforeMount() {
+      this.getPreloadSoundEvent();
     },
     mounted() {
       let self = this;
@@ -173,6 +178,24 @@
           this.$emit("sounds-collapse-list", this.soundType);
         }
         this.$parent.showingSoundOptions = true;
+      },
+      getUserAgent() {
+        /* This is necessary because the world is terrible and unfair.
+        *  iOS devices that rely on mobile data don't allow any sort of preloading of audio files.
+        *  They require physical triggering (like a button press) to start loading the files.
+        *  For a final cherry on top, they also don't seem to buffer the media -- they wait until the audio is fully
+        *  loaded before playing. On any device other than iOSes, we can rely on the "canplay" event. On iOSes, we must rely on "canplaythrough". */
+        this.userAgent = navigator.userAgent;
+      },
+      getPreloadSoundEvent() {
+        this.getUserAgent()
+        let forbiddenDevices = ["iPad", "iPhone", "iPod"]
+        for (let i=0; i<forbiddenDevices.length; i++) {
+          if (this.userAgent.indexOf(forbiddenDevices[i]) > -1) {
+            this.loadSoundEvent = "canplaythrough";
+            return
+          }
+        }
       }
     },
   }

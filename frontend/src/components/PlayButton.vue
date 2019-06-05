@@ -5,10 +5,10 @@
              height="60"
              :original="true"
              class="btn-round"
-             @click="pauseMusic()"
+             @click="playMusic()"
              stroke="0"></svgicon>
 
-    <label @click="pauseMusic">{{playLabel}}</label>
+    <label @click="playMusic">{{playLabel}}</label>
   </div>
 </template>
 
@@ -21,15 +21,22 @@
     name: "play-button",
     data() {
       return {
-        pause: false,
-        playLabel: "pause",
+        play: false,
+        playLabel: "play",
       }
     },
+    mounted() {
+      let self = this;
+      this.$on('play-music',(toPlay) => {
+        self.play = toPlay;
+        self.playLabel = self.play ? "play" : "pause";
+      })
+    },
     methods: {
-      pauseMusic() {
-        this.pause = !this.pause;
-        EventBus.$emit("pause-music", this.pause);
-        this.playLabel = this.pause ? "play" : "pause"
+      playMusic() {
+        this.play = !this.play;
+        EventBus.$emit("play-music", this.play);
+        this.playLabel = this.play ? "play" : "pause";
       }
     }
   }

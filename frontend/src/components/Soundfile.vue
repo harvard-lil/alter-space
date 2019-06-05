@@ -15,8 +15,9 @@
            value="40"
            autocomplete="off"
            v-model.lazy.number="volume"/>
+
     <!-- audio files are hidden from DOM / view -->
-    <audio loop controls preload="none">
+    <audio loop controls :preload="soundIsInChosenField() ? 'auto' : 'metadata'">
       <source :id="audio" :src="`${audioPath}`" type="audio/mpeg">
     </audio>
   </div>
@@ -24,7 +25,7 @@
 
 <script>
   import EventBus from '../event-bus';
-
+  import axios from 'axios';
   const audioBaseUrl = process.env.VUE_APP_SOUND_LOCATION === "LOCAL" ? process.env.VUE_APP_SOUND_LOCAL_URL : process.env.VUE_APP_SOUND_REMOTE_URL;
   // eslint-disable-next-line
   console.log(audioBaseUrl);
@@ -42,6 +43,7 @@
         soundPresets: this.$parent.soundPresets,
         pause: false,
         volume: 50,
+        loadSoundEvent: "canplay"
       }
     },
     watch: {
@@ -50,13 +52,16 @@
       }
     },
     mounted() {
+      this.loadSoundEvent = this.$parent.$parent.loadSoundEvent;
       this.audioFile = this.$el.querySelectorAll('audio')[0];
+      this.audioFile.addEventListener(this.loadSoundEvent, this.soundLoaded, false);
       this.selectedSound = this.soundIsInChosenField();
+
       let self = this;
-      EventBus.$on('pause-music', (tryingToPause) => {
-        this.pause = tryingToPause;
+      EventBus.$on('play-music', (tryingToPlay) => {
+        this.pause = !tryingToPlay;
         if (self.soundIsInChosenField()) {
-          tryingToPause ? self.pauseSound() : self.playSound();
+          tryingToPlay ? self.playSound() : self.pauseSound();
         }
       });
 
@@ -83,8 +88,9 @@
     },
     methods: {
       soundIsInChosenField() {
-        if (this.soundPresets) 
+        if (this.soundPresets) {
           return Object.keys(this.soundPresets).indexOf(this.audio) > -1;
+        }
       },
       addSound() {
         this.selectedSound = true;
@@ -118,13 +124,16 @@
           this.addSound();
         }
       },
+      soundLoaded() {
+        EventBus.$emit('sound-loaded', this.audio);
+      },
       initializePresetSound() {
         // Plays sound if it's in the presets
         if (this.soundIsInChosenField()) {
           this.selectedSound = true;
           // start off preset sounds at 100. Might need to move this at a later point to sound_presets.py
           this.volume = this.soundPresets[this.audio];
-          this.playSound(this.volume);
+          // this.playSound(this.volume);
           this.$parent.$parent.nowPlayingList.push(this.audio);
         }
       }
