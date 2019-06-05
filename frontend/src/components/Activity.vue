@@ -19,8 +19,8 @@
                      @click="playMusic()">
 
             </svgicon>
-            <p v-if="play">play sounds</p>
-            <p v-else>pause sounds</p>
+            <p v-if="play">pause sounds</p>
+            <p v-else>play sounds</p>
           </li>
           &nbsp;
           <li class="list-inline-item">
