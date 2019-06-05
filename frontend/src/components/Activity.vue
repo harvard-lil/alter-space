@@ -5,12 +5,38 @@
         <h1>
           {{translation[$route.params.name]}}
         </h1>
+        <p>Enjoy our presets, or customize to fit your mood below.</p>
+        <ul class="list-inline">
+          <li class="list-inline-item">
+            <loader v-if="loading && !loadedAudio"></loader>
+            <svgicon :icon="play ? 'pause-sounds' : 'play-sounds'"
+                     v-if="!loading || loadedAudio"
+                     class="btn-round btn-preset"
+                     :class="play ? 'pause-sounds' : 'play-sounds'"
+                     width="60"
+                     height="60"
+                     stroke="0"
+                     @click="playMusic()">
 
-        <button class="btn btn-customize"
-                @click="toggleCustomizing()"
-                :class="$route.params.name">
-          Customize!
-        </button>
+            </svgicon>
+            <p v-if="play">pause sounds</p>
+            <p v-else>play sounds</p>
+          </li>
+          &nbsp;
+          <li class="list-inline-item">
+            <svgicon icon="customize-sliders"
+                     class="btn-round btn-preset"
+                     width="60"
+                     height="60"
+                     stroke="0"
+                     @click="toggleCustomizing()">
+
+            </svgicon>
+            <p>customize!</p>
+          </li>
+
+        </ul>
+
       </div>
     </div>
     <div class="activity-container" v-show="customizing">
@@ -43,9 +69,15 @@
 <script>
   import axios from 'axios';
 
+
+  import './icons/play-sounds';
+  import './icons/pause-sounds';
+  import './icons/customize-sliders';
+
   import EventBus from '../event-bus';
   import SoundLevers from "./SoundLevers";
   import LightLevers from "./LightLevers";
+  import Loader from "./Loader";
 
   const activityUrl = process.env.VUE_APP_BACKEND_URL + "activity/";
 
@@ -53,7 +85,8 @@
     name: "Activity",
     components: {
       SoundLevers,
-      LightLevers
+      LightLevers,
+      Loader
     },
     data() {
       return {
@@ -63,9 +96,12 @@
         showingLightOptions: false,
         showingSoundOptions: false,
         taskID: "",
+        loading: false,
         effect: "",
         customizing: false, // if this is set to true we skip the presets page and go straight to the customizing page
         effectOn: "",
+        loadedAudio: false,
+        play: false,
         translation: {
           'relax': 'ReLaX',
           'read': 'READ',
@@ -114,6 +150,14 @@
           cb();
         }
       },
+      playMusic() {
+        let self = this;
+        self.play = !self.play;
+        if (self.play) {
+          self.loading = true;
+        }
+        EventBus.$emit('play-music', self.play)
+      },
       getPresets() {
         let url = activityUrl + this.$route.params.name;
         let self = this;
@@ -124,10 +168,15 @@
               self.effectOn = self.lightPresets.effect
             });
 
-      }
+      },
     },
     beforeMount() {
       this.getPresets();
+      let self = this;
+      EventBus.$on('sound-loaded', () => {
+        self.loading = false;
+        self.loadedAudio = true;
+      })
     },
     beforeRouteLeave(to, from, next) {
       // disable chasing and breathing effects

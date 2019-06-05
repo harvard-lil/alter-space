@@ -164,8 +164,17 @@ def get_lights():
 @backend_app.route("/lights/discover", methods=["GET"])
 def discover_lights():
     discovered_lights = lights.discover_lights()
-    unstored_lights = [[l.get_label(), l.get_mac_addr()] for l in discovered_lights]
-    return json.dumps(unstored_lights)
+    all_lights = []
+    for l in discovered_lights:
+        label = l.label
+        try:
+            if not label:
+                label = l.get_label()
+        except:
+            pass
+        all_lights.append([label, l.mac_addr])
+
+    return json.dumps(all_lights)
 
 
 @backend_app.route("/lights/create", methods=['POST'])

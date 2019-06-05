@@ -91,8 +91,10 @@ def get_stored_lights():
 
 
 def get_or_create_light(label, mac_address=None):
+    if not mac_address and not label:
+        raise Exception("No light found. Both mac_address and label are missing.")
     if not label:
-        raise Exception("No light found", label)
+        label = mac_address
     light_path = os.path.join(config.LIGHT_STORE_DIR, label)
     if os.path.exists(light_path):
         with open(light_path, "rb") as f:
@@ -218,7 +220,7 @@ def set_color(label, color=None, dim_value=100, count=0, duration=3000):
     light.set_color([h, s, dim_level, k], duration)
 
 
-def set_colors(light_id, colors=None, dim_value=100, count=0, duration=3000):
+def set_colors(light_id, colors=None, dim_value=100, count=0, duration=500):
     strip = get_or_create_light(light_id)
     new_zones = []
     dim_level = get_dim_value(dim_value)
@@ -287,7 +289,12 @@ def get_dim_value(dim_value):
 def flicker(label, mac_addr):
     try:
         light = get_or_create_light(label, mac_addr)
-        [h, s, v, k] = light.get_color()
+        print("flicker: light found", label)
+        if isinstance(light, MultiZoneLight):
+            colors = light.get_color_zones()
+            [h, s, v, k] = colors[0]
+        else:
+            [h, s, v, k] = light.get_color()
         light.set_color([h, s, 20000, k], 500)
         sleep(0.5)
         light.set_color([h, s, 55535, k], 500)

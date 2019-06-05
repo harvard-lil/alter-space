@@ -38,9 +38,9 @@
                 </svgicon>
 
 
-                <button class="btn-round-tiny btn-power"
+                <!--<button class="btn-round-tiny btn-power"
                         :class="{active: lightStates[label] }"
-                        @click="togglePower(label)"></button>
+                        @click="togglePower(label)"></button>-->
               </li>
             </ul>
             <!--if light is multizone-->
@@ -57,9 +57,9 @@
                          :class="{active: colorPresets[getIdxFromLightLabel(label)] === colorPresets[getIdxFromLightLabel(currentLightLabel)] && showingList && currentLightLabel === label,
                          lightgradient: true}">
                 </svgicon>
-                <button class="btn-round-tiny btn-power"
+                <!--<button class="btn-round-tiny btn-power"
                         :class="{active: lightStates[label] }"
-                        @click="togglePower(label)"></button>
+                        @click="togglePower(label)"></button>-->
               </li>
             </ul>
             <label class="text-center">colors </label>
@@ -404,7 +404,7 @@
         this.disableEffect = true;
         this.disableColors = true;
         this.disableBrightness = true;
-
+        let self = this;
         axios({
           method: "post",
           url: powerUrl,

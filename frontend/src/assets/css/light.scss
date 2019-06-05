@@ -51,6 +51,130 @@
   }
 }
 
+.container-preset {
+  .btn-preset {
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    &:hover, &:active, &:focus {
+      circle {
+        fill: $color-meditate;
+        stroke: $color-navy;
+        stroke-width: 4px;
+      }
+    }
+  }
+
+  &.activity-meditate {
+    .btn-preset {
+      path {
+        fill: $color-meditate;
+      }
+      &:hover, &:active, &:focus {
+        circle {
+          fill: $color-meditate;
+        }
+        path {
+          fill: $color-navy;
+        }
+      }
+    }
+  }
+  &.activity-relax {
+    .btn-preset {
+      path {
+        fill: $color-relax;
+      }
+      &:hover, &:active, &:focus {
+        circle {
+          fill: $color-relax;
+        }
+        path {
+          fill: $color-navy;
+        }
+      }
+    }
+  }
+  &.activity-focus {
+    .btn-preset {
+      path {
+        fill: $color-focus;
+      }
+      &:hover, &:active, &:focus {
+        circle {
+          fill: $color-focus;
+          stroke: $color-white;
+        }
+        path {
+          fill: $color-white;
+        }
+      }
+    }
+  }
+  &.activity-meditate {
+    .btn-preset {
+      path {
+        fill: $color-meditate;
+      }
+      &:hover, &:active, &:focus {
+        circle {
+          fill: $color-meditate;
+        }
+        path {
+          fill: $color-navy;
+        }
+      }
+    }
+  }
+  &.activity-wyrd {
+    .btn-preset {
+      path {
+        fill: $color-wyrd;
+      }
+      &:hover, &:active, &:focus {
+        circle {
+          fill: $color-wyrd;
+          stroke: $color-white;
+        }
+        path {
+          fill: $color-white;
+        }
+      }
+    }
+  }
+  &.activity-read {
+    .btn-preset {
+      path {
+        fill: $color-read;
+      }
+      &:hover, &:active, &:focus {
+        circle {
+          fill: $color-read;
+        }
+        path {
+          fill: $color-navy;
+        }
+      }
+    }
+  }
+  &.activity-create {
+    .btn-preset {
+      path {
+        fill: $color-create;
+      }
+      &:hover, &:active, &:focus {
+        circle {
+          fill: $color-create;
+        }
+        path {
+          fill: $color-navy;
+        }
+      }
+    }
+  }
+
+}
+
 .light-list {
   display: inline-block;
   li {
@@ -85,9 +209,31 @@
   z-index: 999;
 }
 .btn-light {
+  outline: none;
+  border: 0;
+  padding: 0.3em 0.5em;
   background-color: $color-blue;
   color: $color-white;
   &.progress {
+    background-color: $color-gray;
+    color: dimgray;
+  }
+}
+
+li.light-finding-list-item {
+  padding-bottom: 2em;
+  padding-top: 2em;
+  border-bottom: 1px solid lightgray;
+}
+
+.btn-flicker {
+  outline: none;
+  border: 0;
+  padding: 0.3em 0.5em;
+  margin-top: 1em;
+  z-index: 1;
+  background-color: greenyellow;
+  &.flickering {
     background-color: $color-gray;
     color: dimgray;
   }

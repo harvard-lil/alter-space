@@ -17,15 +17,15 @@
           participate in the first installation and will be invited to provide feedback for future improvements.
         </p>
         <br/>
-          <h4>Credits</h4>
-          Alterspace is a collaboration between Harvard's
+        <h4>Credits</h4>
+        Alterspace is a collaboration between Harvard's
         <span class="unclickable">metaLAB</span> and
         <span class="unclickable">Library Innovation Lab</span>
-          featuring the work of
+        featuring the work of
         <span class="unclickable">FK Production</span>
         and
         <span class="unclickable">Alisa Kolot</span>
-          supported by the <span class="unclickable">Knight Foundation</span>.
+        supported by the <span class="unclickable">Knight Foundation</span>.
         <br/><br/>
         <h6>Sounds used</h6>
 
@@ -47,7 +47,7 @@
           </li>
           <li>
             <b>Forest at Night:</b> BBC Sound Effects - Research and Education
-            </li>
+          </li>
           <li>
             <b>Polar Wind:</b> BBC Sound Effects - Research and Education
           </li>
@@ -61,7 +61,7 @@
             <b>Park:</b> BBC Sound Effects - Research and Education
           </li>
           <li>
-          <b>Outside Cafe:</b> BBC Sound Effects - Research and Education
+            <b>Outside Cafe:</b> BBC Sound Effects - Research and Education
           </li>
           <li>
             <b>Forest At Night:</b> FreeToUseSounds
@@ -90,6 +90,9 @@
           </li>
           <li>
             <b>Cycle:</b> Andrey
+          </li>
+          <li>
+            <b>Sliders:</b> Sergey Demushkin
           </li>
         </ul>
         <br/><br/>

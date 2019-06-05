@@ -20,8 +20,8 @@ install:
 - npm run build
 - cd ..
 
-script:
-- fab test
+# script:
+# - fab test
 
 after_success:
   - >
