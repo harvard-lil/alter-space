@@ -98,7 +98,7 @@
         taskID: "",
         loading: false,
         effect: "",
-        customizing: true, // if this is set to true we skip the presets page and go straight to the customizing page
+        customizing: false, // if this is set to true we skip the presets page and go straight to the customizing page
         effectOn: "",
         loadedAudio: false,
         play: false,
