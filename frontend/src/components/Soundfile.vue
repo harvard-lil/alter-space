@@ -40,7 +40,6 @@
         previousVolume: 100,
         selectedSound: false,
         soundPresets: this.$parent.soundPresets,
-        pause: false,
         volume: 50,
         loadSoundEvent: "canplay"
       }
