@@ -139,11 +139,11 @@
         chosenSounds: [],
         nowPlayingList: [],
         userAgent: "", // see getUserAgent for explanation
-        loadSoundEvent: "canplay"
+        loadSoundEvent: "canplay" // versus canplaythrough. ios needs the latter, everything else needs the former
       }
     },
     beforeMount() {
-      this.getPreloadSoundEvent();
+      this.setPreloadSoundEvent();
     },
     mounted() {
       let self = this;
@@ -187,10 +187,10 @@
         *  loaded before playing. On any device other than iOSes, we can rely on the "canplay" event. On iOSes, we must rely on "canplaythrough". */
         this.userAgent = navigator.userAgent;
       },
-      getPreloadSoundEvent() {
-        this.getUserAgent()
-        let forbiddenDevices = ["iPad", "iPhone", "iPod"]
-        for (let i=0; i<forbiddenDevices.length; i++) {
+      setPreloadSoundEvent() {
+        this.getUserAgent();
+        let forbiddenDevices = ["iPad", "iPhone", "iPod"];
+        for (let i = 0; i < forbiddenDevices.length; i++) {
           if (this.userAgent.indexOf(forbiddenDevices[i]) > -1) {
             this.loadSoundEvent = "canplaythrough";
             return

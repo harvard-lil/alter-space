@@ -25,7 +25,6 @@
 
 <script>
   import EventBus from '../event-bus';
-  import axios from 'axios';
   const audioBaseUrl = process.env.VUE_APP_SOUND_LOCATION === "LOCAL" ? process.env.VUE_APP_SOUND_LOCAL_URL : process.env.VUE_APP_SOUND_REMOTE_URL;
   // eslint-disable-next-line
   console.log(audioBaseUrl);
@@ -40,8 +39,8 @@
         audioPath: audioBaseUrl + this.soundType + "/" + this.audio,
         previousVolume: 100,
         selectedSound: false,
+        pause: true,
         soundPresets: this.$parent.soundPresets,
-        pause: false,
         volume: 50,
         loadSoundEvent: "canplay"
       }
