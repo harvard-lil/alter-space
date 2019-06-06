@@ -34,17 +34,27 @@
         playLabel: "play",
         loading: false,
         loadedAudio: false,
-        initialized: false
+        initialized: false,
+        iosDevice: false
       }
     },
 
     beforeMount() {
+      this.iosDevice = this.$parent.deviceIsiOS();
+      if (!this.$parent.deviceIsiOS()) {
+        this.initialized = true;
+      }
+      if (this.$parent.$parent.loadedAudio) {
+        // if we already did the loading of sound in Activity, set to true
+        // otherwise get spinner forever
+        this.initialized = true;
+      }
       EventBus.$on("play-music", (toPlay) => {
         this.play = toPlay;
         this.setPlayLabel();
       });
       EventBus.$on('sound-loaded', () => {
-        if (this.initialized) {
+        if (this.initialized && this.iosDevice && !this.$parent.$parent.loadedAudio) {
           this.loading = false;
           this.loadedAudio = true;
           this.playLabel = "pause";
@@ -58,7 +68,7 @@
       },
       playMusic() {
         this.play = !this.play;
-        if (this.play && !this.initialized) {
+        if (this.play && !this.initialized && this.iosDevice) {
           this.loading = true;
           this.loadedAudio = false;
           this.playLabel = "loading...";
