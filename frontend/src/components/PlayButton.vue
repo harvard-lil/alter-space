@@ -34,7 +34,7 @@
         playLabel: "play",
         loading: false,
         loadedAudio: false,
-        loadedOnce: false
+        initialized: false
       }
     },
 
@@ -44,9 +44,11 @@
         this.setPlayLabel();
       });
       EventBus.$on('sound-loaded', () => {
-        this.loading = false;
-        this.loadedAudio = true;
-        this.playLabel = "pause";
+        if (this.initialized) {
+          this.loading = false;
+          this.loadedAudio = true;
+          this.playLabel = "pause";
+        }
       })
 
     },
@@ -56,12 +58,12 @@
       },
       playMusic() {
         this.play = !this.play;
-        if (this.play && !this.loadedOnce) {
+        if (this.play && !this.initialized) {
           this.loading = true;
           this.loadedAudio = false;
           this.playLabel = "loading...";
+          this.initialized = true;
         }
-        this.loadedOnce = true;
         EventBus.$emit("play-music", this.play);
         this.setPlayLabel();
       }

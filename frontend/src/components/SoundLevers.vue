@@ -139,12 +139,11 @@
         chosenSounds: [],
         nowPlayingList: [],
         userAgent: "", // see getUserAgent for explanation
-        loadSoundEvent: "canplay"
+        loadSoundEvent: "canplay" // versus canplaythrough. ios needs the latter, everything else needs the former
       }
     },
     beforeMount() {
       this.setPreloadSoundEvent();
-      console.log("soundevent:", this.loadSoundEvent)
     },
     mounted() {
       let self = this;
