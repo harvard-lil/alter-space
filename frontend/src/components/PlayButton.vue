@@ -1,6 +1,10 @@
 <template>
   <div class="td col-2">
+    <loader :typeOfLoader="'playbutton'"
+            v-if="loading && !loadedAudio">
+    </loader>
     <svgicon :icon="playLabel"
+             v-if="!loading || loadedAudio"
              width="60"
              height="60"
              :original="true"
@@ -17,13 +21,19 @@
   import EventBus from '../event-bus';
   import "./icons/play";
   import "./icons/pause";
+  import Loader from "./Loader";
 
   export default {
     name: "play-button",
+    components: {
+      Loader
+    },
     data() {
       return {
         play: false,
         playLabel: "play",
+        loading: false,
+        loadedAudio: false
       }
     },
 
@@ -31,7 +41,12 @@
       EventBus.$on("play-music", (toPlay) => {
         this.play = toPlay;
         this.setPlayLabel();
+      });
+      EventBus.$on('sound-loaded', () => {
+        this.loading = false;
+        this.loadedAudio = true;
       })
+
     },
     methods: {
       setPlayLabel() {

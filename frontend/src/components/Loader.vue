@@ -1,6 +1,6 @@
 <template>
-  <div class="btn-round">
-
+  <div class="btn-round btn-loader"
+        :class="typeOfLoader">
     <div id="floatingCirclesG">
       <div class="f_circleG" id="frotateG_01"></div>
       <div class="f_circleG" id="frotateG_02"></div>
@@ -17,7 +17,8 @@
 
 <script>
   export default {
-    name: "loader"
+    name: "loader",
+    props: ["typeOfLoader"]
   }
 </script>
 
@@ -30,6 +31,9 @@
     width: 60px;
     height: 60px;
     box-shadow: none;
+  }
+  .btn-round.playbutton {
+    background-color: #ff6666;
   }
 
   #floatingCirclesG {

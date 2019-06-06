@@ -188,9 +188,9 @@
         this.userAgent = navigator.userAgent;
       },
       getPreloadSoundEvent() {
-        this.getUserAgent()
-        let forbiddenDevices = ["iPad", "iPhone", "iPod"]
-        for (let i=0; i<forbiddenDevices.length; i++) {
+        this.getUserAgent();
+        let forbiddenDevices = ["iPad", "iPhone", "iPod"];
+        for (let i = 0; i < forbiddenDevices.length; i++) {
           if (this.userAgent.indexOf(forbiddenDevices[i]) > -1) {
             this.loadSoundEvent = "canplaythrough";
             return
