@@ -33,7 +33,8 @@
         play: false,
         playLabel: "play",
         loading: false,
-        loadedAudio: false
+        loadedAudio: false,
+        loadedOnce: false
       }
     },
 
@@ -45,6 +46,7 @@
       EventBus.$on('sound-loaded', () => {
         this.loading = false;
         this.loadedAudio = true;
+        this.playLabel = "pause";
       })
 
     },
@@ -54,6 +56,12 @@
       },
       playMusic() {
         this.play = !this.play;
+        if (this.play && !this.loadedOnce) {
+          this.loading = true;
+          this.loadedAudio = false;
+          this.playLabel = "loading...";
+        }
+        this.loadedOnce = true;
         EventBus.$emit("play-music", this.play);
         this.setPlayLabel();
       }

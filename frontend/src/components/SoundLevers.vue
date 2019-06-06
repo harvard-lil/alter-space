@@ -143,7 +143,8 @@
       }
     },
     beforeMount() {
-      this.getPreloadSoundEvent();
+      this.setPreloadSoundEvent();
+      console.log("soundevent:", this.loadSoundEvent)
     },
     mounted() {
       let self = this;
@@ -187,7 +188,7 @@
         *  loaded before playing. On any device other than iOSes, we can rely on the "canplay" event. On iOSes, we must rely on "canplaythrough". */
         this.userAgent = navigator.userAgent;
       },
-      getPreloadSoundEvent() {
+      setPreloadSoundEvent() {
         this.getUserAgent();
         let forbiddenDevices = ["iPad", "iPhone", "iPod"];
         for (let i = 0; i < forbiddenDevices.length; i++) {
