@@ -39,6 +39,7 @@
         audioPath: audioBaseUrl + this.soundType + "/" + this.audio,
         previousVolume: 100,
         selectedSound: false,
+        pause: true,
         soundPresets: this.$parent.soundPresets,
         volume: 50,
         loadSoundEvent: "canplay"
