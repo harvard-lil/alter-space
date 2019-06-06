@@ -44,6 +44,7 @@
         this.setPlayLabel();
       });
       EventBus.$on('sound-loaded', () => {
+        console.log("sound loaded!")
         if (this.initialized) {
           this.loading = false;
           this.loadedAudio = true;
@@ -62,6 +63,7 @@
           this.loading = true;
           this.loadedAudio = false;
           this.playLabel = "loading...";
+          console.log("setting initialized to true", this.initialized)
           this.initialized = true;
         }
         EventBus.$emit("play-music", this.play);

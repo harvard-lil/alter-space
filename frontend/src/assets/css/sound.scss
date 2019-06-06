@@ -19,10 +19,11 @@
 
 .btn-sound-container {
   -webkit-box-flex: 0;
-  -ms-flex: 0 0 40%;
-  flex: 0 0 40%;
-  max-width: 40%;
-  padding: 0 20px;
+  -ms-flex: 0 0 50%;
+  flex: 0 0 50%;
+  max-width: 50%;
+  //padding: 0 20px;
+  //float: right;
 }
 
 .sound-type-container {
@@ -30,6 +31,7 @@
 }
 
 .btn-sound-item {
+  margin-left: 14px;
   &:first-child {
     float: left;
   }
@@ -37,6 +39,9 @@
     float: right;
   }
   svg.btn-sound-type {
+    margin-top: -5px;
+    margin-bottom: 5px;
+    margin-left: 10px;
     &.nature, &.urban, &.abstract {
       &:hover {
         path {
@@ -50,6 +55,9 @@
         fill: $color-navy;
       }
     }
+  }
+  label {
+    margin-left: 10px;
   }
 }
 
@@ -76,10 +84,16 @@
 }
 
 .now-playing-container {
-  display: inline;
+  display: block;
   text-align: left;
   font-size: 16px;
   font-weight: 600;
+  max-width: 250px;
+  vertical-align: top;
+  margin-left: 40px !important;
+  margin-top: 40px !important;
+  //vertical-align: top;
+  border-left: 1px soliid $color-navy;
   ul {
     max-width: 320px;
   }

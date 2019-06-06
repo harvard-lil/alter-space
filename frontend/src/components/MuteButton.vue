@@ -16,6 +16,8 @@
 <script>
   import EventBus from '../event-bus';
   import './icons/mute';
+  import './icons/volume';
+
 
   export default {
     name: "mute-button",

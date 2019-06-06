@@ -11,16 +11,9 @@
       </svgicon>
 
     </div>
-    <div class="table cell-table table-top" :class="$route.params.name">
+    <div class="table cell-table table-top-single " :class="[$route.params.name, {expanded: showingList, 'table-top': showingList}]">
       <div class="tr">
         <play-button></play-button>
-        <mute-button></mute-button>
-        <sound-slider></sound-slider>
-      </div>
-    </div>
-    <div class="table cell-table table-bottom"
-         :class="[$route.params.name, {expanded: showingList}]">
-      <div class="tr table-with-top-divider">
         <div class="td btn-sound-container">
           <div class="list-inline-item btn-sound-item"
                v-for="type in soundTypes"
@@ -117,17 +110,13 @@
   import './icons/arrow-up';
 
   import PlayButton from './PlayButton'
-  import MuteButton from './MuteButton'
-  import SoundSlider from './SoundSlider'
   import Sounds from './Sounds'
 
   export default {
     name: "sound-levers",
     components: {
-      SoundSlider,
       Sounds,
-      PlayButton,
-      MuteButton
+      PlayButton
     },
     props: ["soundPresets", "collapseSoundOptions"],
     data() {
@@ -138,6 +127,7 @@
         showingList: false,
         chosenSounds: [],
         nowPlayingList: [],
+        showMaxPlaying: 3,
         userAgent: "", // see getUserAgent for explanation
         loadSoundEvent: "canplay" // versus canplaythrough. ios needs the latter, everything else needs the former
       }

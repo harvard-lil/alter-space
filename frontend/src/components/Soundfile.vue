@@ -7,15 +7,6 @@
       {{ audioName }}
     </button>
     <br/>
-    <input type="range"
-           class="col-centered slider-small"
-           :disabled="selectedSound === false"
-           min="1"
-           max="100"
-           value="40"
-           autocomplete="off"
-           v-model.lazy.number="volume"/>
-
     <!-- audio files are hidden from DOM / view -->
     <audio loop controls :preload="soundIsInChosenField() ? 'auto' : 'metadata'">
       <source :id="audio" :src="`${audioPath}`" type="audio/mpeg">
