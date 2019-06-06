@@ -4,7 +4,8 @@ import logging
 from time import sleep
 import requests
 from flask import jsonify, Blueprint, request, render_template, make_response, url_for, send_file
-from config import config, light_presets, sound_presets
+from config import config, light_presets
+from config import sound_presets_ios as sound_presets
 
 from backend import tasks, lights
 
