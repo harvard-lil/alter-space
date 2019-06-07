@@ -97,12 +97,7 @@
           </button>
         </template>
         <template v-else>
-
-          <svgicon icon="arrow-up"
-                   class="arrow-up colors"
-                   :class="['color-'+getIdxFromLightLabel(currentLightLabel), $route.params.name]">
-          </svgicon>
-
+          <div class="helper-text">Light #{{getIdxFromLightLabel(currentLightLabel) + 1}}.</div>
           <button type="button"
                   class="btn-round-small btn-color-option"
                   v-for="(hexVal, idx) in colors"
