@@ -25,14 +25,14 @@
               <li class="list-inline-item" v-bind:key="label" v-for="label in lightLabels">
                 <!--if lightbulb or single zone light-->
                 <svgicon icon="lightbulb"
-                         class="btn-round btn-color"
+                         class="btn-round btn-color lightbulb"
                          v-bind:key="label"
                          width="40"
                          height="40"
                          :disabled="disableColors"
                          stroke="0"
                          @click="showList(label)"
-                         :class="{active: colorPresets[getIdxFromLightLabel(label)] === colorPresets[getIdxFromLightLabel(currentLightLabel)] && showingList && currentLightLabel === label, lightbulb: true}"
+                         :class="{active: colorPresets[getIdxFromLightLabel(label)] === colorPresets[getIdxFromLightLabel(currentLightLabel)] && showingList && currentLightLabel === label}"
                          :style="{'fill': colorPresets[getIdxFromLightLabel(label)]}">
 
                 </svgicon>
@@ -42,18 +42,19 @@
                         :class="{active: lightStates[label] }"
                         @click="togglePower(label)"></button>-->
               </li>
+            <!--</ul>
+            <ul class="light-group list-inline light-list">-->
             <!--if light is multizone-->
               <li class="list-inline-item" v-bind:key="label" v-for="label in multizoneLightLabels">
                 <svgicon icon="lightgradient"
-                         class="btn-round btn-color"
+                         class="btn-round btn-color lightgradient"
                          v-bind:key="label"
                          width="40"
                          height="40"
                          :disabled="disableColors"
                          stroke="0"
                          @click="showList(label)"
-                         :class="{active: colorPresets[getIdxFromLightLabel(label)] === colorPresets[getIdxFromLightLabel(currentLightLabel)] && showingList && currentLightLabel === label,
-                         lightgradient: true}">
+                         :class="{active: colorPresets[getIdxFromLightLabel(label)] === colorPresets[getIdxFromLightLabel(currentLightLabel)] && showingList && currentLightLabel === label}">
                 </svgicon>
                 <!--<button class="btn-round-tiny btn-power"
                         :class="{active: lightStates[label] }"
