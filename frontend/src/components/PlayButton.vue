@@ -11,7 +11,8 @@
              :class="playLabel"
              class="btn-round"
              @click="playMusic()"
-             stroke="0"></svgicon>
+             stroke="0">
+    </svgicon>
 
     <label @click="playMusic">{{playLabel}}</label>
   </div>
@@ -43,23 +44,21 @@
       this.iosDevice = this.$parent.deviceIsiOS();
       if (!this.$parent.deviceIsiOS()) {
         this.initialized = true;
-      }
-      if (this.$parent.$parent.loadedAudio) {
-        // if we already did the loading of sound in Activity, set to true
-        // otherwise get spinner forever
-        this.initialized = true;
+      } else {
+        // only capture this event if on ios
+        EventBus.$on('sound-loaded', () => {
+          if (this.initialized) {
+            this.loading = false;
+            this.loadedAudio = true;
+            this.playLabel = "pause";
+          }
+        })
       }
       EventBus.$on("play-music", (toPlay) => {
         this.play = toPlay;
         this.setPlayLabel();
       });
-      EventBus.$on('sound-loaded', () => {
-        if (this.initialized && this.iosDevice && !this.$parent.$parent.loadedAudio) {
-          this.loading = false;
-          this.loadedAudio = true;
-          this.playLabel = "pause";
-        }
-      })
+
 
     },
     methods: {
@@ -68,6 +67,11 @@
       },
       playMusic() {
         this.play = !this.play;
+        if (this.$parent.$parent.soundInitialized) {
+          // if we already did the loading of sound in Activity, set to true
+          // otherwise get spinner forever
+          this.initialized = true;
+        }
         if (this.play && !this.initialized && this.iosDevice) {
           this.loading = true;
           this.loadedAudio = false;
