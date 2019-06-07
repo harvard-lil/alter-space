@@ -8,7 +8,7 @@
     </button>
     <br/>
     <!-- audio files are hidden from DOM / view -->
-    <audio loop controls :preload="soundIsInChosenField() ? 'auto' : 'metadata'">
+    <audio loop controls :preload="soundIsInChosenField() ? 'auto' : 'none'">
       <source :id="audio" :src="`${audioPath}`" type="audio/mpeg">
     </audio>
   </div>
