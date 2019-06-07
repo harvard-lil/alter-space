@@ -42,9 +42,7 @@
                         :class="{active: lightStates[label] }"
                         @click="togglePower(label)"></button>-->
               </li>
-            </ul>
             <!--if light is multizone-->
-            <ul class="light-group list-inline light-list">
               <li class="list-inline-item" v-bind:key="label" v-for="label in multizoneLightLabels">
                 <svgicon icon="lightgradient"
                          class="btn-round btn-color"

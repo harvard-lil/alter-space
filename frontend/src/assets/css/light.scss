@@ -177,9 +177,12 @@
 
 .light-list {
   display: inline-block;
+  float: left;
   li {
     margin-right: 0.1rem;
     margin-left: 0.1rem;
+    float: left;
+    display: inline;
   }
 }
 
