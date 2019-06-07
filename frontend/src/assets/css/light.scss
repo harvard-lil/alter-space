@@ -180,6 +180,8 @@
   li {
     margin-right: 0.1rem;
     margin-left: 0.1rem;
+    float: left;
+    display: inline;
   }
 }
 
@@ -217,6 +219,9 @@
   &.progress {
     background-color: $color-gray;
     color: dimgray;
+  }
+  &.btn-remove-light {
+    background-color: $color-create;
   }
 }
 
