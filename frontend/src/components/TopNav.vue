@@ -3,15 +3,17 @@
       :class="['activity-'+$route.params.name, {about: $route.name === 'about'}]">
     <li class="nav-item col-2">
       <div class="button-label-container" v-if="$route.name !== 'home'">
-        <router-link to="/"
-        class="nav-button-group">
+        <!--<router-link to="/"
+        class="nav-button-group">-->
           <svgicon icon="home"
                    width="45"
                    height="45"
+                   @click="goHome()"
                    class="icon btn-round btn-nav"
                    stroke="0"></svgicon>
           <br/>
-          Home</router-link>
+          Home
+        <!--</router-link>-->
       </div>
     </li>
     <li class="nav-item col-8">
@@ -38,6 +40,7 @@
 </template>
 
 <script>
+  import axios from 'axios';
   import EventBus from '../event-bus'
   export default {
     name: "topnav",
@@ -53,6 +56,11 @@
       EventBus.$on('customizing', (customizing) => {
         self.customizing = customizing;
       })
+    },
+    methods: {
+      goHome() {
+        window.location = "/"
+      }
     }
   }
 </script>

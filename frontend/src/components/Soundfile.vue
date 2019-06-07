@@ -42,7 +42,7 @@
         pause: true,
         soundPresets: this.$parent.soundPresets,
         volume: 50,
-        loadSoundEvent: "canplay"
+        loadSoundEvent: this.$parent.$parent.loadSoundEvent
       }
     },
     watch: {
@@ -51,7 +51,6 @@
       }
     },
     mounted() {
-      this.loadSoundEvent = this.$parent.$parent.loadSoundEvent;
       this.audioFile = this.$el.querySelectorAll('audio')[0];
       this.audioFile.addEventListener(this.loadSoundEvent, this.soundLoaded, false);
       this.selectedSound = this.soundIsInChosenField();

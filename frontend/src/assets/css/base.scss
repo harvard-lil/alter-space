@@ -397,10 +397,7 @@ button, .btn, .btn-default {
   outline: 0;
   text-align: center;
   margin: 5px 3px;
-  -moz-box-shadow: 2px 1px 5px $color-dropshadow;
-  -webkit-box-shadow: 2px 1px 5px $color-dropshadow;
-  box-shadow: 2px 1px 5px $color-dropshadow;
-
+  
   @include media-breakpoint-only(md) {
     height: 50px;
     width: 50px;
