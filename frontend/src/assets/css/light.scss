@@ -218,6 +218,9 @@
     background-color: $color-gray;
     color: dimgray;
   }
+  &.btn-remove-light {
+    background-color: $color-create;
+  }
 }
 
 li.light-finding-list-item {

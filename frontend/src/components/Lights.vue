@@ -14,11 +14,11 @@
             {{light[1]}}
           </span>
           <button v-if="light[0] in lights"
-                  :class="{progress: currentMACAddress === light[1], 'btn-light btn-default': true}"
+                  :class="[{progress: currentMACAddress === light[1], }, 'btn-remove-light btn-light btn-default']"
                   @click="removeLight(light[0], light[1])">Remove Light
           </button>
           <button v-else
-                  :class="{progress: currentMACAddress === light[1], 'btn-light btn-default': true}"
+                  :class="[{progress: currentMACAddress === light[1]}, 'btn-add-light btn-light btn-default']"
                   @click="addLight(light[0], light[1])">Add light
           </button>
           <br/>
