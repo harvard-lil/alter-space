@@ -93,6 +93,54 @@
         activity: this.$route.params.name,
         soundPresets: [],
         lightPresets: {},
+        allSounds: {
+          "relax": {
+            "nature": {},
+            "urban": {},
+            "abstract": {
+              "Relax.mp3": 80,
+            }
+          },
+          "read": {
+            "nature": {},
+            "urban": {},
+            "abstract": {
+              "Read.mp3": 80,
+            }
+          },
+          "meditate": {
+            "nature": {},
+            "urban": {},
+            "abstract": {
+              "Meditate.mp3": 80,
+            }
+          },
+          "wyrd": {
+            "nature": {},
+            "urban": {
+              "Outside_cafe.mp3": 80,
+            },
+            "abstract": {
+              "Be Weird.mp3": 80,
+            }
+          },
+          "focus": {
+            "nature": {},
+            "urban": {},
+            "abstract": {
+              "Focus.mp3": 80
+            }
+          },
+          "create": {
+            "nature": {
+              "Forest_meadow.mp3": 20
+            },
+            "urban": {},
+            "abstract": {
+              "Create.mp3": 80
+            }
+          },
+        },
         showingLightOptions: false,
         showingSoundOptions: false,
         taskID: "",
@@ -161,9 +209,10 @@
       getPresets() {
         let url = activityUrl + this.$route.params.name;
         let self = this;
+        this.soundPresets = this.allSounds[this.activity];
+        console.log("getting sound " + JSON.stringify(this.soundPresets))
         axios.get(url)
             .then((res) => {
-              self.soundPresets = res.data.sound;
               self.lightPresets = res.data.light;
               self.effectOn = self.lightPresets.effect
             });
