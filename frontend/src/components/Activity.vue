@@ -121,7 +121,7 @@
               "Outside_cafe.mp3": 80,
             },
             "abstract": {
-              "Be Weird.mp3": 80,
+              "Be_Weird.mp3": 80,
             }
           },
           "focus": {
@@ -210,7 +210,6 @@
         let url = activityUrl + this.$route.params.name;
         let self = this;
         this.soundPresets = this.allSounds[this.activity];
-        console.log("getting sound " + JSON.stringify(this.soundPresets))
         axios.get(url)
             .then((res) => {
               self.lightPresets = res.data.light;
