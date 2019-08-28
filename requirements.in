@@ -14,6 +14,7 @@ requests
 urllib3==1.24.2  ## from requests
 celery
 redis # for celery
+werkzeug>=0.15.3
 
 # words into colors
 # -e git+git://github.com/anastasia/namecolor.git@aa2a8d72#egg=namecolor # colors
