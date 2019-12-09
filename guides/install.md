@@ -13,17 +13,24 @@ pyenv virtualenv 3.5.4 alterspace
 pyenv activate alterspace
 ```
 
-#### Install python dependencies 
-
+#### Install python dependencies
 ```
 cp config/config.example.py config/config.py
 pip install -r requirements.txt
-cd frontend
-npm install
-
 ```
 
-### Run flask server
+#### Install JS dependencies
+I have noticed that there are problems with newer versions of node.
+To get around this, I ran `brew install nvm` (a node package manager)
+and then `nvm install 8.11.1` 
+In another bash window:
+```
+cd frontend
+npm install
+```
+
+
+### In the first bash window, run flask server
 
 ```
 cd ..

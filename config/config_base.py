@@ -25,7 +25,7 @@ CELERY_RESULT_BACKEND = 'redis://'
 CELERY_TASK_ALWAYS_EAGER = False
 
 SOUND_USE_LOCAL = False
-
+SOUND_URL = "http://library.law.harvard.edu/projects/files/sounds/"
 # LIGHTS
 LIGHT_STORE_DIR = os.path.join(DIR, 'backend/lightstore')
 

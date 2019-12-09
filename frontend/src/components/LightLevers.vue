@@ -1,119 +1,121 @@
 <template>
-  <div class="row light-levers">
-    <div class="title-shape">
-      <svgicon icon="triangle-light"
-               width="100%"
-               height="100%"
-               title="Light Levers"
-               class="triangle"
-               :class="$route.params.name"
-               stroke="0">
-      </svgicon>
+    <div class="row light-levers">
+        <div class="title-shape">
+            <svgicon icon="triangle-light"
+                     width="100%"
+                     height="100%"
+                     title="Light Levers"
+                     class="triangle"
+                     :class="$route.params.name"
+                     stroke="0">
+            </svgicon>
 
-    </div>
-    <div class="table cell-table table-top-single"
-         :class="[$route.params.name, {
+        </div>
+        <div class="table cell-table table-top-single"
+             :class="[$route.params.name, {
             options: showingList
          }]">
-      <div class="tr">
-        <div class="td col-4">
-          <!-- Light list start -->
-          <div class="btn-group-color"
-               role="group"
-               aria-label="color button group">
-            <ul class="light-group list-inline light-list">
-              <li class="list-inline-item" v-bind:key="label" v-for="label in lightLabels">
-                <!--if lightbulb or single zone light-->
-                <svgicon icon="lightbulb"
-                         class="btn-round btn-color"
-                         v-bind:key="label"
-                         width="40"
-                         height="40"
-                         :disabled="disableColors"
-                         stroke="0"
-                         @click="showList(label)"
-                         :class="{active: colorPresets[getIdxFromLightLabel(label)] === colorPresets[getIdxFromLightLabel(currentLightLabel)] && showingList && currentLightLabel === label, lightbulb: true}"
-                         :style="{'fill': colorPresets[getIdxFromLightLabel(label)]}">
+            <div class="tr">
+                <div class="td col-4">
+                    <!-- Light list start -->
+                    <div class="btn-group-color"
+                         role="group"
+                         aria-label="color button group">
+                        <ul class="light-group list-inline light-list">
+                            <li class="list-inline-item" v-bind:key="label" v-for="label in lightLabels">
+                                <!--if lightbulb or single zone light-->
+                                <svgicon icon="lightbulb"
+                                         class="btn-round btn-color"
+                                         v-bind:key="label"
+                                         width="40"
+                                         height="40"
+                                         :disabled="disableColors"
+                                         stroke="0"
+                                         @click="showList(label)"
+                                         :class="{active: colorPresets[getIdxFromLightLabel(label)] === colorPresets[getIdxFromLightLabel(currentLightLabel)] && showingList && currentLightLabel === label, lightbulb: true}"
+                                         :style="{'fill': colorPresets[getIdxFromLightLabel(label)]}">
 
-                </svgicon>
+                                </svgicon>
 
 
-                <!--<button class="btn-round-tiny btn-power"
-                        :class="{active: lightStates[label] }"
-                        @click="togglePower(label)"></button>-->
-              </li>
-            <!--if light is multizone-->
-              <li class="list-inline-item" v-bind:key="label" v-for="label in multizoneLightLabels">
-                <svgicon icon="lightgradient"
-                         class="btn-round btn-color"
-                         v-bind:key="label"
-                         width="40"
-                         height="40"
-                         :disabled="disableColors"
-                         stroke="0"
-                         @click="showList(label)"
-                         :class="{active: colorPresets[getIdxFromLightLabel(label)] === colorPresets[getIdxFromLightLabel(currentLightLabel)] && showingList && currentLightLabel === label,
+                                <!--<button class="btn-round-tiny btn-power"
+                                        :class="{active: lightStates[label] }"
+                                        @click="togglePower(label)"></button>-->
+                            </li>
+                            <!--if light is multizone-->
+                            <li class="list-inline-item" v-bind:key="label" v-for="label in multizoneLightLabels">
+                                <svgicon icon="lightgradient"
+                                         class="btn-round btn-color"
+                                         v-bind:key="label"
+                                         width="40"
+                                         height="40"
+                                         :disabled="disableColors"
+                                         stroke="0"
+                                         @click="showList(label)"
+                                         :class="{active: colorPresets[getIdxFromLightLabel(label)] === colorPresets[getIdxFromLightLabel(currentLightLabel)] && showingList && currentLightLabel === label,
                          lightgradient: true}">
-                </svgicon>
-                <!--<button class="btn-round-tiny btn-power"
-                        :class="{active: lightStates[label] }"
-                        @click="togglePower(label)"></button>-->
-              </li>
-            </ul>
-            <label class="text-center">colors </label>
-          </div>
-          <!-- Light list end -->
+                                </svgicon>
+                                <!--<button class="btn-round-tiny btn-power"
+                                        :class="{active: lightStates[label] }"
+                                        @click="togglePower(label)"></button>-->
+                            </li>
+                        </ul>
+                        <label class="text-center">colors </label>
+                    </div>
+                    <!-- Light list end -->
+                </div>
+                <div class="td col-8">
+                    <brightness-slider :disable="disableBrightness">
+                    </brightness-slider>
+                    <label>brightness</label>
+                </div>
+            </div>
         </div>
-        <div class="td col-8">
-          <brightness-slider :disable="disableBrightness">
-          </brightness-slider>
-          <label>brightness</label>
-        </div>
-      </div>
+        <table class="table cell-table table-bottom"
+               :class="$route.params.name"
+               v-show="showingList">
+            <div class="btn-group-color-options col-centered"
+                 :class="[$route.params.name, {disabled: disableColors}]"
+                 role="group"
+                 aria-label="color button group">
+                <template v-if="isMultizoneLight(currentLightLabel)">
+                    <div class="helper-text">This light has multiple color zones. Choose up to {{ maxMultizoneValues
+                        }}.
+                    </div>
+                    <ul class="gradient-example list-inline">
+                        <li class="gradient-pixel list-inline-item"
+                            v-for="(pixel, idx) in multizoneValues[currentLightLabel].gradient"
+                            v-bind:key="idx"
+                            :style="{'backgroundColor': pixel}"></li>
+                    </ul>
+
+                    <button type="button"
+                            v-for="(hexVal, idx) in colors"
+                            v-bind:key="idx"
+                            @click="chooseMultizoneColor(hexVal)"
+                            :class="{active: multizoneValues[currentLightLabel].colors.indexOf(hexVal) > -1, 'btn-round-small': true, 'btn-color-option': true}"
+                            :style="{'backgroundColor': hexVal}">
+                    </button>
+                </template>
+                <template v-else>
+
+                    <svgicon icon="arrow-up"
+                             class="arrow-up colors"
+                             :class="['color-'+getIdxFromLightLabel(currentLightLabel), $route.params.name]">
+                    </svgicon>
+
+                    <button type="button"
+                            class="btn-round-small btn-color-option"
+                            v-for="(hexVal, idx) in colors"
+                            v-bind:key="idx"
+                            :id="hexVal"
+                            @click="chooseNewColor(hexVal)"
+                            :style="{'backgroundColor': hexVal}">
+                    </button>
+                </template>
+            </div>
+        </table>
     </div>
-    <table class="table cell-table table-bottom"
-           :class="$route.params.name"
-           v-show="showingList">
-      <div class="btn-group-color-options col-centered"
-           :class="[$route.params.name, {disabled: disableColors}]"
-           role="group"
-           aria-label="color button group">
-        <template v-if="isMultizoneLight(currentLightLabel)">
-          <div class="helper-text">This light has multiple color zones. Choose up to {{ maxMultizoneValues }}.</div>
-          <ul class="gradient-example list-inline">
-            <li class="gradient-pixel list-inline-item"
-                v-for="(pixel, idx) in multizoneValues[currentLightLabel].gradient"
-                v-bind:key="idx"
-                :style="{'backgroundColor': pixel}"></li>
-          </ul>
-
-          <button type="button"
-                  v-for="(hexVal, idx) in colors"
-                  v-bind:key="idx"
-                  @click="chooseMultizoneColor(hexVal)"
-                  :class="{active: multizoneValues[currentLightLabel].colors.indexOf(hexVal) > -1, 'btn-round-small': true, 'btn-color-option': true}"
-                  :style="{'backgroundColor': hexVal}">
-          </button>
-        </template>
-        <template v-else>
-
-          <svgicon icon="arrow-up"
-                   class="arrow-up colors"
-                   :class="['color-'+getIdxFromLightLabel(currentLightLabel), $route.params.name]">
-          </svgicon>
-
-          <button type="button"
-                  class="btn-round-small btn-color-option"
-                  v-for="(hexVal, idx) in colors"
-                  v-bind:key="idx"
-                  :id="hexVal"
-                  @click="chooseNewColor(hexVal)"
-                  :style="{'backgroundColor': hexVal}">
-          </button>
-        </template>
-      </div>
-    </table>
-  </div>
 </template>
 
 <script>
@@ -133,9 +135,10 @@
   const powerUrl = getLightsUrl + "/power";
 
   // steps between color 1 and color 2
-  const steps = 29;
   const colorsUrl = getLightsUrl + "/colors";
   const setLightUrl = getLightsUrl + "/set";
+  const getLightStepsUrl = getLightsUrl + "/color-steps";
+
   export default {
     name: "LightLevers",
     components: {
@@ -169,6 +172,7 @@
         disableEffect: false,
         effectInPreset: "",
         firstCall: true,
+        steps: 29,
       }
     },
     watch: {
@@ -221,13 +225,13 @@
         for (let i = 0; i < colors.length; i++) {
           this.multizoneValues[this.currentLightLabel].gradient.push(colors[i]);
           if (i < colors.length - 1) {
-            colorSteps = this.interpolateColors(colors[i], colors[i + 1], steps);
+            colorSteps = this.interpolateColors(colors[i], colors[i + 1], self.steps);
             colorSteps.shift();
             this.multizoneValues[this.currentLightLabel].gradient.push(colorSteps);
           }
         }
         let gradients = this.multizoneValues[this.currentLightLabel].gradient;
-        let megaGradientArray = []
+        let megaGradientArray = [];
         for (let i = 0; i < gradients.length; i++) {
           megaGradientArray = megaGradientArray.concat(gradients[i]);
         }
@@ -236,6 +240,7 @@
       },
       setLight() {
         if (!(this.currentLightLabel)) {
+          // eslint-disable-next-line no-console
           console.log("no light defined, returning");
           return
         }
@@ -309,7 +314,12 @@
         this.createGradient();
         this.setMultizoneLights();
       },
-
+      getLightSteps() {
+        axios.get(getLightStepsUrl)
+            .then((res) => {
+              self.steps = res.data;
+            });
+      },
       getLSLights() {
         this.lights = JSON.parse(localStorage.getItem('lights'));
         // create an array of just labels for ease of use
@@ -410,7 +420,7 @@
             label: this.currentLightLabel,
             to_status: toState
           },
-        }).then((res) => {
+        }).then(() => {
           self.disableEffect = false;
           self.disableColors = false;
           self.disableBrightness = false;
@@ -440,6 +450,7 @@
 
     },
     created() {
+      this.getLightSteps();
       this.getLSLights();
       this.setLightStates();
     },
