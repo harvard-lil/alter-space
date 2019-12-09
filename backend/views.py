@@ -161,6 +161,14 @@ def get_lights():
     return json.dumps(stored_lights)
 
 
+@backend_app.route("/lights/color-steps", methods=["GET"])
+def get_color_steps():
+    """
+    Returns how many steps our multizone lights have
+    """
+    return "%s" % config.LIGHT_STEPS
+
+
 @backend_app.route("/lights/discover", methods=["GET"])
 def discover_lights():
     discovered_lights = lights.discover_lights()
@@ -254,6 +262,7 @@ def toggle_power():
     except Exception as e:
         raise Exception(e.args, "Something went wrong!")
 
+
 @backend_app.route("/lights/flicker", methods=["POST"])
 def flicker():
     data = get_data_from_request(request)
@@ -265,4 +274,3 @@ def flicker():
         return "ok"
     except Exception as e:
         raise Exception(e.args, "Something went wrong!")
-
