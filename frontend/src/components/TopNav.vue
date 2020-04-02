@@ -40,7 +40,6 @@
 </template>
 
 <script>
-  import axios from 'axios';
   import EventBus from '../event-bus'
   export default {
     name: "topnav",
